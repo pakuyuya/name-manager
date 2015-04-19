@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sass" default="all" basedir=".">
+
+	<property name="ruby.bin" value="C:\Ruby22-x64\bin" />
+
+	<target name="all" depends="init,compass" />
+
+	<condition property="done.setup">
+		<available file="./main/config.rb" />
+	</condition>
+
+	<target name="init" unless="done.setup">
+		<exec executable="${ruby.bin}/ruby" dir="main">
+			<arg value="${ruby.bin}/compass" />
+			<arg value="create" />
+			<arg value="--sass-dir" />
+			<arg value="--css-dir" />
+			<arg value="css" />
+		</exec>
+	</target>
+
+	<target name="compass">
+		<exec executable="${ruby.bin}/ruby" dir="main">
+			<arg value="${ruby.bin}/compass" />
+			<arg value="compile"/>
+			<arg value="-s" />
+			<arg value="expanded" />
+		</exec>
+	</target>
+</project>
