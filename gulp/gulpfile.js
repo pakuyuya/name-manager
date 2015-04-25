@@ -40,13 +40,19 @@ gulp.task('clean', function(cb){
 });
 
 gulp.task('copy-php', function(){
-	return gulp.src([SRC_DIR + 'index.php', SRC_DIR + '.htaccess', SRC_DIR + 'site/**/*'], {base : SRC_DIR})
-		.pipe(gulp.dest(BUILD_DIR));
+	// cleanと並列実行していると失敗するみたいだ
+	setTimeout(function(){
+		gulp.src([SRC_DIR + 'index.php', SRC_DIR + '.htaccess', SRC_DIR + 'site/**/*'], {base : SRC_DIR})
+			.pipe(gulp.dest(BUILD_DIR));
+	}, 100);
 });
 gulp.task('copy-lib',function(){
-	return gulp.src([SRC_DIR + 'lib/**/*'], {base : SRC_DIR})
-		.pipe(gulp.dest(BUILD_DIR));
-})
+	// cleanと並列実行していると失敗するみたいだ
+	setTimeout(function(){
+		gulp.src([SRC_DIR + 'lib/**/*'], {base : SRC_DIR})
+			.pipe(gulp.dest(BUILD_DIR));
+	}, 100);
+});
 
 gulp.task('typescript-compile', function(){
 	return gulp.src(['../src/main/ts/**/*'])
@@ -69,6 +75,4 @@ gulp.task('compass-compile', function(){
 });
 
 
-gulp.task('compile-all', ['initdir', 'clean', 'copy-lib', 'copy-php', 'typescript-compile', 'compass-compile'], function(){
-
-});
+gulp.task('compile-all', ['initdir', 'clean', 'copy-lib', 'copy-php', 'typescript-compile', 'compass-compile']);
