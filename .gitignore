@@ -4,3 +4,5 @@
 /src/main/site/app/views/compile/*
 
 /src/main/.sass-cache
+/build/
+/gulp/node_modules
