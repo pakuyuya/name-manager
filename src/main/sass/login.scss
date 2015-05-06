@@ -1,0 +1,25 @@
+@import "compass";
+
+
+body{
+  background-color:#d1c5c5;
+}
+
+#contents{
+  height: 400px;
+  padding: 20px;
+  @include flexbox((display:box, box-orient: vertical), $version: 1);
+  @include box-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+
+  .mainvisual{
+    width : 40%;
+    margin-left: 10%;
+    text-align: center;
+  }
+
+  .login{
+    width : 40%;
+    margin-right:10%;
+    padding: 10px;
+  }
+}

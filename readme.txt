@@ -12,12 +12,13 @@
 
 □PHP
 	・PHP 5.1以上
-	・MVCフレームワーク：Curry PHP
-	・テンプレート　　 ：Smarty
+	・MVCフレームワーク：Curry PHP（同梱）
+	・テンプレート　　 ：Smarty（同梱）
 
 □JavaScript
 	・AltJSとしてTypeScriptを採用
-	・jQueryベース
+	・Backboneベース
+	・jQuery
 
 □CSS
 	・Sass / Compassを採用
@@ -67,3 +68,11 @@ gem update --system
 gem install sass
 gem install compass
 -----------------------------------------
+
+
+■ 4. コンパイル / 実行
+
+□コンパイル
+・/gulp/compile.batを実行。
+・Webルートに置くファイル・ディレクトリが /build にコピーされます。
+・時々失敗します。。（削除時に排他ロックがかかってるところへコピーするため）もう一度実行すると正常終了することが多いです。

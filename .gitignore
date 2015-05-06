@@ -2,9 +2,10 @@
 /.htpasswd
 
 /src/main/site/app/views/compile/*
+/gulp/node_modules
+/
+/src/main/css
+/
 /src/main/.sass-cache
 /build/
-/gulp/node_modules
-/src/main/site/app/views/compile/*
-/src/main/css
-/*
+

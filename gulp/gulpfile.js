@@ -54,8 +54,10 @@ gulp.task('copy-php', function(){
 				[
 					SRC_DIR + 'index.php',
 					SRC_DIR + '.htaccess',
-					SRC_DIR + 'site/app/**/*',
 					SRC_DIR + 'curry/**/*',
+					SRC_DIR + 'curry/.htaccess', // 何故無視されるんだ。。
+					SRC_DIR + 'site/app/**/*',
+					SRC_DIR + 'site/.htaccess',
 					SRC_DIR + 'site/config/**/*',
 					SRC_DIR + 'site/data/**/*',
 					SRC_DIR + 'site/library/**/*'

@@ -5,7 +5,7 @@
  * @author yu
  *
  */
-abstract class BaseController extends Controller {
+abstract class BaseController extends RestController {
 	private $checkLoginEnabled = true;
 
 	/**
@@ -35,5 +35,13 @@ abstract class BaseController extends Controller {
 	protected function checkLogin() {
 		// TODO: 実装
 		return true;
+	}
+
+	/**
+	 * 処理を即中断し、403レスポンスを返す。
+	 */
+	protected function responseDenyed(){
+		$this->response->setHttpStatus(403);
+		$this->response->send();
 	}
 }

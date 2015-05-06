@@ -1,0 +1,12 @@
+[2015-05-06 15:15:06] [ERROR] FILE:E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\view_smarty.php LINE:136 The file or directory "E:\Software\xampp\htdocs\dev\ho_m2\src\main\site/app/views/templates/index/ajax.tpl" does not exist.
+#0 E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\view_abstract.php(686): ViewSmarty->renderTemplate()
+#1 E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\view_abstract.php(665): ViewAbstract->getRendered()
+#2 E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\dispatcher.php(272): ViewAbstract->render()
+#3 E:\Software\xampp\htdocs\dev\ho_m2\src\main\index.php(24): Dispatcher->dispatch()
+#4 {main}
+[2015-05-06 15:16:48] [ERROR] FILE:E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\curry_class.php LINE:52 "UsersController::data" is undefined.
+#0 E:\Software\xampp\htdocs\dev\ho_m2\src\main\site\app\controllers\ajax\users_controller.php(12): CurryClass->__set('data', Array)
+#1 E:\Software\xampp\htdocs\dev\ho_m2\src\main\site\app\controllers\common\model_json_base_controller.php(17): UsersController->onFetch(Array)
+#2 E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\dispatcher.php(237): ModelJsonBaseController->index()
+#3 E:\Software\xampp\htdocs\dev\ho_m2\src\main\index.php(24): Dispatcher->dispatch()
+#4 {main}

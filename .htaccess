@@ -1,0 +1,5 @@
+SSLRequireSSL
+AuthType Basic
+AuthName "MyGit"
+AuthUserFile E:\software\xampp\apache\conf\.htpasswd
+Require valid-user
