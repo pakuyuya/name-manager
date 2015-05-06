@@ -14,7 +14,7 @@ abstract class BaseController extends Controller {
 	 * @param {boolean} $value
 	 *        	true=有効/false=無効
 	 */
-	protected function setCheckLoginEnabled($value) {
+	protected function setEnabledLoginCheck($value) {
 		$this->checkLoginEnabled = $value;
 	}
 
@@ -23,7 +23,7 @@ abstract class BaseController extends Controller {
 	 *
 	 * @return boolean
 	 */
-	protected function isCheckLoginEnabled() {
+	protected function isEnabledLoginCheck() {
 		return $this->checkLoginEnabled;
 	}
 

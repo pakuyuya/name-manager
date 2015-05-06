@@ -16,7 +16,7 @@ abstract class PageBaseController extends BaseController {
 	public function preProcess() {
 		parent::preProcess ();
 
-		if ($this->isCheckLoginEnabled ()) {
+		if ($this->isEnabledLoginCheck ()) {
 			if (! $this->checkLogin ()) {
 				$this->redirect ( '/login' );
 			}

@@ -3,13 +3,11 @@ Loader::loadController('PageBaseController', 'common');
 
 class LoginController extends PageBaseController
 {
-	/**
-	 * コンストラクタ
-	 */
-	public function __construct()
+	public function initialize()
 	{
 		// ログインチェックを切る
-		$this->setCheckLoginEnabled(false);
+		$this->setEnabledLoginCheck(false);
+		$this->view->addCss('login.css');
 	}
 
 	/**

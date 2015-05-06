@@ -25,21 +25,21 @@ class ViewSmarty extends ViewAbstract
 	 * @var string
 	 */
 	protected $_compileDir;
-	
+
 	/**
 	 * Path of directory to output template cache file
 	 *
 	 * @var string
 	 */
 	protected $_cacheDir;
-	
+
 	/**
 	 * Smarty instance
 	 *
 	 * @var Smarty
 	 */
 	protected $_smarty;
-	
+
 	/**
 	 * Execute initial process,
 	 *
@@ -48,13 +48,18 @@ class ViewSmarty extends ViewAbstract
 	public function initialize()
 	{
 		parent::initialize();
-		
+
 		$this->_smarty = new Smarty();
 		$this->_smarty->error_reporting = E_ALL & ~E_NOTICE;
 		NameManager::setTemplateExtension('tpl');
 		$root = PathManager::getViewDirectory();
 		$this->setCompileDirectory($root . '/compile');
-		$this->setCacheDirectory($root . '/cache');		
+		$this->setCacheDirectory($root . '/cache');
+
+		// ▼ Mod pak Smartyのカスタマイズ
+		$this->_smarty->left_delimiter = '{{';
+		$this->_smarty->right_delimiter = '}}';
+		// ▲ /Mod pak
 	}
 
 	/**
@@ -67,7 +72,7 @@ class ViewSmarty extends ViewAbstract
 		parent::clearValues();
         $this->_smarty->clearAllAssign();
 	}
-	
+
 	/**
 	 * Get Smarty instance
 	 *
@@ -77,10 +82,10 @@ class ViewSmarty extends ViewAbstract
 	{
 		return $this->_smarty;
 	}
-	
+
 	/**
 	 * Set path of directory to output compiled template file
-	 * 
+	 *
 	 * @param string $dir
 	 * @return void
 	 */
@@ -91,7 +96,7 @@ class ViewSmarty extends ViewAbstract
 
 	/**
 	 * Set path of directory to output template cache file
-	 * 
+	 *
 	 * @param string $dir
 	 * @return void
 	 */
@@ -99,10 +104,10 @@ class ViewSmarty extends ViewAbstract
 	{
 		$this->_smarty->cache_dir = $dir;
 	}
-	
+
 	/**
 	 * Set whether output smarty error
-	 * 
+	 *
 	 * @param string $errorLevel
 	 * @return void
 	 */
@@ -110,7 +115,7 @@ class ViewSmarty extends ViewAbstract
 	{
 		$this->_smarty->error_reporting = $errorLevel;
 	}
-	
+
 	/**
 	 * Execute output html without using a layout template
 	 *
@@ -120,11 +125,11 @@ class ViewSmarty extends ViewAbstract
 	{
 		foreach ($this->_vars as $key => $val) {
 			$this->_smarty->assign($key, $val);
-		}	
-	
+		}
+
 		$templateDir = PathManager::getViewTemplateDirectory();
 		$template = $this->_template . '.' . NameManager::getTemplateExtension();
-		
+
 		$this->_smarty->template_dir = $templateDir;
 		$templatePath = $templateDir . '/' . $template;
 		if (!file_exists($templatePath)) {
@@ -133,41 +138,41 @@ class ViewSmarty extends ViewAbstract
 		$rendered = $this->_smarty->fetch($template);
 		return $rendered;
 	}
-	
+
 	/**
 	 * Execute output html using a layout template
 	 *
 	 * @return string
 	 */
 	protected function renderTemplateWithLayout()
-	{		
+	{
 		foreach ($this->_vars as $key => $val) {
 			$this->_smarty->assign($key, $val);
 		}
-		
+
 		$ext = NameManager::getTemplateExtension();
-		
+
 		$templateDir = PathManager::getViewTemplateDirectory();
 		$template = $this->_template . '.' . $ext;
 		$templatePath = $templateDir . '/' . $template;
 		if (!file_exists($templatePath)) {
 			throw new FileNotExistException($templatePath);
-		}		
-		
+		}
+
 		$layoutDir = PathManager::getViewLayoutDirectory();
 		$layout = $this->_layout . '.' . $ext;
 		$layoutPath = $layoutDir . '/' . $layout;
 		if (!file_exists($layoutPath)) {
 			throw new FileNotExistException($layoutPath);
 		}
-		
-		$this->_smarty->template_dir = $templateDir;		
+
+		$this->_smarty->template_dir = $templateDir;
 		$contents = $this->_smarty->fetch($template);
 		$this->_smarty->assign('inner_contents', $contents);
-		
+
 		$this->_smarty->template_dir = $layoutDir;
 		$rendered = $this->_smarty->fetch($layout);
 		return $rendered;
 	}
-		
+
 }
