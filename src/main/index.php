@@ -17,6 +17,7 @@ spl_autoload_register('Loader::autoload');
 // Set directory settings.
 PathManager::setFrameworkRoot(CURRY_PATH);
 PathManager::setSystemRoot(SITE_PATH);
+PathManager::setHtdocsDirectory('.');
 
 // Execute dispatch process.
 $dispatcher = new Dispatcher();

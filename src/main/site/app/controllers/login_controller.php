@@ -7,7 +7,6 @@ class LoginController extends PageBaseController
 	{
 		// ログインチェックを切る
 		$this->setEnabledLoginCheck(false);
-		$this->view->addCss('login.css');
 	}
 
 	/**

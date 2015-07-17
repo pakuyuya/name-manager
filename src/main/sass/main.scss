@@ -1,0 +1,275 @@
+@import "compass";
+@import "common/common-controll";
+
+//----------------------------
+// layout
+//----------------------------
+
+* {
+  padding : 0;
+  margin  : 0;
+}
+
+
+
+li {
+  list-style-type: none;
+  list-style-position: outside;
+}
+
+body {
+  background : #ffffff;
+}
+
+//----------------------------
+// component
+//----------------------------
+
+//----------------------------
+// project
+//----------------------------
+
+// header
+
+.p-header {
+  height : 50px;
+  @include background(linear-gradient(#dddddd 95%, #aaaaaa 100%));
+  @include box-shadow(1 1 3 rgba(0, 0, 0, 0.7));
+}
+
+.p-header > div {
+}
+
+.p-header-buttons {
+  padding-top : 5px;
+}
+
+.p-header-menu {
+  margin-top : 5px;
+  margin-left : -100px;
+  position : absolute;
+  @include border-radius(5px);
+  width : 150px;
+  border : 2px solid #eeeeee;
+  @include box-shadow(0px 1px 3px rgba(0, 0, 0, 0.75));
+
+  background-color : #eeeeee;
+}
+
+.p-header-menu-row {
+  height : 35px;
+  line-height : 35px;
+  padding-left : 7px;
+  cursor : pointer;
+  color : #555555;
+
+  &:not(:last-child)::after {
+    content : "";
+    display : block;
+    width : 98%;
+    border-top : solid 1px #ccc;
+  }
+
+  &:hover {
+    background-color : #ffffff;
+    color : #000000;
+  }
+  &:active {
+    background-color : #aaaaaa;
+    color : #000000;
+  }
+}
+
+button.header {
+  @include button-template(
+          #e2e2e2, #d4d4d4, #d4d4d4,
+          #333333, rgba(255, 255, 255, 0.75),
+          #999999, #949494,
+          rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.25),
+          rgba(255,255,255,0.2), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05)
+  )
+}
+
+// tab
+
+.p-tabs {
+  height : 49px;
+  padding-top: 10px;
+  padding-left: 40px;
+  border-bottom : solid #aaaaaa 1px;
+}
+
+.p-tab {
+  width : 110px;
+  line-height : 40px;
+  max-height: 40px;
+  margin-left: 15px;
+  marign-right: 15px;
+  margin-bottom: -1px;
+
+  border : solid 1px #aaaaaa;
+  @include border-radius(5px 5px 0px 0px);
+
+  &.is-active {
+    border-bottom-style : none;
+  }
+
+  &.search {
+    @include background(linear-gradient(#ffffff, #dddddd));
+  }
+  &.clip {
+
+  }
+}
+
+// search
+.p-main-list-line {
+  height : 5px;
+  background-color: #dddddd;
+}
+
+.p-search {
+}
+
+// commands
+
+
+.p-search-condition {
+  min-width : 250px;
+  width: 300px;
+  border-right : solid 1px #ccc;
+  background : #f8f8f8;
+}
+
+.p-search-condition-head {
+  height : 38px;
+  line-height : 38px;
+  @include background(linear-gradient(#ffffff, #e6e6e6));
+  border : solid 1px #d5d5d5;
+  border-bottom-color : #ccc;
+}
+
+.p-search-condition-box {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  line-height : 23px;
+  font-size : 12px;
+}
+
+.p-search-condition-label {
+  margin-left : -2px;
+  font-size : 14px;
+}
+
+.p-search-condition-clear {
+  color : #666666;
+  text-decoration : none;
+
+  &:hover {
+    color : #fa4111;
+    text-decoration : underline;
+  }
+}
+
+.p-list {
+  padding-left : 25px;
+  padding-bottom : 20px;
+}
+
+.p-commands {
+  padding : 0px 0px;
+  max-height: 50px;
+  background : #f1f1f1;
+}
+
+.p-command {
+  font-size : 16px;
+  height : 40px;
+  line-height : 40px;
+
+  &.searchcondition {
+    //    @include background(linear-gradient(#f0f0f0 0%, #f9f9f9 70%, #d8d8d8));
+    background : #e8e8e8;
+    width : 300px;
+    border-right : solid 1px #ccc;
+    @include box-shadow(inset 0 1 0 rgba(255, 255, 255, 0.2));
+  }
+}
+.p-list-head {
+  margin-top : 15px;
+  height : 38px;
+  leine-height : 38px;
+}
+
+.p-pagecnt {
+  padding-top : 10px;
+}
+
+.p-paging {
+  padding-left : 20px;
+  padding-top : 10px;
+}
+.p-names-list {
+  padding-top : 10px;
+}
+
+.p-names-header > div {
+  text-align :center;
+  background-color : #f8f8f8;
+}
+
+.p-names-row {
+  font-size : 14px;
+  height : 39px;
+  line-height : 39px;
+}
+
+.p-names-row > div {
+  height : 40px;
+  line-height : 40px;
+  text-overflow : ellipsis;
+  overflow : hidden;
+  margin-left : -1px;
+  padding : 0px 5px;
+  border-width : 1px;
+  border-color : #a0a0a0 #d0d0d0;
+  border-style : solid;
+}
+
+.p-names-clip {
+  min-width : 38px;
+  text-align : center;
+}
+.p-names-mem {
+  min-width : 60px;
+  text-align : center;
+}
+
+.p-names-name {
+  width : 30%;
+  min-width : 170px;
+}
+
+.p-names-addr {
+  width : 40%;
+  font-size : 12px;
+  min-width : 300px;
+}
+
+.p-names-expr {
+  font-size : 12px;
+  min-width : 90px;
+  text-align : center;
+}
+
+.p-names-edit {
+  min-width : 70px;
+  text-align : center;
+}
+
+.p-names-del {
+  min-width : 70px;
+  text-align : center;
+}

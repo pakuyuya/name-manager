@@ -1,11 +1,11 @@
 <?php
-Loader::loadController('AjaxBaseController', 'common');
+Loader::loadController('JsonBaseController', 'common');
 
 /**
  * ログインAjax用コントローラー
  * @author pak
  */
-class LoginController extends AjaxBaseController
+class LoginController extends JsonBaseController
 {
 	public function __construct(){
 		$this->setEnabledLoginCheck(false);
@@ -14,8 +14,14 @@ class LoginController extends AjaxBaseController
 	/**
 	 * デフォルトページ
 	 */
-	public function auth(){
-		$this->redirect('/main');
+	public function post(){
+		$this->view->json->result = true;
+	}
+	/**
+	 * デフォルトページ
+	 */
+	public function index(){
+		$this->view->json->result = true;
 	}
 
 }

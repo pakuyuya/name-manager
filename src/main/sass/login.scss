@@ -1,25 +1,69 @@
 @import "compass";
 
 
+//----------------------------
+// layout
+//----------------------------
+html,body{
+  height: 100%;
+  @include box-sizing(border-box);
+}
 body{
-  background-color:#d1c5c5;
+  @include background(linear-gradient(white, #f5f9ff));
+  padding:10%;
 }
 
-#contents{
-  height: 400px;
+//----------------------------
+// component
+//----------------------------
+.c-line{
+  text-align:center;
+  line-height: 48px;
+  vertical-align:middle;
+}
+
+//----------------------------
+// project
+//----------------------------
+
+// login
+
+.p-login{
+  margin: 0 auto;
+  width: 350px;
+  height: 250px;
   padding: 20px;
+  background-color:#ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.25);
   @include flexbox((display:box, box-orient: vertical), $version: 1);
-  @include box-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  @include box-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
 
-  .mainvisual{
-    width : 40%;
-    margin-left: 10%;
-    text-align: center;
-  }
+// title
 
-  .login{
-    width : 40%;
-    margin-right:10%;
-    padding: 10px;
-  }
+.p-title{
+  height:60px;
+}
+
+.p-title-text{
+  padding-left: 5px;
+  padding-top : 10px;
+  font-size : 24px;
+  color:#505070;
+}
+
+.p-title-underline{
+  padding-top:5px;
+  border-bottom: solid 1px #8888cc;
+}
+
+
+.p-form{
+  margin-top: 10px;
+  margin-left: -16px;
+}
+
+.p-form-cmd{
+  margin-top: 5px;
+  margin-left: 16px;
 }

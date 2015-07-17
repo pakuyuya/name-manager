@@ -1,164 +1,95 @@
-@import "compass";
-
-////////////////////////////////////////////////////////////////////////
+@import "compass/css3/transition";
+//
+// @create 2015/4/30
 //
 
-////////////////////////////////////////////////////////////////////////
-// Form Component
+@import "common/common-controll";
+@import "common/common-icon";
 
-// buttons
-// -----------------------------------
+a {
+  color : #131399;
+  text-decoration : none;
 
-@mixin button-template(
-    $bgColorFrom, $bgColorTo, $disabledBGColor,
-    $color, $textShadow,
-    $borderColor, $borderColorBottom,
-    $borderColorShadow1, $borderColorShadow2,
-    $boxShadowColor1, $boxShadowColor2, $activeBoxShadowColor1, $activeBoxShadowColor2
-  )
-{
-  margin-bottom:0;
-  padding: 4px 12px;
-  line-height:20px;
-
-  text-align:center;
-  cursor:pointer;
-
-  font-size:14px;
-  color : $color;
-  @include text-shadow($textShadow, 0, 1px, 1px);
-
-  @include border-radius(4px, 4px);
-  border: 1px solid $borderColor;
-  border-color: $borderColorShadow1 $borderColorShadow1 $borderColorShadow2;
-  border-bottom-color: $borderColorBottom;
-
-  @include background-image(linear-gradient(to bottom, $bgColorFrom, $bgColorTo));
-  background-repeat: repeat-x;
-  @include box-shadow(inset 0 1px 0 $boxShadowColor1, 0 1px 2px $boxShadowColor2);
-
-  &:hover,
-  &:focus,
-  &:active,
-  &[disabled] {
-      color: $color;
-      background-color: $disabledBGColor;
-  }
-  &:hover,
-  &:focus {
-    color: $color;
-    text-decoration: none;
-    background-position: 0 -15px;
-    @include transition(background-position 0.1s linear);
-
-  }
-
-  &:focus {
-    outline: thin dotted $borderColor;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-  }
-  &:active{
-    background-image:none;
-    outline: 0;
-    @include box-shadow(inset 0 2px 4px $activeBoxShadowColor1, 0 1px 2px $activeBoxShadowColor2);
-  }
-}
-button {
-  @include button-template(
-    #ffffff,  #e6e6e6, #e6e6e6,
-    #333333, rgba(255, 255, 255, 0.75),
-    #cccccc, #b3b3b3,
-    rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.25),
-    rgba(255,255,255,0.2), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05)
-  )
-}
-
-button.primary{
-  @include button-template(
-    #0088cc, #0044cc, #0044cc,
-    #ffffff, rgba(0, 0, 0, 0.25),
-    #0044cc, #002a80,
-    rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.25),
-    rgba(255,255,255,0.2), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05)
-  )
-}
-
-
-// textbox
-// -----------------------------------
-
-input[type=text], input[type=number], input[type=password],
-input[type=url], input[type=date], input[type=file],
-input[type=search], textarea {
-  display: inline-block;
-
-  height:20px;
-  line-height:20px;
-  padding: 4px 6px;
-  margin-bottom:10px;
-
-  background-color:#ffffff;
-  border:1px solid #cccccc;
-
-  color:#555555;
-  vertical-align: middle;
-  font-size:14px;
-
-  @include border-radius(4px);
-
-  @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075));
-  @include transition(border linear 0.2s, box-shadow linear 0.2);
-
-  &:focus{
-    border-color: rgba(82, 168, 236, 0.8);
-    outline: 0;
-    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
+  &:hover {
+    color : #1141fa;
+    text-decoration : underline;
   }
 }
 
-
-////////////////////////////////////////////////////////////////////////
-// Base Component
-
-//
-
-@mixin dialog($width){
-  @include border-radius(5px);
-  @inlcude box-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
-  z-index: 1000;
-}
-
-////////////////////////////////////////////////////////////////////////
-// icon
-
-//
-@mixin icon-base{
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-  width: 24px;
-  height: 24px;
-
-  &.small{
-    width: 16px;
-    height: 16px;
-  }
-  &.middle{
-    width: 24px;
-    height: 24px;
-  }
-  &.large{
-    width: 32px;
-    height: 32px;
+.u-vert-sep {
+  display : block;
+  margin : 5px 5%;
+  border-top : 1px solid #ddf;
+  &.white {
+    border-color : #fff;
   }
 }
 
-.icon-user{
-  @include icon-base;
-  background-image: inline-image('users81.svg');
+.u-hori-sep {
+  height:100%;
+  width : 1px;
+  margin-left : 7px;
+  margin-right : 7px;
+  border-left : 1px solid #ddd;
 }
-.icon-key{
-  @include icon-base;
-  background-image: inline-image('key206.svg');
+
+.u-no-transition {
+  @include transition-property(none !important);
 }
+
+.u-flex {
+  @include display-flex;
+}
+
+.u-text-s {
+  font-size : 10px;
+}
+.u-text-m {
+  font-size : 12px;
+}
+.u-text-l {
+  font-size : 14px;
+}
+
+.u-center {
+  text-align : center;
+}
+.u-right {
+  text-align : right;
+}
+.u-left {
+  text-align : left;
+}
+
+.u-float-right {
+  float : right;
+}
+
+.u-float-left {
+  float : left;
+}
+
+.u-row > div {
+  float: left;
+}
+
+.u-p5 { width : 5%; }
+.u-p10 { width : 10%; }
+.u-p15 { width : 15%; }
+.u-p20 { width : 20%; }
+.u-p25 { width : 25%; }
+.u-p30 { width : 30%; }
+.u-p35 { width : 35%; }
+.u-p40 { width : 40%; }
+.u-p45 { width : 45%; }
+.u-p50 { width : 50%; }
+.u-p55 { width : 55%; }
+.u-p60 { width : 60%; }
+.u-p65 { width : 65%; }
+.u-p70 { width : 70%; }
+.u-p75 { width : 75%; }
+.u-p80 { width : 80%; }
+.u-p85 { width : 85%; }
+.u-p90 { width : 90%; }
+.u-p95 { width : 95%; }
+.u-p100 { width : 100%; }

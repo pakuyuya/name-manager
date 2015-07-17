@@ -1,0 +1,71 @@
+@import "compass";
+@import "compass/css3/transition";
+
+// dialog
+
+.c-dialog{
+  min-width : 400px;
+  padding: 15px 20px;
+  position:absolute;
+  @include box-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  z-index: 1000;
+
+  background-color:#ffffff;
+
+  @include transition-property(all);
+  @include transition-duration(0.5s);
+
+  margin-top: -30px;
+  opacity : 0.0;
+
+  &.is-shown{
+    margin-top:0px;
+    opacity : 1.0;
+    &.is-rehide{
+      @include transition-duration(0.25s);
+      opacity : 0;
+      margin-top: 15px;
+    }
+  }
+}
+
+.c-dialog-icon{
+  float: left;
+  padding: 20px;
+}
+.c-dialog-text{
+  line-height: 20px;
+  font-size: 15px;
+  padding: 10px;
+}
+.c-dialog-buttons{
+  margin-top: 15px;
+  text-align : center;
+  line-height: 20px;
+  font-size: 15px;
+  padding: 10px;
+
+  button {
+    margin : 5px 10px;
+  }
+}
+
+.c-dialog-filter{
+  position:absolute;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index:999;
+
+  @include transition-property(all);
+  @include transition-duration(0.75s);
+
+  opacity : 0;
+
+  &.is-shown{
+    opacity : 1.0;
+    &.is-rehide{
+      @include transition-duration(0.25s);
+      opacity : 0;
+    }
+  }
+}

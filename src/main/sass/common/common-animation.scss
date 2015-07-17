@@ -1,0 +1,27 @@
+@import "compass";
+@import "compass/css3/transform";
+@import "compass/css3/animation";
+
+
+@include keyframes(role-one){
+  0% {
+    @include transform-rotate(0deg);
+  }
+  100% {
+    @include transform-rotate(360deg);
+  }
+}
+
+.u-rolebox{
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+
+  .move-one{
+    @include animation(role-one 1.5s 1);
+  }
+
+  .move-infinite{
+    @include animation(role-one 1.5s infinite);
+  }
+}

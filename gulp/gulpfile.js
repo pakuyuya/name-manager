@@ -1,3 +1,4 @@
+// モジュールのロード
 var gulp = require('gulp');
 var fs = require('fs');
 
@@ -11,11 +12,19 @@ var del = require('del');
 var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
 
-
+// ディレクトリパス取得
+// Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にすると、
+//       ファイル名をフルパスにしないとうまく動かない。
 var BUILD_DIR = path.resolve('../build') + '/';
 var SRC_DIR = path.resolve('../src/main') + '/';
 
 
+
+//
+// タスク定義
+//
+
+// ビルドディレクトリ初期化
 gulp.task('initdir', function(){
 	if(!fs.existsSync(BUILD_DIR + 'js')){
 		fs.mkdir(BUILD_DIR + 'js');
@@ -32,24 +41,44 @@ gulp.task('initdir', function(){
 	if(!fs.existsSync(BUILD_DIR + 'site')){
 		fs.mkdir(BUILD_DIR + 'site');
 	}
+	if(!fs.existsSync(BUILD_DIR + 'site/logs')){
+		fs.mkdir(BUILD_DIR + 'site/logs');
+	}
 });
 
-gulp.task('clean', function(cb){
+gulp.task('clean-php', ['initdir'], function(cb){
 	del(
 		[
-			BUILD_DIR + 'js/*.js',
-			BUILD_DIR + 'css/*.css',
 			BUILD_DIR + 'site/app/**/*',
-			BUILD_DIR + 'site/config/**/*',
+			BUILD_DIR + 'site/configs/**/',
 			BUILD_DIR + 'site/data/**/*',
 			BUILD_DIR + 'site/library/**/*',
+		], {force : true},
+		cb);
+});
+gulp.task('clean-lib', ['initdir'], function(cb){
+	del(
+		[
 			BUILD_DIR + 'lib/**/*'
-		], {force : true});
+		], {force : true},
+		cb);
+});
+gulp.task('clean-webcontent', ['initdir'], function(cb){
+	del(
+		[
+			SRC_DIR + 'css/**/*',
+			SRC_DIR + 'js/**/*',
+			BUILD_DIR + 'js/*.js',
+			BUILD_DIR + 'css/*.css',
+		], {force : true},
+		cb);
 });
 
-gulp.task('copy-php', function(){
-	// cleanと並列実行していると失敗するみたいだ
-	setTimeout(function(){
+// 前回ビルド結果削除
+gulp.task('clean', ['clean-php', 'clean-lib', 'clean-webcontent']);
+
+// PHPファイルコピー
+gulp.task('copy-php',['clean-php'], function(){
 		gulp.src(
 				[
 					SRC_DIR + 'index.php',
@@ -58,29 +87,35 @@ gulp.task('copy-php', function(){
 					SRC_DIR + 'curry/.htaccess', // 何故無視されるんだ。。
 					SRC_DIR + 'site/app/**/*',
 					SRC_DIR + 'site/.htaccess',
-					SRC_DIR + 'site/config/**/*',
+					SRC_DIR + 'site/configs/**/*',
 					SRC_DIR + 'site/data/**/*',
-					SRC_DIR + 'site/library/**/*'
+					SRC_DIR + 'site/library/**/*',
 				],
 				 {base : SRC_DIR})
-			.pipe(gulp.dest(BUILD_DIR));
-	}, 100);
-});
-gulp.task('copy-lib',function(){
-	// cleanと並列実行していると失敗するみたいだ
-	setTimeout(function(){
-		gulp.src([SRC_DIR + 'lib/**/*'], {base : SRC_DIR})
-			.pipe(gulp.dest(BUILD_DIR));
-	}, 100);
+			.pipe(gulp.dest(BUILD_DIR))
 });
 
-gulp.task('typescript-compile', function(){
-	return gulp.src([SRC_DIR + 'ts/**/*'])
-		.pipe(typescript({ target : 'ES5', removeComments: true, noExternalResolve: true}))
-		.js
-		.pipe(uglify())
-		.pipe(gulp.dest(BUILD_DIR + 'js/'));
+// ライブラリコピー
+gulp.task('copy-lib',['clean-lib'], function(){
+	gulp.src([SRC_DIR + 'lib/**/*'], {base : SRC_DIR})
+		.pipe(gulp.dest(BUILD_DIR));
 });
+
+// Typescriptコンパイル
+gulp.task('typescript-compile', function(){
+	return gulp.src([SRC_DIR + 'ts/**/*.ts'])
+		.pipe(typescript({ target : 'ES5', removeComments: true, noExternalResolve: true, module: 'amd'}))
+		.js
+		.pipe(gulp.dest(SRC_DIR + 'js/'))
+		.on('end', function(){
+			// main/js/impl以下のファイルだけ圧縮してbuildへコピー
+			gulp.src([SRC_DIR + 'js/impl/**/*.js'])
+				.pipe(uglify())
+				.pipe(gulp.dest(BUILD_DIR + 'js/'));
+		});
+});
+
+// Compassコピー
 gulp.task('compass-compile', function(){
 	return gulp.src([SRC_DIR + 'sass/*.scss'])
 		.pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
@@ -95,13 +130,16 @@ gulp.task('compass-compile', function(){
 		.pipe(gulp.dest(BUILD_DIR + 'css/'));
 });
 
-
+// 全コンパイル
 gulp.task('compile-all', ['initdir', 'clean', 'copy-lib', 'copy-php', 'typescript-compile', 'compass-compile']);
 
-gulp.task('watch-typescript', function(){
-	gulp.watch(SRC_DIR + 'ts/**/*.ts', ['typescript-compile']);
+// コマンドラインで常駐させて、変更があったscssのみ再コンパイル
+gulp.task('watch-compass', function(){
+	gulp.watch(SRC_DIR + 'sass/*.scss', ['compass-compile']);
 });
 
-gulp.task('watch-compass', function(){
-	gulp.watch(SRC_DIR + 'sass/**/*.scss', ['compass-compile']);
-});
+//・typescriptの<reference>参照は、gulp.srcにて指定したもののみが含まれるらしい（ドはまり）
+//・watchのパスは、差分があったファイルのみだけgulp.srcに入力される。
+//gulp.task('watch-typescript', function(){
+//	gulp.watch(SRC_DIR + 'ts/**/*.ts', ['typescript-compile']);
+//});

@@ -10,10 +10,12 @@
 <meta {{$attr}}="{{$key}}" content="{{$content}}" />
 {{/foreach}}
 {{/foreach}}
-<script href="{{$request.base_path}}/lib/underscore/underscore-min.js"></script>
-<script href="{{$request.base_path}}/lib/jquery/jquery-2.1.3.min.js"></script>
-<script href="{{$request.base_path}}/lib/backbone/backbone-min.js"></script>
-<script href="{{$request.base_path}}/js/common.js"></script>
+<script src="{{$request.base_path}}/lib/underscore/underscore-min.js"></script>
+<script src="{{$request.base_path}}/lib/jquery/jquery-2.1.3.min.js"></script>
+<script src="{{$request.base_path}}/lib/backbone/backbone-min.js"></script>
+<script src="{{$request.base_path}}/js/common.js"></script>
+<script src="{{$request.base_path}}/js/tips.js"></script>
+<script src="{{$request.base_path}}/js/dialog.js"></script>
 {{foreach from=$javascripts item=js}}
 <script type="text/javascript" src="{{$request.base_path}}/js/{{$js}}"></script>
 {{/foreach}}

@@ -10,3 +10,6 @@
 #2 E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\dispatcher.php(237): ModelJsonBaseController->index()
 #3 E:\Software\xampp\htdocs\dev\ho_m2\src\main\index.php(24): Dispatcher->dispatch()
 #4 {main}
+[2015-05-08 15:16:22] [ERROR] FILE:E:\Software\xampp\htdocs\dev\ho_m2\src\main\curry\core\dispatcher.php LINE:233 The path "index/index" is not found.
+#0 E:\Software\xampp\htdocs\dev\ho_m2\src\main\index.php(25): Dispatcher->dispatch()
+#1 {main}

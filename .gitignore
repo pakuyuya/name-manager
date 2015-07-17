@@ -9,3 +9,6 @@
 /src/main/.sass-cache
 /build/
 
+/.idea
+/src/main/js/
+/*.iml

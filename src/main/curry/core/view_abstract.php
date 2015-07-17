@@ -20,133 +20,133 @@ abstract class ViewAbstract extends CurryClass
 	 * @var Request
 	 */
 	protected $_request;
-	
+
 	/**
 	 * Rendering controller
 	 *
 	 * @var string
 	 */
 	protected $_renderingController;
-	
+
 	/**
 	 * Rendering action
 	 *
 	 * @var string
 	 */
 	protected $_renderingAction;
-	
+
 	/**
 	 * Values assigned for template
 	 *
 	 * @var array
 	 */
 	protected $_vars = array();
-	
+
 	/**
 	 * title of page
 	 *
-	 * @var string 
+	 * @var string
 	 */
 	protected $_title;
-	
+
 	/**
-	 * values of meta tag 
+	 * values of meta tag
 	 *
-	 * @var array 
+	 * @var array
 	 */
 	protected $_metas = array();
-		
+
 	/**
 	 * Name of layout template
 	 *
 	 * @var string
 	 */
 	protected $_layout = 'default';
-	
+
 	/**
 	 * Name of template
 	 *
 	 * @var string
 	 */
 	protected $_template;
-	
+
 	/**
 	 * Default name of error template
 	 *
-	 * @var string 
+	 * @var string
 	 */
 	protected static $_defaultErrorTemplate = 'error';
-	
+
 	/**
 	 * Name of error template
 	 *
 	 * @var string
 	 */
 	protected $_errorTemplate;
-	
+
 	/**
 	 * Paths of additional Javascript file
 	 *
 	 * @var array
 	 */
 	protected $_jsFiles = array();
-	
+
 	/**
 	 * Buffer of paths of additional preferred Javascript file
 	 *
 	 * @var array
 	 */
 	protected $_jsFilesPreferred = array();
-	
+
 	/**
 	 * Paths of additional css file
 	 *
 	 * @var array
 	 */
 	protected $_cssFiles = array();
-	
+
 	/**
 	 * paths of additional preferred css file
 	 *
 	 * @var array
 	 */
 	protected $_cssFilesPreferred = array();
-	
+
 	/**
 	 * Whether output using a template.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $_templateEnabled = true;
-	
+
 	/**
 	 * Whether output using template with layout.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $_layoutEnabled = true;
-	
+
 	/**
 	 * Default setting of whether output using template with layout.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected static $_defaultLayoutEnabled = true;
-	
+
 	/**
 	 * Whether render html.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $_renderingEnabled = true;
-	
+
 	/**
 	 * Encoding of output template
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $_outputEncoding;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -157,7 +157,7 @@ abstract class ViewAbstract extends CurryClass
 		$this->enableLayout(self::$_defaultLayoutEnabled);
 		$this->setErrorTemplate(self::$_defaultErrorTemplate);
 	}
-	
+
 	/**
 	 * Overriding parent.
 	 * Alias of method "set".
@@ -170,13 +170,13 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->set($key, $val);
 	}
-	
+
 	/**
 	 * Overriding parent.
 	 * Alias of method "get".
 	 *
 	 * @param string $key
-	 * @return mixed 
+	 * @return mixed
 	 */
 	public function __get($key)
 	{
@@ -194,12 +194,12 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_vars[$key] = $val;
 	}
-	
+
 	/**
 	 * Get value for template
 	 *
 	 * @param string $key
-	 * @return mixed 
+	 * @return mixed
 	 */
 	public function get($key = null)
 	{
@@ -208,10 +208,10 @@ abstract class ViewAbstract extends CurryClass
 			$ret = $this->_vars;
 		} else if (isset($this->_vars[$key])) {
 			$ret = $this->_vars[$key];
-		}		
+		}
 		return $ret;
 	}
-		
+
 	/**
 	 * Set path of template directory
 	 *
@@ -222,7 +222,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		PathManager::setViewTemplateDirectory($dir);
 	}
-			
+
 	/**
 	 * Set path of layout template directory
 	 *
@@ -233,10 +233,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		PathManager::setViewLayoutDirectory($dir);
 	}
-	
+
 	/**
 	 * Set whether render html.
-	 * 
+	 *
 	 * @param boolean $enabled
 	 * @return void
 	 */
@@ -244,20 +244,20 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_renderingEnabled = $enabled;
 	}
-	
+
 	/**
 	 * Get whether render html.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getRenderingEnabled()
 	{
-		return $this->_renderingEnabled;  
+		return $this->_renderingEnabled;
 	}
 
 	/**
 	 * Set layout enabled.
-	 * 
+	 *
 	 * @param boolean $enabled
 	 * @return void
 	 */
@@ -265,10 +265,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		self::$_defaultLayoutEnabled = $enabled;
 	}
-	
+
 	/**
 	 * Set whether output using a template.
-	 * 
+	 *
 	 * @param boolean $enabled
 	 * @return void
 	 */
@@ -276,10 +276,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_templateEnabled = $enabled;
 	}
-	
+
 	/**
 	 * Set whether output using template with layout.
-	 * 
+	 *
 	 * @param boolean $enabled
 	 * @return void
 	 */
@@ -287,7 +287,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_layoutEnabled = $enabled;
 	}
-	
+
 	/**
 	 * Set request instance
 	 *
@@ -298,7 +298,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_request = $request;
 	}
-	
+
 	/**
 	 * Set view template use for rendering.
 	 *
@@ -319,7 +319,7 @@ abstract class ViewAbstract extends CurryClass
 		$action = preg_replace('/\.' . $ext . '$/', '', $action);
 		$this->_template = sprintf('%s/%s', $controller, $action);
 	}
-	
+
 	/**
 	 * Execute initial process,
 	 *
@@ -327,7 +327,7 @@ abstract class ViewAbstract extends CurryClass
 	 */
 	public function initialize()
 	{
-		$req = $this->_request;		
+		$req = $this->_request;
 		if ($req->isXmlHttp()) {
 			$this->enableLayout(false);
 		}
@@ -339,7 +339,7 @@ abstract class ViewAbstract extends CurryClass
 		$this->_renderingController = $controller;
 		$this->_renderingAction = $req->getAction();
 	}
-	
+
 	/**
 	 * Set controller for rendering.
 	 *
@@ -350,7 +350,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_renderingController = $controller;
 	}
-	
+
 	/**
 	 * Set action for rendering.
 	 *
@@ -361,10 +361,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_renderingAction = $action;
 	}
-	
+
 	/**
 	 * Set default view template use for rendering on error.
-	 * 
+	 *
 	 * @param string $tamplateName
 	 * @return void
 	 */
@@ -372,7 +372,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		self::$_defaultErrorTemplate = $tamplateName;
 	}
-	
+
 	/**
 	 * Set view template use for rendering on error.
 	 *
@@ -383,7 +383,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_errorTemplate = $tamplateName;
 	}
-	
+
 	/**
 	 * Get view template use for rendering on error.
 	 *
@@ -393,7 +393,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		return $this->_errorTemplate;
 	}
-	
+
 	/**
 	 * Get whether exists view template.
 	 *
@@ -406,9 +406,9 @@ abstract class ViewAbstract extends CurryClass
 		$template = $this->_template . '.' . $ext;
 		$templatePath = $templateDir . '/' . $template;
 		$exists = file_exists($templatePath);
-		return $exists;		
+		return $exists;
 	}
-		
+
 	/**
 	 * Set layout template
 	 *
@@ -421,10 +421,10 @@ abstract class ViewAbstract extends CurryClass
 		$layout = preg_replace('/\.' . $ext . '$/', '', $layout);
 		$this->_layout = $layout;
 	}
-	
+
 	/**
 	 * Set encoding of output template
-	 * 
+	 *
 	 * @param string $encoding
 	 * @return void
 	 */
@@ -432,7 +432,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_outputEncoding = $encoding;
 	}
-	
+
 	/**
 	 * Add javascript file name to read
 	 *
@@ -456,7 +456,7 @@ abstract class ViewAbstract extends CurryClass
 				$this->_jsFilesPreferred[] = $fileName;
 			} else {
 				$this->_jsFilesPreferred[$key] = $fileName;
-			}			
+			}
 		} else {
 			if ($key == null) {
 				$this->_jsFiles[] = $fileName;
@@ -465,7 +465,7 @@ abstract class ViewAbstract extends CurryClass
 			}
 		}
 	}
-		
+
 	/**
 	 * Add javascript file name to read
 	 *
@@ -477,7 +477,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		return $this->_addJs($fileName, $key);
 	}
-	
+
 	/**
 	 * Add javascript file name to read to preferentially
 	 *
@@ -489,7 +489,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		return $this->_addJs($fileName, $key, true);
 	}
-	
+
 	/**
 	 * Add stylesheet file name to read
 	 *
@@ -513,7 +513,7 @@ abstract class ViewAbstract extends CurryClass
 				$this->_cssFilesPreferred[] = $fileName;
 			} else {
 				$this->_cssFilesPreferred[$key] = $fileName;
-			}			
+			}
 		} else {
 			if ($key == null) {
 				$this->_cssFiles[] = $fileName;
@@ -522,7 +522,7 @@ abstract class ViewAbstract extends CurryClass
 			}
 		}
 	}
-	
+
 	/**
 	 * Add stylesheet file name to read
 	 *
@@ -534,7 +534,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		return $this->_addCss($fileName, $key);
 	}
-	
+
 	/**
 	 * Add stylesheet file name to read preferentially
 	 *
@@ -546,10 +546,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		return $this->_addCss($fileName, $key, true);
 	}
-	
+
 	/**
-	 * Set value of tag in which a name has an attribute which is "http-equiv" 
-	 * 
+	 * Set value of tag in which a name has an attribute which is "http-equiv"
+	 *
 	 * @param string $httpEquivValue Value of "name" attribute
 	 * @param string $contentValue Value of "content" attribute
 	 * @return void
@@ -558,10 +558,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_metas['http-equiv'][$httpEquivValue] = $contentValue;
 	}
-	
+
 	/**
-	 * Set value of tag in which a name has an attribute which is "name" 
-	 * 
+	 * Set value of tag in which a name has an attribute which is "name"
+	 *
 	 * @param string $nameValue Value of "name" attribute
 	 * @param string $contentValue Value of "content" attribute
 	 * @return void
@@ -570,10 +570,10 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_metas['name'][$nameValue] = $contentValue;
 	}
-	
+
 	/**
 	 * Set page keywords
-	 * 
+	 *
 	 * @param string|array $keywords
 	 * @return void
 	 */
@@ -582,23 +582,23 @@ abstract class ViewAbstract extends CurryClass
 		if (is_array($keywords)) {
 			$keywords = implode(',', $keywords);
 		}
-		$this->setMetaName('keywords', $keywords);		
+		$this->setMetaName('keywords', $keywords);
 	}
-	
+
 	/**
 	 * Set page description
-	 * 
+	 *
 	 * @param string $description
 	 * @return void
 	 */
 	public function setMetaNameDescription($description)
 	{
-		$this->setMetaName('description', $description);		
+		$this->setMetaName('description', $description);
 	}
-	
+
 	/**
 	 * Set title of page
-	 * 
+	 *
 	 * @param string $title
 	 * @return void
 	 */
@@ -606,7 +606,7 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_title = $title;
 	}
-	
+
 	/**
 	 * Clear all assigned values
 	 *
@@ -616,39 +616,39 @@ abstract class ViewAbstract extends CurryClass
 	{
 		$this->_vars = array();
 	}
-	
+
 	/**
 	 * Set basic vars to template
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setBasicVars()
 	{
-		$req = $this->_request;		
+		$req = $this->_request;
 		$requestInfo['base_path']  = rtrim('/' . trim($req->getBasePath(), '/'), '/');
 		$requestInfo['base_url'] = $req->getBaseUrl();
 		$requestInfo['controller'] = $req->getController();
-		$requestInfo['action'] = $req->getAction(); 
+		$requestInfo['action'] = $req->getAction();
 		$this->set('request', $requestInfo);
-		
+
 		$rendering['controller'] = $this->_renderingController;
 		$rendering['action'] = $this->_renderingAction;
 		$this->set('rendering', $rendering);
-		
+
 		$this->addPreferredCss('common');
 		$this->addPreferredCss($this->_renderingController);
 		$cssFiles = array_merge($this->_cssFilesPreferred, $this->_cssFiles);
 		$this->set('stylesheets', $cssFiles);
-		
+
 		$this->addPreferredJs('common');
 		$this->addPreferredJs($this->_renderingController);
 		$jsFiles = array_merge($this->_jsFilesPreferred, $this->_jsFiles);
 		$this->set('javascripts', $jsFiles);
-		
+
 		$this->set('page_title', $this->_title);
 		$this->set('metas', $this->_metas);
 	}
-	
+
 	/**
 	 * Execute output html
 	 *
@@ -665,10 +665,10 @@ abstract class ViewAbstract extends CurryClass
 		$rendered = $this->getRendered();
 		echo $rendered;
 	}
-	
+
 	/**
-	 * Get output text which should be outputted is acquired. 
-	 * 
+	 * Get output text which should be outputted is acquired.
+	 *
 	 * @return string
 	 */
 	public function getRendered()
@@ -696,19 +696,19 @@ abstract class ViewAbstract extends CurryClass
 		}
 		return $rendered;
 	}
-		
+
 	/**
 	 * Execute output html using a layout template
 	 *
 	 * @return void
 	 */
 	abstract protected function renderTemplate();
-	
+
 	/**
 	 * Execute output html without using a layout template
 	 *
 	 * @return void
 	 */
 	abstract protected function renderTemplateWithLayout();
-		
+
 }
