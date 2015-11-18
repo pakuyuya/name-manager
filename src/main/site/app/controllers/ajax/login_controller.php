@@ -12,13 +12,13 @@ class LoginController extends JsonBaseController
 	}
 
 	/**
-	 * デフォルトページ
+	 *
 	 */
 	public function post(){
 		$this->view->json->result = true;
 	}
 	/**
-	 * デフォルトページ
+	 * POST
 	 */
 	public function index(){
 		$this->view->json->result = true;
