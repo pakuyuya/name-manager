@@ -3,7 +3,6 @@
  */
 
 /// <reference path="../lib/definitely/jquery/jquery.d.ts" />
-/// <reference path="./debug-impl.ts" />
 module Message{
 
     var MSGS = {
@@ -17,7 +16,6 @@ module Message{
 
     export function setLanguage(lang : string){
         if(!MSGS[lang]){
-            Debug.error('no-supporteed language:' + lang);
             return;
         }
 

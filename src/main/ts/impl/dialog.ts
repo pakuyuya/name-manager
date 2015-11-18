@@ -2,12 +2,12 @@
 
 module Dialog{
     /**
-     * ƒ_ƒCƒAƒƒO‚ğŒÄ‚Ño‚·B
+     * ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’å‘¼ã³å‡ºã™ã€‚
      *
      * @param options
      */
     export function show(options : any){
-        // ƒIƒvƒVƒ‡ƒ“ì¬
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½œæˆ
         options = $.extend({
             caption : 'Message',
             text : '', // text
@@ -23,7 +23,7 @@ module Dialog{
     }
 
     /**
-     * Dialog‚ÌDOM‚ğ¶¬‚µ•Ô‚·
+     * Dialogã®DOMã‚’ç”Ÿæˆã—è¿”ã™
      *
      * @param options
      * @returns jQuery
@@ -33,7 +33,7 @@ module Dialog{
         var $dialog =
             $('<div>').addClass('c-dialog');
 
-        // ƒeƒLƒXƒg
+        // ãƒ†ã‚­ã‚¹ãƒˆ
         var $dlgText = $('<div>').addClass('c-dialog-text')
                                     .html(options.text);
 
@@ -42,7 +42,7 @@ module Dialog{
 
         var buttons = options.buttons;
 
-        // ƒpƒ‰ƒƒ^‚ğ‚à‚Æ‚ÉAƒ{ƒ^ƒ“‚ğ¶¬‚µ‚Ä•Ô‚·ƒNƒ[ƒWƒƒ
+        // ãƒ‘ãƒ©ãƒ¡ã‚¿ã‚’ã‚‚ã¨ã«ã€ãƒœã‚¿ãƒ³ã‚’ç”Ÿæˆã—ã¦è¿”ã™ã‚¯ãƒ­ãƒ¼ã‚¸ãƒ£
         var fnCreateButton = function(key, param){
             var id = key;
             var text = 'ok';
@@ -75,10 +75,10 @@ module Dialog{
             return $ret;
         };
 
-        // ƒ{ƒ^ƒ“¶¬
+        // ãƒœã‚¿ãƒ³ç”Ÿæˆ
 
         if(typeof(buttons) !== 'object'){
-            // object‚¶‚á‚È‚¢ê‡i‘½•ªƒvƒŠƒ~ƒeƒBƒuj‚Èê‡‚Íƒpƒ‰ƒ[ƒ^Œ^‚É•ÏŠ·B
+            // objectã˜ã‚ƒãªã„å ´åˆï¼ˆå¤šåˆ†ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ï¼‰ãªå ´åˆã¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‹ã«å¤‰æ›ã€‚
             buttons = { ok : buttons };
         }
 
@@ -92,7 +92,7 @@ module Dialog{
             }
         }
 
-        // DOM’Ç‰Á
+        // DOMè¿½åŠ 
         $dialog.append($dlgText, $dlgButtons);
 
         // focus
@@ -104,7 +104,7 @@ module Dialog{
     }
 
     /**
-     * ”w–ÊƒtƒBƒ‹ƒ^[‚ğì‚èA•Ô‚·
+     * èƒŒé¢ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚’ä½œã‚Šã€è¿”ã™
      *
      * @returns JQuery  filter
      */
@@ -113,7 +113,7 @@ module Dialog{
     }
 
     function setDlgOnDOM($dialog : JQuery, $filter : JQuery){
-        //ƒtƒBƒ‹ƒ^[ƒTƒCƒYİ’è
+        //ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚µã‚¤ã‚ºè¨­å®š
         var $wnd = $(window);
 
         var fnResizeDlgs = function(){
@@ -146,10 +146,10 @@ module Dialog{
         };
 
 
-        // ƒEƒBƒ“ƒhƒE‚ÉƒŠƒTƒCƒYƒCƒxƒ“ƒg’Ç‰Á
+        // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ãƒªã‚µã‚¤ã‚ºã‚¤ãƒ™ãƒ³ãƒˆè¿½åŠ 
         $wnd.bind('resize', fnResizeWnd);
 
-        // •Â‚¶‚éŠÖ”’Ç‰Á
+        // é–‰ã˜ã‚‹é–¢æ•°è¿½åŠ 
         removeFunctionList.push(function(){
             $dialog.addClass('is-rehide');
             $filter.addClass('is-rehide');
@@ -161,13 +161,13 @@ module Dialog{
             $wnd.unbind('resize', fnResizeWnd);
         });
 
-        // DOM’Ç‰Á
+        // DOMè¿½åŠ 
         $('body').append($dialog, $filter);
 
-        // ƒŠƒTƒCƒY
+        // ãƒªã‚µã‚¤ã‚º
         fnResizeDlgs();
 
-        // •\¦
+        // è¡¨ç¤º
         $dialog.addClass('is-shown');
         $filter.addClass('is-shown');
     }
