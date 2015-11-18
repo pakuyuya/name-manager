@@ -7,21 +7,20 @@ Loader::loadController('JsonBaseController', 'common');
  */
 class LoginController extends JsonBaseController
 {
-	public function __construct(){
-		$this->setEnabledLoginCheck(false);
-	}
+    public function __construct(){
+        $this->setEnabledLoginCheck(false);
+    }
 
-	/**
-	 *
-	 */
-	public function post(){
-		$this->view->json->result = true;
-	}
-	/**
-	 * POST
-	 */
-	public function index(){
-		$this->view->json->result = true;
-	}
+    /**
+     *
+     */
+    public function post(){
+        $this->view->json->result = true;
+    }
+    /**
+     * P     */
+    public function index(){
+        $this->view->json->result = true;
+    }
 
 }

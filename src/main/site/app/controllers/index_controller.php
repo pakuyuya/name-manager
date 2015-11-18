@@ -7,12 +7,12 @@ Loader::loadController('PageBaseController', 'common');
  */
 class IndexController extends PageBaseController
 {
-	/**
-	 * デフォルトページ
-	 */
-	public function index()
-	{
-		$this->redirect('/main');
-	}
+    /**
+     * デフォルトページ
+     */
+    public function index()
+    {
+        $this->redirect('/main');
+    }
 
 }

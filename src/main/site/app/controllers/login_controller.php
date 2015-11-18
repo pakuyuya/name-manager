@@ -3,16 +3,19 @@ Loader::loadController('PageBaseController', 'common');
 
 class LoginController extends PageBaseController
 {
-	public function initialize()
-	{
-		// ログインチェックを切る
-		$this->setEnabledLoginCheck(false);
-	}
+    /**
+     * 初期化
+     */
+    public function initialize()
+    {
+        // ログインチェックを切る
+        $this->setEnabledLoginCheck(false);
+    }
 
-	/**
-	 *
-	 */
-	public function index()
-	{
-	}
+    /**
+     * index
+     */
+    public function index()
+    {
+    }
 }
