@@ -13,8 +13,8 @@ var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
 
 // ディレクトリパス取得
-// Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にすると、
-//       ファイル名をフルパスにしないとうまく動かない。
+// Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にする場合、
+//       ファイル名をフルパスに変換して渡す必要あり。
 var BUILD_DIR = path.resolve('../build') + '/';
 var SRC_DIR = path.resolve('../src/main') + '/';
 
@@ -31,6 +31,9 @@ gulp.task('initdir', function(){
 	}
 	if(!fs.existsSync(BUILD_DIR + 'css')){
 		fs.mkdir(BUILD_DIR + 'css');
+	}
+	if(!fs.existsSync(BUILD_DIR + 'html')){
+		fs.mkdir(BUILD_DIR + 'html');
 	}
 	if(!fs.existsSync(BUILD_DIR + 'lib')){
 		fs.mkdir(BUILD_DIR + 'lib');
@@ -70,6 +73,7 @@ gulp.task('clean-webcontent', ['initdir'], function(cb){
 			SRC_DIR + 'js/**/*',
 			BUILD_DIR + 'js/*.js',
 			BUILD_DIR + 'css/*.css',
+			BUILD_DIR + 'html/**/*',
 		], {force : true},
 		cb);
 });
@@ -95,6 +99,15 @@ gulp.task('copy-php',['clean-php'], function(){
 			.pipe(gulp.dest(BUILD_DIR))
 });
 
+gulp.task('copy-html', function(){
+	gulp.src(
+		[
+			SRC_DIR + 'html/**/*',
+		],
+		{base : SRC_DIR})
+		.pipe(gulp.dest(BUILD_DIR))
+})
+
 // ライブラリコピー
 gulp.task('copy-lib',['clean-lib'], function(){
 	gulp.src([SRC_DIR + 'lib/**/*'], {base : SRC_DIR})
@@ -104,7 +117,7 @@ gulp.task('copy-lib',['clean-lib'], function(){
 // Typescriptコンパイル
 gulp.task('typescript-compile', function(){
 	return gulp.src([SRC_DIR + 'ts/**/*.ts'])
-		.pipe(typescript({ target : 'ES5', removeComments: true, noExternalResolve: true, module: 'amd'}))
+		.pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'amd'}))
 		.js
 		.pipe(gulp.dest(SRC_DIR + 'js/'))
 		.on('end', function(){
@@ -131,15 +144,9 @@ gulp.task('compass-compile', function(){
 });
 
 // 全コンパイル
-gulp.task('compile-all', ['initdir', 'clean', 'copy-lib', 'copy-php', 'typescript-compile', 'compass-compile']);
+gulp.task('compile-all', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'typescript-compile', 'compass-compile']);
 
 // コマンドラインで常駐させて、変更があったscssのみ再コンパイル
 gulp.task('watch-compass', function(){
 	gulp.watch(SRC_DIR + 'sass/*.scss', ['compass-compile']);
 });
-
-//・typescriptの<reference>参照は、gulp.srcにて指定したもののみが含まれるらしい（ドはまり）
-//・watchのパスは、差分があったファイルのみだけgulp.srcに入力される。
-//gulp.task('watch-typescript', function(){
-//	gulp.watch(SRC_DIR + 'ts/**/*.ts', ['typescript-compile']);
-//});
