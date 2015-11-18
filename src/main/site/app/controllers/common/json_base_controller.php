@@ -14,8 +14,8 @@ abstract class JsonBaseController extends BaseController {
 	 * @see Controller::preProcess()
 	 */
 	public function preProcess() {
-		if ($this->isEnabledLoginCheck ()) {
-			if (! $this->checkLogin ()) {
+		if ($this->isEnabledLoginCheck()) {
+			if (!$this->checkLogin()) {
 				$this->responseDenyed();
 			}
 		}
@@ -34,5 +34,6 @@ abstract class JsonBaseController extends BaseController {
 	 */
 	public function postProcess() {
 		$this->view->strjson = json_encode($this->view->json);
+		echo $this->view->strjson;
 	}
 }
