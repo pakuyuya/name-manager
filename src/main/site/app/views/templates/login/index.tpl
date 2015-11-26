@@ -8,11 +8,11 @@
 
             <div class="c-line">
                 <label for="loginid"><span class="icon-user"></span></label>
-                <input type="text" id="loginid" ng-model="loginid" placeholder="user id" />
+                <input type="text" id="loginid" class="size-m" ng-model="loginid" placeholder="user id" />
             </div>
             <div class="c-line">
                 <label for="loginpw"><span class="icon-key"></span></label>
-                <input type="password" id="loginpw" ng-model="loginpw" placeholder="password" />
+                <input type="password" id="loginpw" class="size-m" ng-model="loginpw" placeholder="password" />
             </div>
             <div class="p-form-cmd c-line">
                 <button id="login-button" type="submit" class="primary">Login</button>

@@ -157,8 +157,10 @@ input[type=search], textarea {
   }
 
   &.size-m {
-    padding   : 4px 6px;
-    font-size : 16px;
+    padding     : 4px 6px;
+    font-size   : 16px;
+    height      : 28px;
+    line-height : 28px;
   }
 
   &.size-s {
