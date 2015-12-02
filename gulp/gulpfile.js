@@ -167,3 +167,7 @@ gulp.task('build', ['initdir', 'copy-lib-noclean', 'copy-php-noclean', 'copy-htm
 gulp.task('watch-compass', function(){
 	gulp.watch(SRC_DIR + 'sass/*.scss', ['compass-compile']);
 });
+
+gulp.task('watch-typescript', function(){
+    gulp.watch(SRC_DIR + 'ts/**/*.ts', ['typescript-compile']);
+});
