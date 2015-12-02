@@ -165,7 +165,7 @@ gulp.task('build', ['initdir', 'copy-lib-noclean', 'copy-php-noclean', 'copy-htm
 
 // コマンドラインで常駐させて、変更があったscssのみ再コンパイル
 gulp.task('watch-compass', function(){
-	gulp.watch(SRC_DIR + 'sass/*.scss', ['compass-compile']);
+	gulp.watch(SRC_DIR + 'sass/**/*.scss', ['compass-compile']);
 });
 
 gulp.task('watch-typescript', function(){
