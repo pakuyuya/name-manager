@@ -32,10 +32,13 @@
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">
                                 <h3 class="p-search-condition-label">役員区分</h3>
-                                <label><input type="checkbox" />役員</label>
-                                <label><input type="checkbox" />団体会員</label>
-                                <label><input type="checkbox" />賛助会員</label>
-                                <label><input type="checkbox" />購読会員</label>
+                                <div ng-repeat="condMemberTypes">
+                                    <label><i</label>
+                                    <label><input type="checkbox" />役員</label>
+                                    <label><input type="checkbox" />団体会員</label>
+                                    <label><input type="checkbox" />賛助会員</label>
+                                    <label><input type="checkbox" />購読会員</label>
+                                </div>
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">

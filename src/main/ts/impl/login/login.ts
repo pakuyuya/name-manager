@@ -4,9 +4,8 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
-/// <reference path="../dialog.ts" />
-/// <reference path="../tips.ts" />
-/// <reference path="../common.ts" />
+
+import common = require('../common');
 
 /**
  * /login 用JS定義
@@ -32,7 +31,7 @@ module Login {
                 },
                 // HTTP失敗 or 拒否
                 function (response) {
-                    Common.systemErr();
+                    common.systemErr();
                 }
             )
         }

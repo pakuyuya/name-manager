@@ -1,13 +1,13 @@
 /// <reference path="../lib/definitely/jquery/jquery.d.ts" />
 
-module Tips{
+export module Tips{
     /**
-     * ‚«o‚µ•t‚«ƒƒbƒZ[ƒW‚ğì¬‚·‚éB
+     * å¹ãå‡ºã—ä»˜ããƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½œæˆã™ã‚‹ã€‚
      *
      * @param options
      */
     export function show(options : any){
-        // ƒIƒvƒVƒ‡ƒ“ì¬
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½œæˆ
         options = $.extend({
             text : '', // text
             bgColor : '#ffcccc',
@@ -25,7 +25,7 @@ module Tips{
         var $target : JQuery = $(options.target);
 
         if(!$target.length){
-            // –³Œø‚Èƒ^[ƒQƒbƒg
+            // ç„¡åŠ¹ãªã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
             return false;
         }
 
@@ -34,7 +34,7 @@ module Tips{
     }
 
     /**
-     * Tips‚ÌDOM‚ğ¶¬‚µ•Ô‚·
+     * Tipsã®DOMã‚’ç”Ÿæˆã—è¿”ã™
      * @param options
      * @returns jQuery
      */
@@ -45,7 +45,7 @@ module Tips{
 
         $tips.css(options.css);
 
-        // ƒeƒLƒXƒg
+        // ãƒ†ã‚­ã‚¹ãƒˆ
         var $tipsText = $('<div>').addClass('c-tips-text')
                                     .text(options.text);
 
@@ -57,7 +57,7 @@ module Tips{
 
         $tipsText .css(tipsTextCss);
 
-        // ‚«o‚µOŠp
+        // å¹ãå‡ºã—ä¸‰è§’
         var $tipsTriangle = $('<div>').addClass('c-tips-triangle');
 
         var tipsTriangleCss : any = {};
@@ -66,7 +66,7 @@ module Tips{
 
         $tipsTriangle .css(tipsTriangleCss);
 
-        // ƒeƒLƒXƒg‚Ì— ‘¤
+        // ãƒ†ã‚­ã‚¹ãƒˆã®è£å´
         var $tipsTextBack = $('<div>').addClass('c-tips-text-back');
 
         var tipsTextBackCss : any = {};
@@ -74,7 +74,7 @@ module Tips{
 
         $tipsTextBack.css(tipsTextBackCss);
 
-        // DOM’Ç‰Á
+        // DOMè¿½åŠ 
         $tips.append($tipsText, $tipsTriangle, $tipsTextBack);
         return $tips;
     }
@@ -84,7 +84,7 @@ module Tips{
 
         var tgtOffset = $target.offset();
 
-        // ”ñ•\¦‚Ìƒ_ƒ~[DOM‚ğì¬‚µABODY‚É’Ç‰Á‚·‚é‚±‚Æ‚ÅAˆê“xƒTƒCƒY‚ğŒvZ‚³‚¹‚é
+        // éè¡¨ç¤ºã®ãƒ€ãƒŸãƒ¼DOMã‚’ä½œæˆã—ã€BODYã«è¿½åŠ ã™ã‚‹ã“ã¨ã§ã€ä¸€åº¦ã‚µã‚¤ã‚ºã‚’è¨ˆç®—ã•ã›ã‚‹
         var $dmy = $('<div>').css({opacity: 0, position: 'absolute', top:0, height:0});
         $dmy.append($tips);
 
@@ -92,36 +92,36 @@ module Tips{
 
         $body.append($dmy);
 
-        // ŠeDOMæ“¾
+        // å„DOMå–å¾—
         var $tipsText = $tips.children('.c-tips-text');
         var $tipsTriangle = $tips.children('.c-tips-triangle');
         var $tipsTextBack = $tips.children('.c-tips-text-back');
 
-        // TextBack‚Ì’ZŒ`İ’è
+        // TextBackã®çŸ­å½¢è¨­å®š
         $tipsTextBack.width($tipsText.outerWidth())
                      .height($tipsText.outerHeight());
 
-        // Tips‘S‘Ì‚ÌOffsetŒvZ
+        // Tipså…¨ä½“ã®Offsetè¨ˆç®—
         var offset = $target.offset();
         offset.left += $target.width() - 15;
         offset.top  -= $tipsText.outerHeight() + 2;
 
-        // Triangle‚ÌOffsetŒvZ
+        // Triangleã®Offsetè¨ˆç®—
         $tipsTriangle.css({
             top  : ($tipsText.outerHeight())+ 'px',
             left : '5px'
         });
 
-        // DOM‚©‚çíœ
+        // DOMã‹ã‚‰å‰Šé™¤
         $dmy.remove();
         $tips.remove();
 
-        // ‰ü‚ß‚ÄDOM‚É“o˜^
+        // æ”¹ã‚ã¦DOMã«ç™»éŒ²
         //$body.append($tips);
         $target.parent().append($tips);
         $tips.offset(offset);
 
-        // œ‹ƒCƒxƒ“ƒg
+        // é™¤å»ã‚¤ãƒ™ãƒ³ãƒˆ
         var removeFunc = function(){
             $tips.remove();
             $target.unbind('focus', buraFunc);

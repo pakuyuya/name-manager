@@ -4,12 +4,11 @@
 
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
-/// <reference path="../dialog.ts" />
-/// <reference path="../tips.ts" />
-/// <reference path="../common.ts" />
+
 
 var mainApp = angular.module('mainApp', []);
 
+// ui Gmenu
 mainApp.directive('uiGmenu', function(){
     return {
         restrict: 'CA',
@@ -29,6 +28,7 @@ mainApp.directive('uiGmenu', function(){
     };
 });
 
-mainApp.controller('header', ['$scope', function($scope){
-
+mainApp.controller('header', ['$scope', '$http', function($scope, $http){
+    // init models
+    $scope.memberTypes = [];
 }]);

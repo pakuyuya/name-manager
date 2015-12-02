@@ -1,6 +1,6 @@
 /// <reference path="../lib/definitely/jquery/jquery.d.ts" />
 
-module Dialog{
+export module Dialog{
     /**
      * ダイアログを呼び出す。
      *

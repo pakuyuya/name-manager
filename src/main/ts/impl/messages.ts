@@ -3,7 +3,7 @@
  */
 
 /// <reference path="../lib/definitely/jquery/jquery.d.ts" />
-module Message{
+export module Message{
 
     var MSGS = {
         ja : {
