@@ -8,15 +8,16 @@ var path = require('path');
 var concat = require('gulp-concat');
 var compass = require('gulp-compass');
 var typescript = require('gulp-typescript');
+var webpack = require('gulp-webpack');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
+var foreach = require('gulp-foreach');
 var del = require('del');
 var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
 
 var shell = require('gulp-shell');
-var webpack = require('gulp-webpack');
-var foreach = require('gulp-foreach');
+var runSequence = require('run-sequence');
 
 var FileUtils = FileUtils || {};
 (function(FileUtils) {
@@ -34,6 +35,9 @@ var FileUtils = FileUtils || {};
         return path.substr(0, end);
     };
 })(FileUtils);
+
+// clean-全コンパイル
+gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'typescript-compile', 'compass-compile']);
 
 // ディレクトリパス取得
 // Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にする場合、
@@ -144,9 +148,9 @@ gulp.task('typescript-compile', function(){
         .pipe(gulp.dest(SRC_DIR + 'js/'))
         .on('end', function(){
             // main/js/impl以下のファイルだけ圧縮してbuildへコピー
-            gulp.src([SRC_DIR + 'js/impl/*/*.js'])
+            gulp.src([SRC_DIR + 'js/deploy/*/*.js'])
                 .pipe(foreach(function(stream, f){
-                    var path = f.path.substr((SRC_DIR + 'js/impl/').length);
+                    var path = f.path.substr((SRC_DIR + 'js/deploy/').length);
                     return stream
                         .pipe(webpack({
                             output : {
@@ -174,13 +178,6 @@ gulp.task('compass-compile', function(){
         .pipe(gulp.dest(BUILD_DIR + 'css/'));
 });
 
-// clean-全コンパイル
-gulp.task('rebuild', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'typescript-compile', 'compass-compile']);
-
-// cleanせずbuild
-gulp.task('build', ['initdir', 'copy-lib-noclean', 'copy-php-noclean', 'copy-html', 'typescript-compile', 'compass-compile']);
-
-
 // コマンドラインで常駐させて、変更があったscssのみ再コンパイル
 gulp.task('watch-compass', function(){
 	gulp.watch(SRC_DIR + 'sass/**/*.scss', ['compass-compile']);
@@ -191,6 +188,6 @@ gulp.task('watch-typescript', function(){
 });
 
 gulp.task('watch-php-app', function() {
-    gulp.watch(SRC_DIR + 'site/app/**/*', ['copy-php']);
+    gulp.watch(SRC_DIR + 'site/app/**/*', function(){ runSequence('clean-php', 'copy-php') });
 });
 

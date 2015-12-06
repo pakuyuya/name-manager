@@ -11,10 +11,8 @@ _{foreach from=$meta key=key item=content}_
 _{/foreach}_
 _{/foreach}_
 <script src="_{$request.base_path}_/lib/jquery/jquery-2.1.3.min.js"></script>
-<script src="_{$request.base_path}_/lib/angularjs/angularjs.min.js"></script>
-<script src="_{$request.base_path}_/js/common.js"></script>
-<script src="_{$request.base_path}_/js/tips.js"></script>
-<script src="_{$request.base_path}_/js/dialog.js"></script>
+    <script src="_{$request.base_path}_/lib/angularjs/angularjs.min.js"></script>
+    <script src="_{$request.base_path}_/lib/checklist-model/checklist-model.js"></script>
 _{foreach from=$javascripts item=js}_
 <script type="text/javascript" src="_{$request.base_path}_/js/_{$js}_"></script>
 _{/foreach}_

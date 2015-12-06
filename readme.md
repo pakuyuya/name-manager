@@ -47,8 +47,6 @@
 Node.jsのパッケージインストールコマンドまとめ
 ```
 npm install -g gulp
-npm install -g typescript
-npm install -g gulp-typescript
 ```
 
   * Ruby https://www.ruby-lang.org/ja/
@@ -66,6 +64,9 @@ gem install compass
 
 
 ## 5. コンパイル / 実行
+
+* コンパイル用に gulp モジュールをインストール
+  * ```(プロジェクト)/gulp``` に移動し、```npm install``` (かなり時間かかります。）
 
 * コンパイル
   * ```gulp compile-all``` 実行

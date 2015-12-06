@@ -145,8 +145,7 @@ export module Dialog{
             }, 0);
         };
 
-
-        // ウィンドウにリサイズイベント追加
+        // windowにリサイズイベント追加
         $wnd.bind('resize', fnResizeWnd);
 
         // 閉じる関数追加

@@ -5,8 +5,9 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
+import appConsts = require('setting/constants');
 
-var mainApp = angular.module('mainApp', []);
+var mainApp = angular.module(appConsts.appName);
 
 // ui Gmenu
 mainApp.directive('uiGmenu', function(){
@@ -28,7 +29,13 @@ mainApp.directive('uiGmenu', function(){
     };
 });
 
-mainApp.controller('header', ['$scope', '$http', function($scope, $http){
+mainApp.controller('HeaderCtrl', ['$scope', '$http', function($scope){
+
+}]);
+
+mainApp.controller('MainCtrl', [ 'memberTypes',  function( memberTypes){
     // init models
-    $scope.memberTypes = [];
+    var self = this;
+    self.selectedNum = 0;
+    self.memberTypes = memberTypes.getAll();
 }]);

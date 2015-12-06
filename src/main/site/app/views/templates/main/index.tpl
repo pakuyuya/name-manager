@@ -1,6 +1,6 @@
 
 <div ng-app="mainApp">
-    <header class="p-header u-flex" id="header" ng-controller="header">
+    <header class="p-header u-flex" id="header" ng-controller="HeaderCtrl as header">
         <div class="u-p95">
             ヒューライツ大阪名簿データベース
         </div>
@@ -8,16 +8,18 @@
         <div class="p-header-buttons u-p5" ui-gmenu>
         </div>
     </header>
-    <div id="main">
+    <div id="main" ng-controller="MainCtrl as main">
         <!-- タブ -->
         <div class="p-tabs u-flex">
             <div class="p-tab search u-center is-active">名簿一覧</div>
-            <div class="p-tab clip   u-center">クリップ (1)</div>
+            <div class="p-tab clip   u-center">選択 ({{selectedNum}})</div>
         </div>
+
         <!-- 本検索フォーム -->
         <div id="main-list">
             <div class="p-main-list-line">
             </div>
+
             <!-- リスト -->
             <!-- ゆくゆくは、directive化しようかな -->
             <div class="p-search">
@@ -31,13 +33,9 @@
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">
-                                <h3 class="p-search-condition-label">役員区分</h3>
-                                <div ng-repeat="condMemberTypes">
-                                    <label><i</label>
-                                    <label><input type="checkbox" />役員</label>
-                                    <label><input type="checkbox" />団体会員</label>
-                                    <label><input type="checkbox" />賛助会員</label>
-                                    <label><input type="checkbox" />購読会員</label>
+                                <h3 class="p-search-condition-label">役員・会員オプション</h3>
+                                <div>
+                                    <label ng-repeat="type in main.memberTypes"><input type="checkbox" value="{{ type.value }}" checklist-model="main.condMemberTypes" checklist-value="type.value" />{{ type.name }}</label>
                                 </div>
                             </div>
                             <span class="u-vert-sep"></span>
@@ -65,7 +63,6 @@
                             </div>
                         </form>
                     </div>
-
                     <!--  -->
                     <div class="u-p80">
                         <div class="p-commands">
@@ -93,114 +90,18 @@
                             </div>
 
                             <div>
-                                <button type="button" class="size-s">すべてクリップ</button>
-                                <button type="button" class="size-s">すべてのクリップを外す</button>
+                                <button type="button" class="size-s">検索結果をすべて選択</button>
+                                <button type="button" class="size-s">すべての選択を取り消す</button>
                             </div>
                             <!-- リスト -->
                             <div class="p-names-list">
                                 <div class="p-names-row p-names-header u-flex">
-                                    <div class="p-names-clip">Clip</div>
+                                    <div class="p-names-clip">選択</div>
                                     <div class="p-names-mem">会員</div>
                                     <div class="p-names-name">氏名/組織名</div>
                                     <div class="p-names-addr">住所</div>
                                     <div class="p-names-expr">配布期限</div>
                                     <div class="p-names-edit">編集</div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
-                                </div>
-                                <div class="p-names-row u-row u-flex">
-                                    <div class="p-names-clip">○</div>
-                                    <div class="p-names-mem">賛助</div>
-                                    <div class="p-names-name">first-name</div>
-                                    <div class="p-names-addr">大阪府大阪市梅田1-1-100 太郎ビル</div>
-                                    <div class="p-names-expr">2014/01/01</div>
-                                    <div class="p-names-edit"><button class="size-m">編集</button></div>
                                 </div>
                             </div>
                         </div>
