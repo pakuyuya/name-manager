@@ -18,6 +18,23 @@ var shell = require('gulp-shell');
 var webpack = require('gulp-webpack');
 var foreach = require('gulp-foreach');
 
+var FileUtils = FileUtils || {};
+(function(FileUtils) {
+    FileUtils.filename = function(path) {
+        var start = path.search('[\\\\/][^\\\\/]*$');
+
+        start = (start >= 0) ? start + 1 : 0;
+
+        return path.substr(start);
+    };
+    FileUtils.basename = function(path) {
+        var end = path.search('[\\\\/][^\\\\/]*[\\\\/]?$');
+        end = (end >= 0) ? end : path.length;
+
+        return path.substr(0, end);
+    };
+})(FileUtils);
+
 // ディレクトリパス取得
 // Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にする場合、
 //       ファイル名をフルパスに変換して渡す必要あり。
@@ -75,8 +92,8 @@ gulp.task('clean-webcontent', ['initdir'], function(cb){
         [
             SRC_DIR + 'css/**/*',
             SRC_DIR + 'js/**/*',
-            BUILD_DIR + 'js/*.js',
-            BUILD_DIR + 'css/*.css',
+            BUILD_DIR + 'js/*',
+            BUILD_DIR + 'css/*',
             BUILD_DIR + 'html/**/*',
         ], {force : true},
         cb);
@@ -128,14 +145,15 @@ gulp.task('typescript-compile', function(){
         .on('end', function(){
             // main/js/impl以下のファイルだけ圧縮してbuildへコピー
             gulp.src([SRC_DIR + 'js/impl/*/*.js'])
-                .pipe(foreach(function(stream){
+                .pipe(foreach(function(stream, f){
+                    var path = f.path.substr((SRC_DIR + 'js/impl/').length);
                     return stream
                         .pipe(webpack({
                             output : {
-                                filename : '[name]/[name].js'
+                                filename : path
                             }
                         }))
-                        .pipe(uglify())
+                        .pipe(uglify());
                 }))
                 .pipe(gulp.dest(BUILD_DIR + 'js/'));
         });
@@ -171,3 +189,8 @@ gulp.task('watch-compass', function(){
 gulp.task('watch-typescript', function(){
     gulp.watch(SRC_DIR + 'ts/**/*.ts', ['typescript-compile']);
 });
+
+gulp.task('watch-php-app', function() {
+    gulp.watch(SRC_DIR + 'site/app/**/*', ['copy-php']);
+});
+
