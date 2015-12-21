@@ -5,7 +5,7 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
-import appConsts = require('setting/constants');
+import appConsts = require('./setting/constants');
 
 var mainApp = angular.module(appConsts.appName);
 

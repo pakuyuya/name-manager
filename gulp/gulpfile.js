@@ -148,9 +148,10 @@ gulp.task('typescript-compile', function(){
         .pipe(gulp.dest(SRC_DIR + 'js/'))
         .on('end', function(){
             // main/js/impl以下のファイルだけ圧縮してbuildへコピー
-            gulp.src([SRC_DIR + 'js/deploy/*/*.js'])
+            gulp.src([SRC_DIR + 'js/app/*/*.js'])
                 .pipe(foreach(function(stream, f){
-                    var path = f.path.substr((SRC_DIR + 'js/deploy/').length);
+                    var path = f.path.substr((SRC_DIR + 'js/app/').length);
+                    console.log(path);
                     return stream
                         .pipe(webpack({
                             output : {

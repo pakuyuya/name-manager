@@ -7,11 +7,13 @@
 
 import common = require('../common');
 
+import appConsts = require('./setting/constants');
+
 /**
  * /login 用JS定義
  */
 module Login {
-    var loginApp = angular.module('loginApp', []);
+    var loginApp = angular.module(appConsts.appName, []);
     loginApp.controller('loginCtrl', ['$scope', '$http', function($scope, $http) {
         $scope.sendLogin = function() {
             return $http({
