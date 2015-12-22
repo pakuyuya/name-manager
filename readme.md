@@ -13,8 +13,9 @@
   * MVCフレームワーク：Curry PHP（同梱）
   * テンプレート　　 ：Smarty（同梱）
 
-* JavaScript
+* TypeScript
   * AltJSとしてTypeScriptを採用
+  * ver > 1.7
   * Angularjs
   * jQuery
 

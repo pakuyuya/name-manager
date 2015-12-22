@@ -7,7 +7,7 @@ var fs = require('fs');
 var path = require('path');
 var concat = require('gulp-concat');
 var compass = require('gulp-compass');
-var typescript = require('gulp-typescript');
+var typescript = require('gulp-tsc');
 var webpack = require('gulp-webpack');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
@@ -142,20 +142,19 @@ gulp.task('copy-lib',['clean-lib'], function(){
 
 // Typescriptコンパイル
 gulp.task('typescript-compile', function(){
+
     return gulp.src([SRC_DIR + 'ts/**/*.ts'])
         .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'amd'}))
-        .js
         .pipe(gulp.dest(SRC_DIR + 'js/'))
         .on('end', function(){
             // main/js/impl以下のファイルだけ圧縮してbuildへコピー
-            gulp.src([SRC_DIR + 'js/app/*/*.js'])
+            gulp.src([SRC_DIR + 'js/app/app/*.js'])
                 .pipe(foreach(function(stream, f){
-                    var path = f.path.substr((SRC_DIR + 'js/app/').length);
-                    console.log(path);
+                    var filename = f.path.substr((SRC_DIR + 'js/app/app/').length);
                     return stream
                         .pipe(webpack({
                             output : {
-                                filename : path
+                                filename : filename
                             }
                         }))
                         .pipe(uglify());

@@ -1,7 +1,7 @@
-/// <reference path="../../../lib/definitely/jquery/jquery.d.ts" />
-/// <reference path="../../../lib/definitely/angularjs/angular.d.ts" />
+/// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
+/// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
-import appConsts = require('../setting/constants');
+import {appName} from '../constants'
 
 class MemberTypesService {
     public getAll() {
@@ -14,4 +14,4 @@ class MemberTypesService {
     }
 }
 
-angular.module(appConsts.appName).factory('memberTypes',[new MemberTypesService]);
+angular.module(appName).factory('memberTypes',[new MemberTypesService]);

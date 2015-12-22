@@ -5,9 +5,9 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
-import appConsts = require('./setting/constants');
+import {appName} from '../constants';
 
-var mainApp = angular.module(appConsts.appName);
+var mainApp = angular.module(appName);
 
 // ui Gmenu
 mainApp.directive('uiGmenu', function(){

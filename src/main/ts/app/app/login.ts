@@ -6,14 +6,14 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 
 import common = require('../common');
+import {appName} from '../constants';
 
-import appConsts = require('./setting/constants');
 
 /**
  * /login 用JS定義
  */
 module Login {
-    var loginApp = angular.module(appConsts.appName, []);
+    var loginApp = angular.module(appName, []);
     loginApp.controller('loginCtrl', ['$scope', '$http', function($scope, $http) {
         $scope.sendLogin = function() {
             return $http({

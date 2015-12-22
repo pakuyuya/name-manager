@@ -1,7 +1,7 @@
-/// <reference path="../../../lib/definitely/jquery/jquery.d.ts" />
-/// <reference path="../../../lib/definitely/angularjs/angular.d.ts" />
+/// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
+/// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
-import appConsts = require('../setting/constants');
+import appConsts = require('../constants');
 
 class NamesListDirective {
     restrict = 'CA';

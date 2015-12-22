@@ -1,7 +1,6 @@
-/// <reference path="../../../lib/definitely/angularjs/angular-resource.d.ts" />
+/// <reference path="../../lib/definitely/angularjs/angular-resource.d.ts" />
 
-import globalConsts = require('../../globalconstants');
-import appConsts = require('../setting/constants');
+import {appName, apiBaseUrl} from '../constants';
 
 export interface NamesResource extends ng.resource.IResource<NamesResource> {
     isMember: string;
@@ -15,7 +14,7 @@ export interface NamesResourceClass extends ng.resource.IResourceClass<NamesReso
 }
 
 export function nameFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
-    var url = `${globalConsts.apiBaseUrl}` + 'names';
+    var url = apiBaseUrl + '/name/:id';
     var params = {
         lang: '@lang',
         memberTypes: '@memberTypes',
@@ -30,5 +29,5 @@ export function nameFactory($resource: ng.resource.IResourceService) : NamesReso
     return <NamesResourceClass> $resource(url, params, {query: queryAction });
 }
 
-var app = angular.module(appConsts.appName);
+var app = angular.module(appName);
 app.factory('Names', ['$resource', nameFactory]);
