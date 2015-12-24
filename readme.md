@@ -1,7 +1,7 @@
 # ヒューライツ大阪　名簿システム ver2
 
 
-## プロジェクトについて
+## 1. プロジェクトについて
 
  * 名簿管理システムです。
 
@@ -15,7 +15,7 @@
 
 * TypeScript
   * AltJSとしてTypeScriptを採用
-  * ver > 1.7
+  * ver >= 1.7
   * Angularjs
   * jQuery
 
@@ -42,12 +42,12 @@
   * Node.js　http://nodejs.jp/
 
   * Gulp
-  * Gulp-typescript
   * TypeScript
 
 Node.jsのパッケージインストールコマンドまとめ
 ```
 npm install -g gulp
+npm install -g typescript
 ```
 
   * Ruby https://www.ruby-lang.org/ja/
