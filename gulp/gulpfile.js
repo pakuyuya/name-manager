@@ -19,23 +19,6 @@ var notify = require('gulp-notify');
 var shell = require('gulp-shell');
 var runSequence = require('run-sequence');
 
-var FileUtils = FileUtils || {};
-(function(FileUtils) {
-    FileUtils.filename = function(path) {
-        var start = path.search('[\\\\/][^\\\\/]*$');
-
-        start = (start >= 0) ? start + 1 : 0;
-
-        return path.substr(start);
-    };
-    FileUtils.basename = function(path) {
-        var end = path.search('[\\\\/][^\\\\/]*[\\\\/]?$');
-        end = (end >= 0) ? end : path.length;
-
-        return path.substr(0, end);
-    };
-})(FileUtils);
-
 // clean-全コンパイル
 gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'typescript-compile', 'compass-compile']);
 
