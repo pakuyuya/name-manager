@@ -1,23 +1,27 @@
-'use strict';
+"use strict";
 
 // モジュールのロード
-var gulp = require('gulp');
 var fs = require('fs');
-
 var path = require('path');
+
+var gulp = require('gulp');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
-var compass = require('gulp-compass');
-var typescript = require('gulp-tsc');
-var webpack = require('gulp-webpack');
-var uglify = require('gulp-uglify');
-var minifyCss = require('gulp-minify-css');
+var runSequence = require('run-sequence');
 var foreach = require('gulp-foreach');
+var rename = require('gulp-rename');
 var del = require('del');
+
 var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
 
-var shell = require('gulp-shell');
-var runSequence = require('run-sequence');
+var compass = require('gulp-compass');
+var minifyCss = require('gulp-minify-css');
+
+var typescript = require('gulp-tsc');
+var browserify = require('browserify');
+var uglify = require('gulp-uglify');
 
 // clean-全コンパイル
 gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'typescript-compile', 'compass-compile']);
@@ -127,22 +131,20 @@ gulp.task('copy-lib',['clean-lib'], function(){
 gulp.task('typescript-compile', function(){
 
     return gulp.src([SRC_DIR + 'ts/**/*.ts'])
-        .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'amd'}))
-        .pipe(gulp.dest(SRC_DIR + 'js/'))
+        .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'commonjs'}))
+        .pipe(gulp.dest(SRC_DIR + 'js'))
         .on('end', function(){
             // main/js/impl以下のファイルだけ圧縮してbuildへコピー
             gulp.src([SRC_DIR + 'js/app/app/*.js'])
                 .pipe(foreach(function(stream, f){
                     var filename = f.path.substr((SRC_DIR + 'js/app/app/').length);
-                    return stream
-                        .pipe(webpack({
-                            output : {
-                                filename : filename
-                            }
-                        }))
-                        .pipe(uglify());
+                    return browserify({ entries: [f.path]})
+                        .bundle()
+                        .pipe(source(filename))
+                        .pipe(buffer())
+                        .pipe(uglify())
+                        .pipe(gulp.dest(BUILD_DIR + 'js'));
                 }))
-                .pipe(gulp.dest(BUILD_DIR + 'js/'));
         });
 });
 
@@ -173,4 +175,3 @@ gulp.task('watch-typescript', function(){
 gulp.task('watch-php-app', function() {
     gulp.watch(SRC_DIR + 'site/app/**/*', function(){ runSequence('clean-php', 'copy-php') });
 });
-
