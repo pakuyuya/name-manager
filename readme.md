@@ -73,3 +73,66 @@ gem install compass
   * ```gulp compile-all``` 実行
   * Webルートに置くファイル・ディレクトリが /build にコピーされます。
 * 時々失敗します。。（削除時に排他ロックがかかってるところへコピーするため）もう一度実行すると正常終了することが多いです。
+
+## 6. ディレクトリ構成
+
+### 全体の構成
+
+```
+hurights-meibo2
+├ build   配備対象が作成されるディレクトリ（gulpにより設定）
+├ doc     ドキュメント
+├ gulp    gulpのビルドスクリプト
+└ src     開発ソース
+　├ main　　開発用ソース
+  ｜ ├ curry  CurryPHP本体
+  ｜ ├ html   Angularテンプレート
+  ｜ ├ images 画像
+  ｜ ├ lib    JavaScript/CSS ベンダーライブラリ
+  ｜ ├ sass   Compassファイル
+  ｜ ├ site   PHP実装。CurryPHPの実装に従う
+  ｜ ├ ts     Typescriptファイル
+  ｜ ｜ ├ app   実装
+  ｜ ｜ └ lib   ベンダーライブラリ
+  ｜ ├ .htaccess   CurryPHPにあわせたApacheのアクセス制御ファイル
+  ｜ └ index.php   CurryPHPエントリポイント
+  └ test    テスト用ソース
+```
+
+### Typescriptの構成
+
+```
+hurights-meibo2
+└ src     開発ソース
+　└ main　　開発用ソース
+  　 └ ts     Typescriptファイル
+  　 　 └ app   実装
+　　　　　 ├  app         エントリポイント。各画面で<script src="...">参照する
+　　　　 　├  directives  Angular Directive集
+　　　 　　├  resources   Angular Resource集
+           ├  services    Angular Service集
+           └  common      雑多な共通コンポーネント
+```
+
+### PHPの構成
+
+```
+hurights-meibo2
+└ src     開発ソース
+　└ main　　開発用ソース
+  　 ├ curry   CurryPHP本体
+     └ site    開発用ソース
+  　 　 ├ app
+　　　　｜ ├  controllers  コントローラ
+　　　　｜ ├  models       モデル
+        ｜ ├  services     サービス
+        ｜ └  views        テンプレート
+        ├ configs 設定ファイル
+        ｜ ├ app.ini       独自追加した、アプリケーション設定一括保持ファイル
+        ｜ ├ curry.ini     CurryPHP 全体設定ファイル
+        ｜ ├ database.ini  Database ファイル
+        ｜ └ routing.ini   ルーティングファイル
+        ├ library    PHPライブラリ。ベンダー、独自追加含む
+        ├ logs       アプリケーションログ。エラーなどはここに吐かれる。
+        └ .htaccess  require all denied
+```
