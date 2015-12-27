@@ -1,4 +1,4 @@
-<div ng-app="loginApp">
+<div ng-app="app">
     <section class="p-login" ng-controller="loginCtrl">
         <div class="p-title">
             <h2 class="p-title-text">Welcome</h2>

@@ -16,18 +16,34 @@ export interface NamesResourceClass extends ng.resource.IResourceClass<NamesReso
 export function nameFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
     var url = apiBaseUrl + '/name/:id';
     var params = {
-        lang: '@lang',
-        memberTypes: '@memberTypes',
-        sendTypes: '@sendTypes',
-        name: '@name',
+        name_en: '@name_en',
+        name_jp: '@name_jp',
+        name_kn: '@name_kn',
+        alias  : '@alias',
+        honorific : '@honorific',
+        category1 : '@category1',
+        category2 : '@category2',
+        fax : '@fax,',
+        json_tel : '@json_tel',
+        json_zipaddress : '@json_zipaddress',
+        url : '@url',
+        country : '@country',
+        contrem_en : '@contrem_en',
+        contrem_jp : '@contrem_jp',
+        cd_nametype : '@cd_nametype',
     };
 
-    var queryAction: ng.resource.IActionDescriptor = {
+    var getAction: ng.resource.IActionDescriptor = {
         method: 'GET',
-        isArray: true
     };
-    return <NamesResourceClass> $resource(url, params, {query: queryAction });
+    var saveAction: ng.resource.IActionDescriptor = {
+        method: 'POST',
+    };
+    var removeAction: ng.resource.IActionDescriptor = {
+        method: 'DELETE',
+    };
+    return <NamesResourceClass> $resource(url, params, {get: getAction, save: saveAction, remove: removeAction});
 }
 
 var app = angular.module(appName);
-app.factory('Names', ['$resource', nameFactory]);
+app.factory('Name', ['$resource', nameFactory]);

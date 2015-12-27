@@ -1,9 +1,9 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
-import appConsts = require('../constants');
+import {appName} from '../constants';
 
-class NamesListDirective {
+export class NamesListDirective {
     restrict = 'CA';
     priority = 0;
     transclude = true;
@@ -19,5 +19,4 @@ class NamesListDirective {
     }];
 };
 
-var app = angular.module(appConsts.appName, ['checklist-model']);
-app.directive('namesList', function() { return new NamesListDirective() });
+var app = angular.module(appName).directive('namesList', () => { return new NamesListDirective() } );

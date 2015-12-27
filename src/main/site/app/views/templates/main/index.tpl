@@ -1,12 +1,12 @@
 
-<div ng-app="mainApp">
+<div ng-app="app">
     <header class="p-header u-flex" id="header" ng-controller="HeaderCtrl as header">
         <div class="u-p95">
             ヒューライツ大阪名簿データベース
         </div>
         <!-- ボタン -->
-        <div class="p-header-buttons u-p5" ui-gmenu>
-        </div>
+        <gmenu class="p-header-buttons u-p5">
+        </gmenu>
     </header>
     <div id="main" ng-controller="MainCtrl as main">
         <!-- タブ -->
@@ -35,7 +35,7 @@
                             <div class="p-search-condition-box">
                                 <h3 class="p-search-condition-label">役員・会員オプション</h3>
                                 <div>
-                                    <label ng-repeat="type in main.memberTypes"><input type="checkbox" value="{{ type.value }}" checklist-model="main.condMemberTypes" checklist-value="type.value" />{{ type.name }}</label>
+                                    <label ng-repeat="type in main.memberTypes"><input type="checkbox" checklist-model="main.condMemberTypes" checklist-value="type.value" />{{ type.name }}</label>
                                 </div>
                             </div>
                             <span class="u-vert-sep"></span>
@@ -99,7 +99,6 @@
                                     <div class="p-names-clip">選択</div>
                                     <div class="p-names-mem">会員</div>
                                     <div class="p-names-name">氏名/組織名</div>
-                                    <div class="p-names-addr">住所</div>
                                     <div class="p-names-expr">配布期限</div>
                                     <div class="p-names-edit">編集</div>
                                 </div>

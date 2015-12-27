@@ -5,7 +5,7 @@
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 
-import common = require('../common');
+import systemUI = require('../common/systemui');
 import {appName} from '../constants';
 
 
@@ -23,7 +23,6 @@ module Login {
             .then (
                 // HTTP成功
                 function(response) {
-                    console.log(response);
                     if(response.data.result) {
                         $(location).attr('href', 'main');
                     } else {
@@ -33,7 +32,7 @@ module Login {
                 },
                 // HTTP失敗 or 拒否
                 function (response) {
-                    common.systemErr();
+                    systemUI.systemErr();
                 }
             )
         }

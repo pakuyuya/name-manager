@@ -1,4 +1,4 @@
-/// <reference path="../lib/definitely/jquery/jquery.d.ts" />
+/// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 
 export module Dialog{
     /**

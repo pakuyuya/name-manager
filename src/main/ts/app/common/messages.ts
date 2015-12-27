@@ -2,7 +2,7 @@
  * Created by yu on 2015/05/28.
  */
 
-/// <reference path="../lib/definitely/jquery/jquery.d.ts" />
+/// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 export module Message{
 
     var MSGS = {

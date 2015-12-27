@@ -14,4 +14,4 @@ class MemberTypesService {
     }
 }
 
-angular.module(appName).factory('memberTypes',[new MemberTypesService]);
+var app = angular.module(appName).factory('memberTypes', [() => {return new MemberTypesService}]);

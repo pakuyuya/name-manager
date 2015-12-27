@@ -13,21 +13,21 @@ export interface NamesResource extends ng.resource.IResource<NamesResource> {
 export interface NamesResourceClass extends ng.resource.IResourceClass<NamesResource> {
 }
 
-export function nameFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
+export function namesFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
     var url = `${apiBaseUrl}` + 'names';
     var params = {
         lang: '@lang',
+        name: '@name',
         memberTypes: '@memberTypes',
         sendTypes: '@sendTypes',
-        name: '@name',
     };
 
     var queryAction: ng.resource.IActionDescriptor = {
         method: 'GET',
         isArray: true
     };
-    return <NamesResourceClass> $resource(url, params, {query: queryAction });
+    return <NamesResourceClass> $resource(url, params, {query: queryAction});
 }
 
 var app = angular.module(appName);
-app.factory('Names', ['$resource', nameFactory]);
+app.factory('Names', ['$resource', namesFactory]);
