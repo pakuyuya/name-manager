@@ -218,6 +218,7 @@ button.header {
 .p-names-header > div {
   text-align :center;
   background-color : #f8f8f8;
+  font-size: 14px;
 }
 
 .p-names-row {
@@ -239,7 +240,7 @@ button.header {
 }
 
 .p-names-clip {
-  min-width : 38px;
+  min-width : 48px;
   text-align : center;
 }
 .p-names-mem {
@@ -248,13 +249,7 @@ button.header {
 }
 
 .p-names-name {
-  width : 30%;
-  min-width : 170px;
-}
-
-.p-names-addr {
-  width : 40%;
-  font-size : 12px;
+  width : 50%;
   min-width : 300px;
 }
 

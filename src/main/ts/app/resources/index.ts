@@ -1,3 +1,4 @@
 
-import './name';
-import './names';
+import './nameResource';
+import './namesResource';
+import './namesCountResource';

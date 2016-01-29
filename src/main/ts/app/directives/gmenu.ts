@@ -24,4 +24,4 @@ class GmenuCtrl{
     }
 }
 
-angular.module(appName).directive('gmenu', function(){ return new Gmenu(); });
+angular.module(appName).directive('gmenu', () => new Gmenu() );

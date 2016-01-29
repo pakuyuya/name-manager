@@ -3,7 +3,7 @@
 
 import {appName} from '../constants'
 
-class MemberTypesService {
+export class MemberTypesService {
     public getAll() {
         return [
             { name:'役員', value:'off'},
@@ -14,4 +14,4 @@ class MemberTypesService {
     }
 }
 
-var app = angular.module(appName).factory('memberTypes', [() => {return new MemberTypesService}]);
+angular.module(appName).factory('MemberTypes', [() => {return new MemberTypesService}]);

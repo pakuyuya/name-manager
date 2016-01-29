@@ -17,10 +17,9 @@ abstract class RestfullBaseController extends JsonBaseController {
 
         $uriParams = $this->getRequest()->getParams(0);
         if(!isset($uriParams[0])){
-            $this->onFetchList($params);
+            $this->fetchList($params);
         } else {
-            $params['id'] = $uriParams[0];
-            $this->onFetchOne($params);
+            $this->fetchOne($$params);
         }
     }
 
@@ -29,7 +28,14 @@ abstract class RestfullBaseController extends JsonBaseController {
      */
     public function post() {
         $params = $this->getRequest()->getRestParams();
-        $this->saveAsNew($params);
+
+        $urlParams = $this->getRequest()->getParams();
+        if(!isset($urlParams[0])){
+            $this->responseDenyed();
+        }
+        $tranId = $urlParams[0];
+
+        $this->saveAsNew($tranId, $params);
     }
 
     /**
@@ -38,14 +44,14 @@ abstract class RestfullBaseController extends JsonBaseController {
     public function put(){
         $params = $this->getRequest()->getRestParams();
 
-        $uriParams = $this->getRequest()->getParams(0);
-        if(!isset($uriParams[0])){
-            // id がセットされていなかった場合
+        $urlParams = $this->getRequest()->getParams();
+        if(!isset($urlParams[0]) && !isset($urlParams[1])){
             $this->responseDenyed();
         }
-        $params['id'] = $uriParams[0];
+        $tranId = $urlParams[0];
+        $id = $urlParams[1];
 
-        $this->save($params);
+        $this->save($tranId, $id, $params);
     }
 
     /**
@@ -54,14 +60,14 @@ abstract class RestfullBaseController extends JsonBaseController {
     public function delete() {
         $params = $this->getRequest()->getRestParams();
 
-        $uriParams = $this->getRequest()->getParams(0);
-        if(!isset($uriParams[0])){
-            // id がセットされていなかった場合
+        $urlParams = $this->getRequest()->getParams();
+        if(!isset($urlParams[0]) && !isset($urlParams[1])){
             $this->responseDenyed();
         }
-        $params['id'] = $uriParams[0];
+        $tranId = $urlParams[0];
+        $id = $urlParams[1];
 
-        $this->destroy($params);
+        $this->destroy($tranId, $id, $params);
     }
 
     /**
@@ -69,14 +75,20 @@ abstract class RestfullBaseController extends JsonBaseController {
      *
      * @param params {array} リクエストパラメタ
      */
-    abstract protected function fetchList($params);
+    protected function fetchList($params) {
+        $this->responseDenyed();
+    }
 
     /**
      * id指定取得
      *
+     * @param tranId {string} トランザクションID
+     * @param id {string} 主キー
      * @param params {array} リクエストパラメタ
      */
-    abstract protected function fetchOne($params);
+    protected function fetchOne($tranId, $id, $params) {
+        $this->responseDenyed();
+    }
 
     /**
      * 新規登録
@@ -84,16 +96,21 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param $params {array} 追加
      * @return mixed
      */
-    abstract protected function saveAsNew($params);
+    protected function saveAsNew($tranId, $params) {
+        $this->responseDenyed();
+    }
 
     /**
      * 更新
      *
-     * @param $id
+     * @param tranId {string} トランザクションID
+     * @param id {string} 主キー
      * @param $params
      * @return mixed
      */
-    abstract protected function save($params);
+    protected function save($tranId, $params) {
+        $this->responseDenyed();
+    }
 
     /**
      * 削除リクエスト
@@ -101,5 +118,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param $id     {int}   ID
      * @param $params {array} リクエストパラメタ
      */
-    abstract protected function destroy($params);
+    protected function destroy($tranId, $params) {
+        $this->responseDenyed();
+    }
 }

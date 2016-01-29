@@ -13,12 +13,18 @@ import '../resources/index'
 import '../services/index';
 import '../directives/index';
 
+import {MemberTypesService} from '../services/memberTypesService';
+
 app.controller('HeaderCtrl', ['$scope', function($scope){
 }]);
 
-app.controller('MainCtrl', ['memberTypes', function(memberTypes){
-    // init models
-    var self = this;
-    self.selectedNum = 0;
-    self.memberTypes = memberTypes.getAll();
-}]);
+
+class MainController {
+    constructor(private MemberTypes: MemberTypesService) {
+        this.memberTypes = this.MemberTypes.getAll();
+    }
+    public selectedNum = 0;
+    public memberTypes = [];
+}
+
+app.controller('MainCtrl', ['MemberTypes', MainController]);

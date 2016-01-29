@@ -19,14 +19,24 @@ module Login {
             return $http({
                 url    : 'ajax/login',
                 method : 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                transformRequest: $.param,
+                data: {
+                    loginid : $scope.loginid,
+                    loginpw : $scope.loginpw,
+                }
             })
             .then (
                 // HTTP成功
                 function(response) {
-                    if(response.data.result) {
-                        $(location).attr('href', 'main');
+                    if (response.data.error) {
+                        systemUI.systemErr();
                     } else {
-                        $scope.error = 'login failed.';
+                        if (response.data.result) {
+                            $(location).attr('href', 'main');
+                        } else {
+                            $scope.error = 'Incorrect username or password.';
+                        }
                     }
                     return false;
                 },
@@ -35,6 +45,9 @@ module Login {
                     systemUI.systemErr();
                 }
             )
+        }
+        $scope.clearError = function() {
+            $scope.error = false;
         }
     }]);
 }

@@ -97,3 +97,15 @@ a {
 .c-error {
   color : #551111;
 }
+
+.c-infobox {
+  margin  : 10px;
+  padding : 2px;
+  &.error {
+    color : #771111;
+    background-color : #ffcccc;
+    border : solid 1px #ddaaaa;
+  }
+}
+
+.u-block { display: block; }

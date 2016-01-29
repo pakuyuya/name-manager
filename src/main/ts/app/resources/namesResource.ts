@@ -3,11 +3,10 @@
 import {appName, apiBaseUrl} from '../constants';
 
 export interface NamesResource extends ng.resource.IResource<NamesResource> {
-    isMember: string;
-    checked: boolean;
-    name: string;
-    address: string;
-    expiredAt: string;
+    id         : string;
+    memberLabel: string;
+    name       : string;
+    expiredAt  : string;
 }
 
 export interface NamesResourceClass extends ng.resource.IResourceClass<NamesResource> {
@@ -21,13 +20,11 @@ export function namesFactory($resource: ng.resource.IResourceService) : NamesRes
         memberTypes: '@memberTypes',
         sendTypes: '@sendTypes',
     };
-
     var queryAction: ng.resource.IActionDescriptor = {
         method: 'GET',
         isArray: true
     };
+
     return <NamesResourceClass> $resource(url, params, {query: queryAction});
 }
-
-var app = angular.module(appName);
-app.factory('Names', ['$resource', namesFactory]);
+angular.module(appName).factory('NamesResource', ['$resource', namesFactory]);

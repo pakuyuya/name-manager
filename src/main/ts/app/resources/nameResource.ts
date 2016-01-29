@@ -33,17 +33,7 @@ export function nameFactory($resource: ng.resource.IResourceService) : NamesReso
         cd_nametype : '@cd_nametype',
     };
 
-    var getAction: ng.resource.IActionDescriptor = {
-        method: 'GET',
-    };
-    var saveAction: ng.resource.IActionDescriptor = {
-        method: 'POST',
-    };
-    var removeAction: ng.resource.IActionDescriptor = {
-        method: 'DELETE',
-    };
-    return <NamesResourceClass> $resource(url, params, {get: getAction, save: saveAction, remove: removeAction});
+    return <NamesResourceClass> $resource(url, params);
 }
 
-var app = angular.module(appName);
-app.factory('Name', ['$resource', nameFactory]);
+angular.module(appName).factory('NameResource', ['$resource', nameFactory]);

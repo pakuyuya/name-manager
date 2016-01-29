@@ -9,16 +9,13 @@ class LoginService extends Service
      */
     public function auth($userid, $password)
     {
-        // DBから取得
-        $db = Db::factory();
-
         // DB探索
-        $mdAdmin = $this->model('AdminUser');
+        $admin = $this->model('LoginUser');
 
         $result = $admin->select()
-            ->where('loginId = :loginId and loginPw = :loginPw')
-            ->params('loginId', $userid)
-            ->params('loginPw', loginPw)
+            ->where('login_id = :login_id and login_pw = :login_pw')
+            ->params('login_id', $userid)
+            ->params('login_pw', $password)
             ->fetchRow();
 
         if(!$result)
@@ -26,9 +23,9 @@ class LoginService extends Service
 
         // 結果を作成し返却
         $ret = array(
-            'loginId' => $result['loginId'],
-            'userName' => $result['userName'],
-            'loginedAt' => time()
+            'login_id' => $result['login_id'],
+            'user_name' => $result['user_name'],
+            'logined_at' => time()
         );
 
         return $ret;

@@ -8,18 +8,18 @@
 
             <div class="c-line">
                 <label for="loginid"><span class="icon-user"></span></label>
-                <input type="text" id="loginid" class="size-m" ng-model="loginid" placeholder="user id" />
+                <input type="text" id="loginid" class="size-m" ng-model="loginid" placeholder="user id" ng-change="clearError()" />
             </div>
             <div class="c-line">
                 <label for="loginpw"><span class="icon-key"></span></label>
-                <input type="password" id="loginpw" class="size-m" ng-model="loginpw" placeholder="password" />
+                <input type="password" id="loginpw" class="size-m" ng-model="loginpw" placeholder="password" ng-change="clearError()" />
             </div>
             <div class="p-form-cmd c-line">
                 <button id="login-button" type="submit" class="primary">Login</button>
             </div>
-            <div class="c-line">
-                <div class="u-center c-error" ng-if="!!error">{{error}}</div>
-            </div>
         </form>
+        <div class="c-line" ng-if="!!error">
+            <div class="c-infobox error">{{error}}</div>
+        </div>
     </section>
 </div>

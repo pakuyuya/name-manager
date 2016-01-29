@@ -1,5 +1,6 @@
 <?php
 Loader::loadController('JsonBaseController', 'common');
+Loader::loadLibrary('Util', 'common');
 
 /**
  * ログインAjax用コントローラー
@@ -7,6 +8,9 @@ Loader::loadController('JsonBaseController', 'common');
  */
 class LoginController extends JsonBaseController
 {
+    /**
+     * LoginController constructor.
+     */
     public function __construct(){
         $this->setEnabledLoginCheck(false);
     }
@@ -15,12 +19,27 @@ class LoginController extends JsonBaseController
      *
      */
     public function post(){
-        $this->view->json->result = true;
+
+        $params = $this->getRequest()->getRestParams();
+        $id = getnull($params, 'loginid');
+        $pw = getnull($params, 'loginpw');
+
+        $login = $this->service('LoginService');
+
+        $user =  $login->auth($id, $pw);
+        if ($user == null) {
+            $this->json->result = false;
+            return;
+        }
+
+        $login->saveLogin($user);
+
+        $this->json->result = true;
     }
     /**
      * P     */
     public function index(){
-        $this->view->json->result = true;
+        $this->post();
     }
 
 }

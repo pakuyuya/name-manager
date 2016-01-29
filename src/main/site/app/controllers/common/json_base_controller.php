@@ -8,6 +8,9 @@ Loader::loadController ( 'BaseController', 'common' );
  *
  */
 abstract class JsonBaseController extends BaseController {
+
+    protected $json;
+
     /**
      * {@inheritDoc }
      *
@@ -19,12 +22,10 @@ abstract class JsonBaseController extends BaseController {
                 $this->responseDenyed();
             }
         }
-        // テンプレートをAjax用に指定
-        $this->view->enableLayout(false);
-        $this->view->setTemplate('index', 'ajax');
+        $this->view->enableRendering(false);
 
         // 出力用空オブジェクトセット
-        $this->view->json = (object) array();
+        $this->json = (object) array();
     }
 
     /**
@@ -33,7 +34,6 @@ abstract class JsonBaseController extends BaseController {
      * @see Controller::preProcess()
      */
     public function postProcess() {
-        $this->view->strjson = json_encode($this->view->json);
-        echo $this->view->strjson;
+        $this->response->json($this->json);
     }
 }

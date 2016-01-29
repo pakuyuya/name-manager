@@ -23,8 +23,9 @@ var typescript = require('gulp-tsc');
 var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 
+
 // clean-全コンパイル
-gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'typescript-compile', 'compass-compile']);
+gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'compile-typescript', 'compile-compass']);
 
 // ディレクトリパス取得
 // Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にする場合、
@@ -128,7 +129,7 @@ gulp.task('copy-lib',['clean-lib'], function(){
 });
 
 // Typescriptコンパイル
-gulp.task('typescript-compile', function(){
+gulp.task('compile-typescript', function(){
 
     return gulp.src([SRC_DIR + 'ts/**/*.ts'])
         .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'commonjs'}))
@@ -149,7 +150,7 @@ gulp.task('typescript-compile', function(){
 });
 
 // Compassコピー
-gulp.task('compass-compile', function(){
+gulp.task('compile-compass', function(){
     return gulp.src([SRC_DIR + 'sass/*.scss'])
         .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
         .pipe(compass({
@@ -165,11 +166,11 @@ gulp.task('compass-compile', function(){
 
 // コマンドラインで常駐させて、変更があったscssのみ再コンパイル
 gulp.task('watch-compass', function(){
-	gulp.watch(SRC_DIR + 'sass/**/*.scss', ['compass-compile']);
+	gulp.watch(SRC_DIR + 'sass/**/*.scss', ['compile-compass']);
 });
 
 gulp.task('watch-typescript', function(){
-    gulp.watch(SRC_DIR + 'ts/**/*.ts', ['typescript-compile']);
+    gulp.watch(SRC_DIR + 'ts/**/*.ts', ['compile-typescript']);
 });
 
 gulp.task('watch-php-app', function() {
