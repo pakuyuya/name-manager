@@ -14,5 +14,4 @@ class IndexController extends PageBaseController
     {
         $this->redirect('/main');
     }
-
 }

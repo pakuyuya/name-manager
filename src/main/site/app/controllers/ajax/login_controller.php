@@ -19,10 +19,9 @@ class LoginController extends JsonBaseController
      *
      */
     public function post(){
-
         $params = $this->getRequest()->getRestParams();
-        $id = getnull($params, 'loginid');
-        $pw = getnull($params, 'loginpw');
+        $id = getOr($params, 'loginid', null);
+        $pw = getOr($params, 'loginpw', null);
 
         $login = $this->service('LoginService');
 

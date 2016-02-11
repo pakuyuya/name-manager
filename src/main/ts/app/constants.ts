@@ -1,3 +1,4 @@
 
-export var appName = 'app';
-export var apiBaseUrl = 'ajax/';
+export const appName = 'app';
+export const apiBaseUrl = 'ajax';
+

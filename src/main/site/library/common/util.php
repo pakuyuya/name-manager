@@ -14,8 +14,15 @@ function replace_each($str, ...$entries) {
     return $str;
 }
 
-function getnull($ary, $key) {
-    return isset($ary[$key]) ? $ary[$key] : null;
+function getOr($ary, $key, $ifunset) {
+    return isset($ary[$key]) ? $ary[$key] : $ifunset;
+}
+
+function whiteboxOr($value, $whiteboxlist, $ifnotexists) {
+    foreach ($whiteboxlist as $v) {
+        if ($value === $v) return $v;
+    }
+    return $ifnotexists;
 }
 
 function keysCamel2Sanake($ary) {

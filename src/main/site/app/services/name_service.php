@@ -9,6 +9,34 @@ class NameService extends SimpleRestService {
     }
 
     public function find($param) {
+
+        $select = $this->createSelectQuery($param);
+
+        $paramOrder = getOr($param, 'order', null);
+        $orderAllows = ["id", "expire_at"];
+        $defaultOrder = "id";
+
+        $order = whiteboxOr($paramOrder, $orderAllows, $defaultOrder);
+        $select->order($order);
+
+        if (isset($param['offset'])) {
+            $select->offset($param['offset']);
+        }
+
+        if (isset($param['limit'])) {
+            $select->limit($param['limit']);
+        }
+
+        return $select->fetchAll();
+    }
+
+    public function getCount($param) {
+        $select = $this->createSelectQuery($param);
+
+        return $select->fetchCount();
+    }
+
+    private function createSelectQuery($param) {
         $model = $this->createModel();
         $select = $model->select();
 
@@ -33,16 +61,9 @@ class NameService extends SimpleRestService {
 
         if (isset($param['member_type_id'])) {
             $member_type_id = $param['member_type_id'];
-
             $select->whereIn('member_type_id', $member_type_id);
         }
 
-        $offset = (isset($param['offset'])) ? $param['offset'] : 0;
-        $select->offset($offset);
-
-        $limit = (isset($param['limit'])) ? $param['limit'] : 20;
-        $select->limit($limit);
-
-        return $select->fetchAll();
+        return $select;
     }
 }

@@ -2,7 +2,7 @@
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
 import {appName} from '../constants';
-import {NamesService, NamesDto} from '../services/namesService';
+import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
 
 class NamesListDirectiveController {
     datas: Array<any> = [{a:1}];
@@ -11,7 +11,7 @@ class NamesListDirectiveController {
     idxto   : number = 10;
     total   : number = 10;
 
-    constructor(private Names: NamesService) {
+    constructor(private NameSearch: NameSearchService) {
         this.datas = [{a:1}];
         this.search();
     }
@@ -20,13 +20,20 @@ class NamesListDirectiveController {
         this.query = {};
     }
     public search() {
-        this.datas = this.Names.query(this.query);
+        const self = this;
+        this.NameSearch.query(this.query)
+            .then(function(greeting : NameSearchResult){
+                self.idxfrom = greeting.idxfrom;
+                self.idxto = greeting.idxto;
+                self.total = greeting.total;
+                self.datas = greeting.datas;
+            });
     }
 };
 
 class NamesListDirective {
     restrict = 'E';
-    controller = ['Names', NamesListDirectiveController];
+    controller = ['NameSearch', NamesListDirectiveController];
     controllerAs = 'namesList';
     replace = true;
 };

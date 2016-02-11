@@ -4,13 +4,23 @@
 import {appName} from '../constants'
 
 export class MemberTypesService {
+    private defines = [
+        { name:'役員', value:'1'},
+        { name:'団体会員', value:'2'},
+        { name:'賛助会員', value:'3'},
+        { name:'購読会員', value:'4'}
+    ];
+
     public getAll() {
-        return [
-            { name:'役員', value:'off'},
-            { name:'団体会員', value:'ord'},
-            { name:'賛助会員', value:'sup'},
-            { name:'購読会員', value:'sub'}
-        ];
+        return this.defines;
+    }
+    public resolveName(id) {
+        for (let memberType of this.defines) {
+            if (id == memberType.value) {
+                return memberType.name;
+            }
+        }
+        return '';
     }
 }
 

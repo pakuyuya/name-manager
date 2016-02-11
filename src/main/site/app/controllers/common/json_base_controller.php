@@ -17,11 +17,14 @@ abstract class JsonBaseController extends BaseController {
      * @see Controller::preProcess()
      */
     public function preProcess() {
+        parent::preProcess();
+
         if ($this->isEnabledLoginCheck()) {
             if (!$this->checkLogin()) {
                 $this->responseDenyed();
             }
         }
+        $this->getRequest()->setAutoTrim(true);
         $this->view->enableRendering(false);
 
         // 出力用空オブジェクトセット

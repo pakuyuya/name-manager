@@ -7,7 +7,7 @@ import {appName} from '../constants'
  * チェックした名簿のIDを保持するサービス<br>
  * 実態はSetの実装。
  */
-export class ClipSetService {
+export class CheckedNameService {
     static idset: Object;
     static len: number;
 
@@ -20,9 +20,9 @@ export class ClipSetService {
      * @param id
      */
     public clip(id: string) {
-        if (!ClipSetService.idset[id]) {
-            ClipSetService.idset[id] = true;
-            ClipSetService.len++;
+        if (!CheckedNameService.idset[id]) {
+            CheckedNameService.idset[id] = true;
+            CheckedNameService.len++;
         }
     }
 
@@ -31,9 +31,9 @@ export class ClipSetService {
      * @param id
      */
     public unclip(id: string) {
-        if (ClipSetService.idset[id]) {
-            delete ClipSetService.idset[id];
-            ClipSetService.len--;
+        if (CheckedNameService.idset[id]) {
+            delete CheckedNameService.idset[id];
+            CheckedNameService.len--;
         }
     }
 
@@ -41,8 +41,8 @@ export class ClipSetService {
      * クリップを全て消去する
      */
     public clear() {
-        ClipSetService.idset = {};
-        ClipSetService.len   = 0;
+        CheckedNameService.idset = {};
+        CheckedNameService.len   = 0;
     }
 
     /**
@@ -50,7 +50,7 @@ export class ClipSetService {
      * @returns {Object} IDがindexとなる連想配列
      */
     public getIdset() : Object {
-        return  ClipSetService.idset;
+        return  CheckedNameService.idset;
     }
 
     /**
@@ -59,7 +59,7 @@ export class ClipSetService {
      */
     public getIds() : Array<string> {
         var ids = [];
-        for (let id in ClipSetService.idset) {
+        for (let id in CheckedNameService.idset) {
             ids.push(id);
         }
         return ids;
@@ -70,7 +70,7 @@ export class ClipSetService {
      * @returns {number} 個数
      */
     public length() : number {
-        return ClipSetService.len;
+        return CheckedNameService.len;
     }
 
     /**
@@ -79,8 +79,8 @@ export class ClipSetService {
      * @returns {boolean}
      */
     public contains(id: string) : boolean {
-        return !!ClipSetService.idset[id];
+        return !!CheckedNameService.idset[id];
     }
 }
 
-angular.module(appName).factory('ClipSet', [() => {return new ClipSetService}]);
+angular.module(appName).factory('CheckedName', [() => {return new CheckedNameService(); }]);

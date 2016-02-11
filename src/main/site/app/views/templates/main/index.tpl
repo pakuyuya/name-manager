@@ -105,11 +105,15 @@
                                         <div class="p-names-edit">編集</div>
                                     </div>
                                     <div class="p-names-row u-flex" ng-repeat="name in namesList.datas">
-                                        <div class="p-names-clip">選択</div>
-                                        <div class="p-names-mem">会員</div>
-                                        <div class="p-names-name">氏名/組織名</div>
-                                        <div class="p-names-expr">配布期限</div>
-                                        <div class="p-names-edit">編集</div>
+                                        <div class="p-names-clip">
+                                            <input type="checkbox" ng-model="name.checked">
+                                        </div>
+                                        <div class="p-names-mem">{{ name.memberLabel }}</div>
+                                        <div class="p-names-name">{{ name.name_e }} / {{ name.name_j }}</div>
+                                        <div class="p-names-expr">{{ name.expire_on }}</div>
+                                        <div class="p-names-edit">
+                                            <button type="button" ng-click="namesList.edit(name.id)">編集</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
