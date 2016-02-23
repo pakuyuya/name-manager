@@ -28,3 +28,21 @@ class MainController {
 }
 
 app.controller('MainCtrl', ['MemberTypes', MainController]);
+
+$(function(){
+    const $mainList = $('#main-list');
+    const $namesListLeft = $('#names-list-left');
+    const $wnd = $(window);
+
+    function resizeMainList() {
+        $mainList.css('height', ($wnd.height() - $mainList.offset().top) + 'px');
+    }
+    function resizeNameListLeft() {
+        $namesListLeft.css('height', ($wnd.height() - $namesListLeft.offset().top) + 'px')
+    }
+
+    $wnd.resize(resizeMainList);
+    $wnd.resize(resizeNameListLeft);
+
+    setTimeout(() => $wnd.resize(), 0);
+});

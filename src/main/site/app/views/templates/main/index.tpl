@@ -21,7 +21,7 @@
             </div>
             <!-- リスト -->
             <names-list-form class="p-search">
-                <div class="u-flex">
+                <div id="names-list-left" class="u-flex">
                     <div class="p-search-condition">
                         <form ng-submit="namesList.search()" style="height:100%">
                             <div class="p-search-condition-box">
