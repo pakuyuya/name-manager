@@ -33,8 +33,8 @@ abstract class BaseController extends RestController {
      * @return boolean 判定
      */
     protected function checkLogin() {
-        // TODO: 実装
-        return true;
+        $login = $this->service('loginService');
+        return $login->loadLoginInfo() !== null;
     }
 
     /**
