@@ -1,5 +1,9 @@
 <?php
 
+function forceArray($v) {
+    return (is_array($v)) ? $v : [$v];
+}
+
 function camel2snakeCase($str) {
     return preg_replace(
             '([A-Z])', '\\u$1',
@@ -8,10 +12,14 @@ function camel2snakeCase($str) {
 }
 
 function replace_each($str, ...$entries) {
-    for($i = 0, $len = count($entries); $i<$len; $i++){
+    for($i = 0, $len = count($entries); $i<$len; $i+=2){
         $str = str_replace($entries[$i], $entries[$i+1], $str);
     }
     return $str;
+}
+
+function emptyStr($str) {
+    return $str === null || $str === '';
 }
 
 function getOr($ary, $key, $ifunset) {

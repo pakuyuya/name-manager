@@ -26,38 +26,29 @@
                         <form ng-submit="namesList.search()" style="height:100%">
                             <div class="p-search-condition-box">
                                 <h3>フリーワード</h3>
-                                <input type="search" class="u-p100" />
+                                <input type="search" class="u-p100" ng-model="namesList.query.freeword" />
                             </div>
                             <div class="p-search-condition-box">
                                 <h3>氏名 / 組織名</h3>
-                                <input type="search" class="u-p100" />
+                                <input type="search" class="u-p100" ng-model="namesList.query.name" />
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">
-                                <h3 class="p-search-condition-label">役員・会員オプション</h3>
+                                <h3 class="p-search-condition-label">役員・会員・ひろば発送</h3>
                                 <div>
-                                    <label ng-repeat="type in main.memberTypes"><input type="checkbox" checklist-model="main.condMemberTypes" checklist-value="type.value" />{{ type.name }}</label>
+                                    <label ng-repeat="type in main.memberTypes">
+                                        <input type="checkbox" checklist-model="namesList.query.membertype_id" checklist-value="type.value" />{{ type.name }}
+                                    </label>
                                 </div>
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">
-                                <h3 class="p-search-condition-label">会員・ひろば配布</h3>
-                                <label><input type="checkbox" />個人会員</label>
-                                <label><input type="checkbox" />団体会員</label>
-                                <label><input type="checkbox" />賛助会員</label><br />
-                                <label><input type="checkbox" />購読</label>
-                                <label><input type="checkbox" />大口配布</label>
-                                <label><input type="checkbox" />府市配布</label>
-                                <label><input type="checkbox" />寄贈配布</label>
-                            </div>
-                            <span class="u-vert-sep"></span>
-                            <div class="p-search-condition-box">
                                 <h3 class="p-search-condition-label">配布期限</h3>
-                                <input type="date" style="font-size:10px;" />～<input type="date" style="font-size:10px;" />
+                                <input type="date" ng-model="namesList.query.send_expire_from" />～<input type="date" ng-model="namesList.query.send_expire_to" />
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box u-right u-text-m">
-                                <a href="#" class="p-search-condition-clear">検索条件をクリア</a>
+                                <a href="#" class="p-search-condition-clear" ng-click="namesList.resetQuery()">検索条件をクリア</a>
                             </div>
                             <div class="p-search-condition-box u-center">
                                 <button type="submit" class="u-p70">検索</button>

@@ -115,13 +115,15 @@ button.primary{
 }
 
 //-----------------------------------------------
-// rabel, input(general)
+// label, input(general)
 //-----------------------------------------------
 label {
-  cursor : pointer;
+  cursor: pointer;
+  display: inline-block;
+  viratical-align: middle;
 }
 input {
-  cursor : pointer;
+  cursor: pointer;
 }
 
 //-----------------------------------------------
@@ -166,4 +168,14 @@ input[type=search], textarea {
   &.size-s {
   }
 
+}
+input[type=date] {
+  font-size: 10px;
+}
+
+//-----------------------------------------------
+// checkbox
+// ----------------------------------------------
+input[type=checkbox] {
+  margin-left : 2px;
 }

@@ -40,28 +40,28 @@ class NameService extends SimpleRestService {
         $model = $this->createModel();
         $select = $model->select();
 
-        if (isset($param['freeword'])) {
-            $freeword = escapeLike($param['freeword']);
+        if (isset($param['freeword']) && !emptyStr($param['freeword'])) {
+            $freeword = '%' . escapeLike($param['freeword']) . '%';
 
-            $select->where('entry_name_j', $freeword);
-            $select->where('entry_name_j_kana', $freeword);
-            $select->where('entry_name_j', $freeword);
-            $select->where('entry_alias', $freeword);
-            $select->where('entry_category1', $freeword);
-            $select->where('member_name', $freeword);
+            $select->whereLike('entry_name_j', $freeword);
+            $select->whereLike('entry_name_j_kana', $freeword);
+            $select->whereLike('entry_name_j', $freeword);
+            $select->whereLike('entry_alias', $freeword);
+            $select->whereLike('entry_category1', $freeword);
+            $select->whereLike('member_name', $freeword);
         }
 
-        if (isset($param['name'])) {
+        if (isset($param['name']) && !emptyStr($param['name'])) {
             $name = escapeLike($param['name']);
 
-            $select->where('entry_name_j', $name);
-            $select->where('entry_name_j_kana', $name);
-            $select->where('entry_name_j', $name);
+            $select->whereLike('entry_name_j', $name);
+            $select->whereLike('entry_name_j_kana', $name);
+            $select->whereLike('entry_name_j', $name);
         }
 
-        if (isset($param['member_type_id'])) {
-            $member_type_id = $param['member_type_id'];
-            $select->whereIn('member_type_id', $member_type_id);
+        if (!empty($param['membertype_id'])) {
+            $member_type_id = forceArray($param['membertype_id']);
+            $select->whereIn('membertype_id', $member_type_id);
         }
 
         return $select;
