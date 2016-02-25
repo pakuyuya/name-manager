@@ -40,28 +40,44 @@ class NameService extends SimpleRestService {
         $model = $this->createModel();
         $select = $model->select();
 
-        if (isset($param['freeword']) && !emptyStr($param['freeword'])) {
+        if (isset($param['freeword']) && !isEmptyStr($param['freeword'])) {
             $freeword = '%' . escapeLike($param['freeword']) . '%';
 
-            $select->whereLike('entry_name_j', $freeword);
-            $select->whereLike('entry_name_j_kana', $freeword);
-            $select->whereLike('entry_name_j', $freeword);
-            $select->whereLike('entry_alias', $freeword);
-            $select->whereLike('entry_category1', $freeword);
-            $select->whereLike('member_name', $freeword);
+            $where =
+                'entry_name_j like :freeword'
+                .' or entry_name_j_kana like :freeword'
+                .' or entry_name_e like :freeword'
+                .' or entry_alias like :freeword'
+                .' or entry_category1 like :freeword'
+                .' or member_name like :freeword';
+
+            $select->where($where, ['freeword' => $freeword]);
         }
 
-        if (isset($param['name']) && !emptyStr($param['name'])) {
+        if (isset($param['name']) && !isEmptyStr($param['name'])) {
             $name = escapeLike($param['name']);
 
-            $select->whereLike('entry_name_j', $name);
-            $select->whereLike('entry_name_j_kana', $name);
-            $select->whereLike('entry_name_j', $name);
+            $where =
+                'entry_name_j like :name'
+                .' or entry_name_j_kana like :name'
+                .' or entry_name_e like :name';
+
+            $select->whereLike($where, ['name' => $name]);
         }
 
         if (!empty($param['membertype_id'])) {
             $member_type_id = forceArray($param['membertype_id']);
             $select->whereIn('membertype_id', $member_type_id);
+        }
+
+        if (!empty($param['send_expire_from'])) {
+            $send_expire_from = toSqlDate($param['send_expire_from']);
+            $select->whereGe('send_expire_on', $send_expire_from);
+        }
+
+        if (!empty($param['send_expire_to'])) {
+            $send_expire_to = toSqlDate($param['send_expire_to']);
+            $select->whereLe('send_expire_on', $send_expire_to);
         }
 
         return $select;

@@ -169,8 +169,11 @@ input[type=search], textarea {
   }
 
 }
-input[type=date] {
-  font-size: 10px;
+input.ui-date {
+  width : 100px;
+  padding-left: 5px;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 //-----------------------------------------------

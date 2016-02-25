@@ -1,6 +1,7 @@
 <?php
 Loader::loadController('RestfullBaseController', 'common');
 Loader::loadLibrary('util', 'common');
+Loader::loadLibrary('ValidatorEx');
 
 /**
  * ログインAjax用コントローラー
@@ -15,15 +16,38 @@ class NamesearchController extends JsonBaseController
      * GET request
      */
     public function index() {
-        $name = $this->service('NameService');
+        // validation
+        $validator = new ValidatorEx();
+        $validator->setRules(
+            [
+                'offset' => [
+                    ['rule' => 'number_string']
+                ],
+                'limit' => [
+                    ['rule' => 'number_string']
+                ],
+                'send_expire_from' => [
+                    ['rule' => 'date']
+                ],
+                'send_expire_to' => [
+                    ['rule' => 'date']
+                ]
+            ]
+        );
 
         $params = $this->request->getQuery();
+        if(!$validator->validate($params)) {
+            $this->responceDenied();
+        }
+
+        $name = $this->service('NameService');
+
         $params['offset'] = (int)getOr($params, 'offset', 0);
         $params['limit'] = (int)getOr($params, 'limit', 20);
 
         $datas = $name->find($params);
         $total = $name->getCount($params);
-        $idxfrom = ($datas > 0) ? $params['offset'] + 1 : 0;
+        $idxfrom = ($total > 0) ? $params['offset'] + 1 : 0;
         $idxto   = (int)$params['offset'] + count($datas);
 
         $this->json = [

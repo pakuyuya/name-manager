@@ -4,6 +4,7 @@
 
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
+/// <reference path="../../lib/definitely/jquery-ui/jquery-ui.d.ts" />
 
 
 import {appName} from '../constants';
@@ -30,6 +31,10 @@ class MainController {
 app.controller('MainCtrl', ['MemberTypes', MainController]);
 
 $(function(){
+    // datepicker有効化
+    $('.ui-date').datepicker({dateFormat:'yy/mm/dd',});
+
+    // 検索メニュー自動リサイズとハンドリング
     const $mainList = $('#main-list');
     const $namesListLeft = $('#names-list-left');
     const $wnd = $(window);

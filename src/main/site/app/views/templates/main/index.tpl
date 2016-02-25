@@ -44,7 +44,9 @@
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">
                                 <h3 class="p-search-condition-label">配布期限</h3>
-                                <input type="date" ng-model="namesList.query.send_expire_from" />～<input type="date" ng-model="namesList.query.send_expire_to" />
+                                <input type="search" class="ui-date" pattern="^\d{1,4}/\d{1,2}/\d{1,2}$" ng-model="namesList.query.send_expire_from" />
+                                ～
+                                <input type="search" class="ui-date" pattern="^\d{1,4}/\d{1,2}/\d{1,2}$" ng-model="namesList.query.send_expire_to" />
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box u-right u-text-m">

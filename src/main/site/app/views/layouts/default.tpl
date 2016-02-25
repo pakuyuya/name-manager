@@ -11,6 +11,7 @@ _{foreach from=$meta key=key item=content}_
 _{/foreach}_
 _{/foreach}_
 <script src="_{$request.base_path}_/lib/jquery/jquery-2.1.3.min.js"></script>
+<script src="_{$request.base_path}_/lib/jquery-ui/jquery-ui.min.js"></script>
 <script src="_{$request.base_path}_/lib/angularjs/angular.min.js"></script>
 <script src="_{$request.base_path}_/lib/angularjs/angular-resource.min.js"></script>
 <script src="_{$request.base_path}_/lib/checklist-model/checklist-model.js"></script>
@@ -18,6 +19,8 @@ _{foreach from=$javascripts item=js}_
 <script type="text/javascript" src="_{$request.base_path}_/js/_{$js}_"></script>
 _{/foreach}_
 
+<link rel="stylesheet" type="text/css" href="_{$request.base_path}_/lib/jquery-ui/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="_{$request.base_path}_/lib/jquery-ui/jquery-ui.theme.min.css" />
 <link rel="stylesheet" type="text/css" href="_{$request.base_path}_/css/common.css" />
 <link rel="stylesheet" type="text/css" href="_{$request.base_path}_/css/component.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="_{$request.base_path}_/css/screen.css"/>

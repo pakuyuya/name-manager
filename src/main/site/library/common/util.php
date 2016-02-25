@@ -18,7 +18,7 @@ function replace_each($str, ...$entries) {
     return $str;
 }
 
-function emptyStr($str) {
+function isEmptyStr($str) {
     return $str === null || $str === '';
 }
 
@@ -40,6 +40,10 @@ function keysCamel2Sanake($ary) {
     }
 
     return $newary;
+}
+
+function toSqlDate($str) {
+    return str_replace('/', '-', $str);
 }
 
 function escapeLike($str) {
