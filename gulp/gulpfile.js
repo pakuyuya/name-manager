@@ -39,26 +39,23 @@ var SRC_DIR = path.resolve('../src/main') + '/';
 
 // ビルドディレクトリ初期化
 gulp.task('initdir', function(){
-    if(!fs.existsSync(BUILD_DIR + 'js')){
-        fs.mkdir(BUILD_DIR + 'js');
+
+    function securePath(path) {
+        if (!fs.existsSync(path)) {
+            fs.mkdir(path);
+        }
     }
-    if(!fs.existsSync(BUILD_DIR + 'css')){
-        fs.mkdir(BUILD_DIR + 'css');
-    }
-    if(!fs.existsSync(BUILD_DIR + 'html')){
-        fs.mkdir(BUILD_DIR + 'html');
-    }
-    if(!fs.existsSync(BUILD_DIR + 'lib')){
-        fs.mkdir(BUILD_DIR + 'lib');
-    }
-    if(!fs.existsSync(BUILD_DIR + 'images')){
-        fs.mkdir(BUILD_DIR + 'images');
-    }
-    if(!fs.existsSync(BUILD_DIR + 'site')){
-        fs.mkdir(BUILD_DIR + 'site');
-    }
-    if(!fs.existsSync(BUILD_DIR + 'site/logs')){
-        fs.mkdir(BUILD_DIR + 'site/logs');
+
+    for (const path of [
+        BUILD_DIR + 'js',
+        BUILD_DIR + 'css',
+        BUILD_DIR + 'html',
+        BUILD_DIR + 'lib',
+        BUILD_DIR + 'images',
+        BUILD_DIR + 'site',
+        BUILD_DIR + 'site/logs',
+    ]) {
+        securePath(path);
     }
 });
 
@@ -86,13 +83,19 @@ gulp.task('clean-webcontent', ['initdir'], function(cb){
             SRC_DIR + 'js/**/*',
             BUILD_DIR + 'js/*',
             BUILD_DIR + 'css/*',
+        ], {force : true},
+        cb);
+});
+gulp.task('clean-html', ['initdir'], function(cb){
+    del(
+        [
             BUILD_DIR + 'html/**/*',
         ], {force : true},
         cb);
 });
 
 // 前回ビルド結果削除
-gulp.task('clean', ['clean-php', 'clean-lib', 'clean-webcontent']);
+gulp.task('clean', ['clean-php', 'clean-lib', 'clean-webcontent', 'clean-html']);
 
 // PHPファイルコピー
 gulp.task('copy-php',['clean-php'], function() {
@@ -113,7 +116,7 @@ gulp.task('copy-php',['clean-php'], function() {
 });
 
 // HTMLファイルコピー
-gulp.task('copy-html', function() {
+gulp.task('copy-html', ['clean-html'], function() {
     gulp.src(
         [
             SRC_DIR + 'html/**/*',
@@ -135,7 +138,7 @@ gulp.task('compile-typescript', function(){
         .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'commonjs'}))
         .pipe(gulp.dest(SRC_DIR + 'js'))
         .on('end', function(){
-            // main/js/impl以下のファイルだけ圧縮してbuildへコピー
+            // js/app/app以下のファイルだけbrowserifyと圧縮してbuildへコピー
             gulp.src([SRC_DIR + 'js/app/app/*.js'])
                 .pipe(foreach(function(stream, f){
                     var filename = f.path.substr((SRC_DIR + 'js/app/app/').length);
