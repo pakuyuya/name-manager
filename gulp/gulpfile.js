@@ -133,8 +133,8 @@ gulp.task('copy-lib',['clean-lib'], function(){
 
 // Typescriptコンパイル
 gulp.task('compile-typescript', function(){
-
     return gulp.src([SRC_DIR + 'ts/**/*.ts'])
+        .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
         .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'commonjs'}))
         .pipe(gulp.dest(SRC_DIR + 'js'))
         .on('end', function(){
@@ -157,6 +157,7 @@ gulp.task('compile-compass', function(){
     return gulp.src([SRC_DIR + 'sass/*.scss'])
         .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
         .pipe(compass({
+            config_file: SRC_DIR + 'sass/config.rb',
             comments: false,
             project: SRC_DIR,
             css: 'css',
@@ -178,4 +179,8 @@ gulp.task('watch-typescript', function(){
 
 gulp.task('watch-php-app', function() {
     gulp.watch(SRC_DIR + 'site/app/**/*', function(){ runSequence('clean-php', 'copy-php') });
+});
+
+gulp.task('watch-html', function() {
+    gulp.watch(SRC_DIR + 'html/**/*', ['copy-html'] );
 });
