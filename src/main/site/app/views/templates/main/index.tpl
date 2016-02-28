@@ -8,7 +8,8 @@
         <gmenu class="p-header-buttons u-p5">
         </gmenu>
     </header>
-    <div id="main" ng-controller="MainCtrl as main">
+    <main>
+<!--    <div id="main" ng-controller="MainCtrl as main"> -->
         <!-- タブ -->
         <div class="p-tabs u-flex">
             <div class="p-tab search u-center is-active">名簿一覧</div>
@@ -61,7 +62,9 @@
                     <names-list class="u-p80">
                         <div>
                             <div class="p-commands">
-                                <div class="p-command"></div>
+                                <div class="p-command">
+                                    <button type="button" ng-click="addNameDialog.open()">新しい連絡先を登録</button>
+                                </div>
                             </div>
                             <div class="p-list u-block">
                                 <!-- ページング -->
@@ -118,5 +121,6 @@
         <!-- クリップリスト -->
         <div id="clip-list">
         </div>
-    </div>
+        <add-name-dialog ng-model="dialog"></add-name-dialog>
+    </main>
 </div>

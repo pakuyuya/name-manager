@@ -24,6 +24,19 @@
   }
 }
 
+@mixin icon-base-text {
+  @include icon-base;
+  &.small{
+    font-size: 12px;
+  }
+  &.middle{
+    font-size: 18px;
+  }
+  &.large{
+    font-size: 28px;
+  }
+}
+
 .icon-user{
   @include icon-base;
   background-image: inline-image('users81.svg');
@@ -36,3 +49,15 @@
   @include icon-base;
   background-image: inline-image('gear-white.svg');
 }
+
+.icon-close {
+  @inclide icon-base-text;
+  color: #888888;
+  cursor: pointer;
+
+  &:before { content: "×"; }
+  &:hover {
+    color: #222222;
+  }
+}
+

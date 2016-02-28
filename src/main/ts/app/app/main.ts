@@ -19,6 +19,9 @@ import {MemberTypesService} from '../services/memberTypesService';
 app.controller('HeaderCtrl', ['$scope', function($scope){
 }]);
 
+//
+// MainDirective
+//
 
 class MainController {
     constructor(private MemberTypes: MemberTypesService) {
@@ -28,7 +31,15 @@ class MainController {
     public memberTypes = [];
 }
 
-app.controller('MainCtrl', ['MemberTypes', MainController]);
+class MainDirective {
+    restrict = 'E';
+    controller = ['MemberTypes', MainController];
+    controllerAs = 'main';
+    replace = true;
+}
+
+app.directive('main', () => new MainDirective());
+
 
 $(function(){
     // datepicker有効化

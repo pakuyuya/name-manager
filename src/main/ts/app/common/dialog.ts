@@ -1,5 +1,8 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 
+import {ZIndexer} from './z-indexer'
+import {minDlgZIndex} from '../constants'
+
 export module Dialog{
     /**
      * ダイアログを呼び出す。
@@ -113,6 +116,10 @@ export module Dialog{
     }
 
     function setDlgOnDOM($dialog : JQuery, $filter : JQuery){
+
+        $filter.css('z-index', ZIndexer.next(minDlgZIndex).toString());
+        $dialog.css('z-index', ZIndexer.next(minDlgZIndex).toString());
+
         //フィルターサイズ設定
         var $wnd = $(window);
 

@@ -1,0 +1,50 @@
+<div>
+    <dialog class="p-add-name-dialog" width="800px">
+        <div class="u-right">
+            <span class="icon-close" ng-click="addNameDialog.requestClose()"></span>
+        </div>
+        <form>
+            <fieldset>
+                <legend>新しい連絡先</legend>
+                <table>
+                    <tr ng-if="!!addNameDialog.model.id">
+                        <th>名簿番号</th>
+                        <td>{{ addNameDialog.model.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>連絡先名（日本語）</th>
+                        <td><input type="text" ng-model="addNameDialog.model.entry_name_ja"></td>
+                    </tr>
+                    <tr>
+                        <th>連絡先名（かな）</th>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>連絡先名（英語）</th>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>別名</th>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>別名</th>
+                        <td><input type="text"></td>
+                    </tr>
+                </table>
+                <div>
+                    <input type="text" />
+                </div>
+                <div>
+                    <label>
+                        <input type="checkbox">登録内容を見直しました。
+                    </label>
+                </div>
+                <div>
+                    <button type="button">登録する</button>
+                    <button type="button" ng-click="addNameDialog.requestClose()">キャンセル</button>
+                </div>
+            </fieldset>
+        </form>
+    </dialog>
+</div>

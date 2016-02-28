@@ -10,8 +10,6 @@
   margin  : 0;
 }
 
-
-
 li {
   list-style-type: none;
   list-style-position: outside;
@@ -19,6 +17,13 @@ li {
 
 body {
   background : #ffffff;
+}
+
+table {
+  border-collapse: collapse;
+}
+table, th, td {
+  border : none;
 }
 
 //----------------------------
