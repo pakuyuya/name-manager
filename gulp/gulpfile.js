@@ -1,10 +1,13 @@
 "use strict";
 
+const debug = false;
+
 // モジュールのロード
 var fs = require('fs');
 var path = require('path');
 
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
@@ -146,7 +149,7 @@ gulp.task('compile-typescript', function(){
                         .bundle()
                         .pipe(source(filename))
                         .pipe(buffer())
-                        .pipe(uglify())
+                        .pipe(debug ? gutil.noop() : uglify())
                         .pipe(gulp.dest(BUILD_DIR + 'js'));
                 }))
         });
@@ -164,7 +167,7 @@ gulp.task('compile-compass', function(){
             scss: SRC_DIR + 'sass',
             image: SRC_DIR + 'sass/images'
         }))
-        .pipe(minifyCss())
+        .pipe(debug ? gulp.noop() : minifyCss())
         .pipe(gulp.dest(BUILD_DIR + 'css/'));
 });
 

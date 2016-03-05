@@ -1,35 +1,50 @@
 <div>
     <dialog class="p-add-name-dialog" width="800px">
-        <div class="u-right">
-            <span class="icon-close" ng-click="addNameDialog.requestClose()"></span>
+        <div class="c-dialog-title u-flex u-bg-primary-color u-white">
+            <div class="u-p90">
+                新しい連絡先
+            </div>
+            <div class="u-p10 u-right">
+                <span class="icon-close white" ng-click="addNameDialog.requestClose()"></span>
+            </div>
         </div>
-        <form>
+
+        <form class="padding-top10">
             <fieldset>
-                <legend>新しい連絡先</legend>
-                <table>
-                    <tr ng-if="!!addNameDialog.model.id">
-                        <th>名簿番号</th>
-                        <td>{{ addNameDialog.model.id }}</td>
+                <table class="c-field-table">
+                    <tr class="c-field-row" ng-if="!!addNameDialog.model.id">
+                        <th class="c-field-head">名簿番号</th>
+                        <td class="c-field-data u-p90">{{ addNameDialog.model.id }}</td>
                     </tr>
-                    <tr>
-                        <th>連絡先名（日本語）</th>
-                        <td><input type="text" ng-model="addNameDialog.model.entry_name_ja"></td>
+                    <tr class="c-field-row">
+                        <th class="c-field-head">連絡先名（日本語）</th>
+                        <td class="c-field-data u-p80">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_name_ja">
+                        </td>
                     </tr>
-                    <tr>
-                        <th>連絡先名（かな）</th>
-                        <td><input type="text"></td>
+                    <tr class="c-field-row">
+                        <th class="c-field-head">連絡先名（かな）</th>
+                        <td class="c-field-data u-p80">
+                            <input type="text" class="u-p100 size-m">
+                        </td>
                     </tr>
-                    <tr>
-                        <th>連絡先名（英語）</th>
-                        <td><input type="text"></td>
+                    <tr class="c-field-row">
+                        <th class="c-field-head">連絡先名（英語）</th>
+                        <td class="c-field-data u-p80">
+                            <input type="text" class="u-p100 size-m">
+                        </td>
                     </tr>
-                    <tr>
-                        <th>別名</th>
-                        <td><input type="text"></td>
+                    <tr class="c-field-row">
+                        <th class="c-field-head">別名</th>
+                        <td class="c-field-data u-p80">
+                            <input type="text" class="u-p100 size-m">
+                        </td>
                     </tr>
-                    <tr>
-                        <th>別名</th>
-                        <td><input type="text"></td>
+                    <tr class="c-field-row">
+                        <th class="c-field-head">別名</th>
+                        <td class="c-field-data u-p80">
+                            <input type="text" class="u-p100 size-m">
+                        </td>
                     </tr>
                 </table>
                 <div>

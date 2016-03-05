@@ -23,6 +23,7 @@ _{/foreach}_
 <link rel="stylesheet" type="text/css" href="_{$request.base_path}_/lib/jquery-ui/jquery-ui.theme.min.css" />
 <link rel="stylesheet" type="text/css" href="_{$request.base_path}_/css/common.css" />
 <link rel="stylesheet" type="text/css" href="_{$request.base_path}_/css/component.css" />
+<link rel="stylesheet" type="text/css" href="_{$request.base_path}_/css/directive.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="_{$request.base_path}_/css/screen.css"/>
 <link rel="stylesheet" type="text/css" media="print" href="_{$request.base_path}_/css/print.css"/>
 _{foreach from=$stylesheets item=css}_

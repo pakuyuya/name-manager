@@ -28,8 +28,8 @@ export class DialogDirectiveController {
         this.dialogSize.height = attrs.height || this.dialogSize.height;
 
         setTimeout(() => {
-            this.dialogfy(element)
-            this.replaceDialog();
+            this.dialogfy(element);
+            setTimeout(() => this.replaceDialog(), 0);
         }, 0);
 
         scope.$watch(angular.bind(this, function(){ return this.isOpened; }), () => this.refreshDisplay());
@@ -43,12 +43,34 @@ export class DialogDirectiveController {
     }
 
     public open() {
-        this.setupFilter();
-        this.addjustZIndex();
-        this.isOpened = true;
-        if (!this.$scope.$$phase) {
-            this.$scope.$apply();
-        }
+        // 'center'とか指定すると、画面隠しながら resize() 繰り返すとleftとかが滅茶苦茶になりよったため
+        // 不本意ながらhackりまくって動作を制御。
+
+        this.$dlg
+            .addClass('u-no-transition')
+            .css({
+                opacity: '0,0',
+                display : 'block',
+                top : '0',
+                left : '0',
+            });
+
+        setTimeout(() => {
+            this.$dlg.css({top : '', left : '', 'opacity': '', display : ''});
+            this.replaceDialog();
+
+            setTimeout(() => {
+                this.$dlg.removeClass('u-no-transition');
+                this.setupFilter();
+                this.addjustZIndex();
+                this.isOpened = true;
+                if (!this.$scope.$$phase) {
+                    this.$scope.$apply();
+                }
+
+                setTimeout(() => this.replaceDialog(), 0);
+            }, 0);
+        }, 0);
     }
     public close() {
         this.disposeFilter();
@@ -113,13 +135,24 @@ export class DialogDirectiveController {
                          .width($doc.outerWidth())
                          .height($doc.outerHeight());
         $(document.body).append(this.$filter);
+        $(window).resize(this, this.replaceFilter);
 
         setTimeout(() => this.$filter.addClass('is-shown'), 0);
     }
+
+    private replaceFilter(e) {
+        const self = e.data;
+        const $doc = $(document);
+        self.$filter
+            .width($doc.outerWidth())
+            .height($doc.outerHeight());
+    }
+
     private disposeFilter() {
         if (this.$filter) {
             this.$filter.remove();
             delete this.$filter;
+            $(window).off('resize', this.replaceFilter);
         }
     }
 };

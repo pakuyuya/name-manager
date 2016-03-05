@@ -55,6 +55,8 @@
   color: #888888;
   cursor: pointer;
 
+  &.white { color : white; }
+
   &:before { content: "×"; }
   &:hover {
     color: #222222;

@@ -1,7 +1,9 @@
 @import "compass/css3/transition";
 
+@import "common/common-color";
 @import "common/common-controll";
 @import "common/common-icon";
+@import "common/common-form";
 
 a {
   color : #131399;
@@ -11,6 +13,10 @@ a {
     color : #1141fa;
     text-decoration : underline;
   }
+}
+
+hr {
+  color : #aaaaaa;
 }
 
 .u-vert-sep {
@@ -56,6 +62,24 @@ a {
 }
 .u-left {
   text-align : left;
+}
+
+.u-caption {
+  line-height : 24px;
+  font-size   : 18px;
+
+  &.size-l {
+    line-height : 32px;
+    font-size   : 24px;
+  }
+
+  &.size-m {
+  }
+
+  &.size-s {
+    line-height : 18px;
+    font-size   : 12px;
+  }
 }
 
 .u-float-right {
@@ -106,3 +130,14 @@ a {
 }
 
 .u-block { display: block; }
+
+.margin-btm10 {
+  margin-bottom: 10px;
+}
+.margin-btm15 {
+  margin-bottom: 10px;
+}
+
+.padding-top10 {
+  padding-top : 10px;
+}

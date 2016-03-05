@@ -29,6 +29,19 @@
   }
 }
 
+.c-dialog-title {
+  box-sizing : border-box;
+
+  margin-top : -15px;
+  margin-left : -20px;
+  margin-right : -20px;
+  padding : 0px 15px;
+
+  font-size : 24px;
+  height : 48px;
+  line-height : 48px;
+}
+
 .c-dialog-icon{
   float: left;
   padding: 20px;
@@ -56,7 +69,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index:999;
 
-  @include transition-property(all);
+  @include transition-property(opacity);
   @include transition-duration(0.75s);
 
   opacity : 0;

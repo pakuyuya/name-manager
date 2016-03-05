@@ -1,0 +1,13 @@
+$primary-color : #58BE89;
+$sub-color     : #79D1B0;
+
+.u-white {
+  color : #ffffff;
+}
+
+.u-bg-primary-color {
+  background-color : $primary-color;
+}
+.u-bg-sub-color {
+  background-color : $sub-color;
+}
