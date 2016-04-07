@@ -5,11 +5,13 @@ import {appName, minDlgZIndex} from '../constants';
 import {ZIndexer} from '../common/z-indexer';
 
 export class DialogDirectiveController {
+    private MOVE_DURATION = 500; // ぐぬぬ
+
     private $dlg:JQuery = null;
     private $filter:JQuery = null;
     public isOpened: boolean = false;
     private dialogOffset = {
-        top: 100,
+        top: 50,
         left: 'center',
     };
     private dialogSize = {
@@ -68,10 +70,14 @@ export class DialogDirectiveController {
                     this.$scope.$apply();
                 }
 
-                setTimeout(() => this.replaceDialog(), 0);
+                setTimeout(() => {
+                    this.replaceDialog();
+                    setTimeout(() => $(window).resize(), this.MOVE_DURATION);
+                }, 0);
             }, 0);
         }, 0);
     }
+
     public close() {
         this.disposeFilter();
         this.isOpened = false;
@@ -88,6 +94,10 @@ export class DialogDirectiveController {
             const $wnd = $(window);
             offset.left = $wnd.width() / 2 - this.$dlg.width() / 2;
             break;
+        }
+
+        if (offset.left < 0) {
+            offset.left = 0;
         }
 
         this.$dlg.offset(offset);

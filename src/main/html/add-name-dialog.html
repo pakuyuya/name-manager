@@ -11,54 +11,142 @@
 
         <form class="padding-top10">
             <fieldset>
+                <h3 class="c-legend">基本情報</h3>
                 <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
                     <tr class="c-field-row" ng-if="!!addNameDialog.model.id">
-                        <th class="c-field-head">名簿番号</th>
-                        <td class="c-field-data u-p90">{{ addNameDialog.model.id }}</td>
+                        <th class="c-field-head" colspan="4">名簿番号</th>
+                        <td class="c-field-data" colspan="12">{{ addNameDialog.model.id }}</td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head">連絡先名（日本語）</th>
-                        <td class="c-field-data u-p80">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_name_ja">
+                        <th class="c-field-head" colspan="4">連絡先名（英語）</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.entry_name_e">
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head">連絡先名（かな）</th>
-                        <td class="c-field-data u-p80">
-                            <input type="text" class="u-p100 size-m">
+                        <th class="c-field-head" colspan="4">連絡先名（日本語）</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_name_j">
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head">連絡先名（英語）</th>
-                        <td class="c-field-data u-p80">
-                            <input type="text" class="u-p100 size-m">
+                        <th class="c-field-head" colspan="4">連絡先名（かな）</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.entry_name_j_kana">
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head">別名</th>
-                        <td class="c-field-data u-p80">
-                            <input type="text" class="u-p100 size-m">
+                        <th class="c-field-head" colspan="4">別名</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.entry_alias">
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head">別名</th>
-                        <td class="c-field-data u-p80">
-                            <input type="text" class="u-p100 size-m">
+                        <th class="c-field-head" colspan="4">カテゴリ－</th>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_category1" placeholder="1)">
+                        </td>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_category2" placeholder="2)">
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">電話番号</th>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_tels[0]" placeholder="1)">
+                        </td>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_tels[1]" placeholder="2)">
+                        </td>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_tels[2]" placeholder="3)">
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">FAX</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_fax">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">メールアドレス１</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_mails[0]">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">メールアドレス２</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_mails[1]">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">URL</th>
+                        <th class="c-field-data" colspan="12"><input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.e"></th>
+                    </tr>
+                    <tr class="c-field-row-elastic">
+                        <th class="c-field-head" colspan="4">コンタクト備考（英語）</th>
+                        <th class="c-field-data" colspan="12">
+                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.model.e"></textarea>
+                        </th>
+                    </tr>
+                    <tr class="c-field-row-elastic">
+                        <th class="c-field-head" colspan="4">コンタクト備考（日本語）</th>
+                        <th class="c-field-data" colspan="12">
+                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.model.e"></textarea>
+                        </th>
+                    </tr>
+                </table>
+                <hr class="c-sep-vertical">
+                <h3 class="c-legend">住所</h3>
+                <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="3">1</th>
+                        <td>
+                            <div class="u-right">〒&nbsp;</div>
+                            <div class="u-right">住所&nbsp;</div>
+                        </td>
+                        <td class="c-field-data" colspan="11">
+                            <div><input type="text" class="u-p25 size-m" ng-model="addNameDialog.model.entry_address[0].zip"></div>
+                            <div><input type="text" class="u-p95 size-m" ng-model="addNameDialog.model.entry_address[0].address"></div>
+                        </td>
+                        <td>
+                            <button type="button" tabindex="-1">×</button>
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <td colspan="4">
+                        </td>
+                        <td colspan="11" class="u-center">
+                            <button type="button" tabindex="-1" class="u-p80">住所を追加する</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+                <hr class="c-sep-vertical">
+                <table class="c-field-table margin-top20">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr>
+                        <td colspan="16" class="u-center">
+                            <input type="checkbox">登録内容を見直しました。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="16" class="u-center">
+                            <button type="button">登録する</button>
+                            <button type="button" ng-click="addNameDialog.requestClose()">キャンセル</button>
                         </td>
                     </tr>
                 </table>
-                <div>
-                    <input type="text" />
-                </div>
-                <div>
-                    <label>
-                        <input type="checkbox">登録内容を見直しました。
-                    </label>
-                </div>
-                <div>
-                    <button type="button">登録する</button>
-                    <button type="button" ng-click="addNameDialog.requestClose()">キャンセル</button>
-                </div>
             </fieldset>
         </form>
     </dialog>
