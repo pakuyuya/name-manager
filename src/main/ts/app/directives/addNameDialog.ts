@@ -6,6 +6,7 @@ import {DialogDirectiveController} from './dialog';
 import {NameResource} from '../resources/nameResource';
 import {appName, templateBaseUrl} from '../constants';
 import {Dialog} from '../common/dialog'
+import {matchUnlessHashkey} from '../common/util';
 
 interface AddNameModel {
     name_en     : string;
@@ -40,20 +41,18 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     public requestClose() {
-        for (const k in this.model) {
-            if (this.model[k] !== this.initModel[k]) {
-                Dialog.show({
-                    text: '編集内容を破棄します。よろしいですか？',
-                    buttons : { ok : 'OK', ng : 'Cancel'},
-                    callback:(id) => {
-                        if (id === 'ok') {
-                            this.clearModels();
-                            this.close();
-                        }
+        if (!matchUnlessHashkey(this.model, this.initModel)) {
+            Dialog.show({
+                text: '編集内容を破棄します。よろしいですか？',
+                buttons: {ok: 'OK', ng: 'Cancel'},
+                callback: (id) => {
+                    if (id === 'ok') {
+                        this.clearModels();
+                        this.close();
                     }
-                });
-                return;
-            }
+                }
+            });
+            return;
         }
         this.close();
         this.clearModels();

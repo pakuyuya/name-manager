@@ -75,13 +75,13 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">メールアドレス１</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_mails[0]">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.mails[0]">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">メールアドレス２</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_mails[1]">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.mails[1]">
                         </th>
                     </tr>
                     <tr class="c-field-row">
@@ -109,18 +109,18 @@
                     </colgroup>
                     <tr class="c-field-row" ng-repeat="address in addNameDialog.model.addresses">
                         <th class="c-field-head" colspan="2">{{ $index+1 }}</th>
-                        <td>
+                        <td class="c-field-data">
                             <input type="radio" ng-model="addNameDialog.model.sendindex" value="{{$index}}">
                         </td>
-                        <td>
-                            <div class="u-right">〒&nbsp;</div>
-                            <div class="u-right">住所&nbsp;</div>
+                        <td class="c-field-data">
+                            <div class="u-right text-s">〒&nbsp;</div>
+                            <div class="u-right text-s">住所&nbsp;</div>
                         </td>
                         <td class="c-field-data" colspan="11">
                             <div><input type="text" class="u-p25 size-m" ng-model="address.zip"></div>
                             <div><input type="text" class="u-p95 size-m" ng-model="address.address"></div>
                         </td>
-                        <td>
+                        <td class="c-field-data">
                             <button type="button" tabindex="-1" ng-click="addNameDialog.removeAddress($index)">×</button>
                         </td>
                     </tr>
@@ -131,6 +131,26 @@
                             <button type="button" tabindex="-1" class="u-p80" ng-click="addNameDialog.addAddress()">住所を追加する</button>
                         </td>
                         <td></td>
+                    </tr>
+                </table>
+                <h3 class="c-legend">ひろば</h3>
+                <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <td class="c-field-data" colspan="1"></td>
+                        <th class="c-field-head u-left" colspan="15">
+                            <label><input type="checkbox" ng-model="addNameDialog.send" value="true">ひろばを発送します</label>
+                        </th>
+                    </tr>
+                </table>
+                <table class="c-field-table" ng-show="addNameDialog.send">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4"></th>
                     </tr>
                 </table>
                 <hr class="c-sep-vertical">
