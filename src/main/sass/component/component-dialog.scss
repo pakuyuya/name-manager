@@ -6,6 +6,7 @@
 .c-dialog{
   min-width : 400px;
   padding: 15px 20px;
+  margin-bottom: 40px;
   position:absolute;
   @include box-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
   z-index: 1000;
