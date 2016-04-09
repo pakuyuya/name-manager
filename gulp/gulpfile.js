@@ -50,6 +50,7 @@ gulp.task('initdir', function(){
     }
 
     for (const path of [
+        BUILD_DIR,
         BUILD_DIR + 'js',
         BUILD_DIR + 'css',
         BUILD_DIR + 'html',
@@ -138,7 +139,13 @@ gulp.task('copy-lib',['clean-lib'], function(){
 gulp.task('compile-typescript', function(){
     return gulp.src([SRC_DIR + 'ts/**/*.ts'])
         .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
-        .pipe(typescript({ target : 'ES5', removeComments: false, noExternalResolve: true, module: 'commonjs'}))
+        .pipe(typescript({
+            target : 'ES5',
+            removeComments: false,
+            noExternalResolve: true,
+            module: 'commonjs',
+            allowUnreachableCode: true,
+        }))
         .pipe(gulp.dest(SRC_DIR + 'js'))
         .on('end', function(){
             // js/app/app以下のファイルだけbrowserifyと圧縮してbuildへコピー
