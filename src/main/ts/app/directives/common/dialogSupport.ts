@@ -1,6 +1,7 @@
 /// <reference path="../../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../../lib/definitely/angularjs/angular.d.ts" />
 
+
 export abstract class DialogSupportController {
     protected ctrlDlg:any = null;
 
@@ -13,6 +14,10 @@ export abstract class DialogSupportController {
 
         this.ctrlDlg = angular.element($dlg.get(0)).controller('dialog');
         console.assert(this.ctrlDlg, `DialogDirective unregistered!`);
+    }
+
+    public onResizeCall() {
+        this.ctrlDlg.adjustOnResize();
     }
 
     public open() {

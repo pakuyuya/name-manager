@@ -2,15 +2,25 @@
 
 import {appName, apiBaseUrl} from '../constants';
 
-export interface NamesResource extends ng.resource.IResource<NamesResource> {
-    isMember: string;
-    checked: boolean;
-    name: string;
-    address: string;
-    expiredAt: string;
+export interface NameResource extends ng.resource.IResource<NameResource> {
+    name_en     : string;
+    name_jp     : string;
+    name_kn     : string;
+    alias       : string;
+    honorific   : string;
+    category1   : string;
+    category2   : string;
+    tels        : Array<string>;
+    fax         : string;
+    addresses   : Array<{send:boolean, zip:string, address:string}>;
+    url         : string;
+    country     : string;
+    contrem_en  : string;
+    contrem_jp  : string;
+    cd_nametype : string;
 }
 
-export interface NamesResourceClass extends ng.resource.IResourceClass<NamesResource> {
+export interface NamesResourceClass extends ng.resource.IResourceClass<NameResource> {
 }
 
 export function nameFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
@@ -21,11 +31,10 @@ export function nameFactory($resource: ng.resource.IResourceService) : NamesReso
         name_kn: '@name_kn',
         alias  : '@alias',
         honorific : '@honorific',
-        category1 : '@category1',
-        category2 : '@category2',
+        category : '@category',
+        tels : '@tels',
         fax : '@fax,',
-        json_tel : '@json_tel',
-        json_zipaddress : '@json_zipaddress',
+        addresses : '@addresses',
         url : '@url',
         country : '@country',
         contrem_en : '@contrem_en',

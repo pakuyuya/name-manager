@@ -23,47 +23,47 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（英語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.entry_name_e">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.name_e">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（日本語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_name_j">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.name_j">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（かな）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.entry_name_j_kana">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.name_k">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">別名</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.entry_alias">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.model.alias">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">カテゴリ－</th>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_category1" placeholder="1)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.category1" placeholder="1)">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_category2" placeholder="2)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.category2" placeholder="2)">
                         </td>
                         <td colspan="4"></td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">電話番号</th>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_tels[0]" placeholder="1)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.tels[0]" placeholder="1)">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_tels[1]" placeholder="2)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.tels[1]" placeholder="2)">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.entry_tels[2]" placeholder="3)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.model.tels[2]" placeholder="3)">
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -107,25 +107,28 @@
                     <colgroup>
                         <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
                     </colgroup>
-                    <tr class="c-field-row">
-                        <th class="c-field-head" colspan="3">1</th>
+                    <tr class="c-field-row" ng-repeat="address in addNameDialog.model.addresses">
+                        <th class="c-field-head" colspan="2">{{ $index+1 }}</th>
+                        <td>
+                            <input type="radio" ng-model="addNameDialog.model.sendindex" value="{{$index}}">
+                        </td>
                         <td>
                             <div class="u-right">〒&nbsp;</div>
                             <div class="u-right">住所&nbsp;</div>
                         </td>
                         <td class="c-field-data" colspan="11">
-                            <div><input type="text" class="u-p25 size-m" ng-model="addNameDialog.model.entry_address[0].zip"></div>
-                            <div><input type="text" class="u-p95 size-m" ng-model="addNameDialog.model.entry_address[0].address"></div>
+                            <div><input type="text" class="u-p25 size-m" ng-model="address.zip"></div>
+                            <div><input type="text" class="u-p95 size-m" ng-model="address.address"></div>
                         </td>
                         <td>
-                            <button type="button" tabindex="-1">×</button>
+                            <button type="button" tabindex="-1" ng-click="addNameDialog.removeAddress($index)">×</button>
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <td colspan="4">
                         </td>
                         <td colspan="11" class="u-center">
-                            <button type="button" tabindex="-1" class="u-p80">住所を追加する</button>
+                            <button type="button" tabindex="-1" class="u-p80" ng-click="addNameDialog.addAddress()">住所を追加する</button>
                         </td>
                         <td></td>
                     </tr>

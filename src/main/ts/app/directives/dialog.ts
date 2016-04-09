@@ -113,6 +113,10 @@ export class DialogDirectiveController {
         this.refreshDisplay();
     }
 
+    public adjustOnResize() {
+        setTimeout(()=>{ this.replaceFilter(); }, 0);
+    }
+
     private refreshDisplay() {
         if(this.$dlg) {
             if (this.isOpened) {
@@ -145,24 +149,26 @@ export class DialogDirectiveController {
                          .width($doc.outerWidth())
                          .height($doc.outerHeight());
         $(document.body).append(this.$filter);
-        $(window).resize(this, this.replaceFilter);
+        $(window).resize(this, (e) => e.data.replaceFilter());
 
         setTimeout(() => this.$filter.addClass('is-shown'), 0);
     }
 
-    private replaceFilter(e) {
-        const self = e.data;
+
+    private replaceFilter() {
         const $doc = $(document);
-        self.$filter
-            .width($doc.outerWidth())
-            .height($doc.outerHeight());
+        if (this.$filter) {
+            this.$filter
+                .width($doc.outerWidth())
+                .height($doc.outerHeight());
+        }
     }
 
     private disposeFilter() {
         if (this.$filter) {
             this.$filter.remove();
             delete this.$filter;
-            $(window).off('resize', this.replaceFilter);
+            $(document.body).off('resize', (e) => { e.data.replaceFilter() });
         }
     }
 };
