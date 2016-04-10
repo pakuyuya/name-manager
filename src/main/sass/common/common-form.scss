@@ -47,10 +47,13 @@
 .c-field-head {
   padding-right : 10px;
   text-align : center;
-//  background-color : #eeeeee;
 }
 
 .c-field-data {
   padding-left:15px;
   padding-right:10px;
+}
+
+[disabled] {
+  color : #888888;
 }
