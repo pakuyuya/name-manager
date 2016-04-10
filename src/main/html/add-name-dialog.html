@@ -107,6 +107,17 @@
                     <colgroup>
                         <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
                     </colgroup>
+                    <tr class="c-field-row">
+                        <td colspan="4">
+                            &nbsp;
+                        </td>
+                        <td colspan="11" class="u-center">
+                            <button type="button" tabindex="-1" class="u-p50" ng-click="addNameDialog.addAddress()">住所を追加する</button>
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
                     <tr class="c-field-row" ng-repeat="address in addNameDialog.model.addresses">
                         <th class="c-field-head" colspan="2">{{ $index+1 }}</th>
                         <td class="c-field-data">
@@ -124,53 +135,108 @@
                             <button type="button" tabindex="-1" ng-click="addNameDialog.removeAddress($index)">×</button>
                         </td>
                     </tr>
-                    <tr class="c-field-row">
-                        <td colspan="4">
-                        </td>
-                        <td colspan="11" class="u-center">
-                            <button type="button" tabindex="-1" class="u-p80" ng-click="addNameDialog.addAddress()">住所を追加する</button>
-                        </td>
-                        <td></td>
-                    </tr>
                 </table>
-                <h3 class="c-legend">ひろば</h3>
+            </fieldset>
+            <h3 class="c-legend">会員</h3>
+            <table class="c-field-table">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr class="c-field-row">
+                    <td class="c-field-data" colspan="1"></td>
+                    <th class="c-field-head u-left" colspan="15">
+                        <label><input type="checkbox" ng-model="addNameDialog.isMember" value="true">会員として登録します。</label>
+                    </th>
+                </tr>
+            </table>
+            <fieldset ng-disabled="!(addNameDialog.isMember)">
                 <table class="c-field-table">
                     <colgroup>
                         <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
                     </colgroup>
                     <tr class="c-field-row">
-                        <td class="c-field-data" colspan="1"></td>
-                        <th class="c-field-head u-left" colspan="15">
-                            <label><input type="checkbox" ng-model="addNameDialog.send" value="true">ひろばを発送します</label>
-                        </th>
-                    </tr>
-                </table>
-                <table class="c-field-table" ng-show="addNameDialog.send">
-                    <colgroup>
-                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
-                    </colgroup>
-                    <tr class="c-field-row">
-                        <th class="c-field-head" colspan="4"></th>
-                    </tr>
-                </table>
-                <hr class="c-sep-vertical">
-                <table class="c-field-table margin-top20">
-                    <colgroup>
-                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
-                    </colgroup>
-                    <tr>
-                        <td colspan="16" class="u-center">
-                            <input type="checkbox">登録内容を見直しました。
+                        <th class="c-field-head" colspan="4">会員種別</th>
+                        <td class="c-field-data" colspan="12">
+                            <label><input type="radio" value="1" ng-model="addNameDialog.model.memberType">個人会員</label>
+                            <label><input type="radio" value="2" ng-model="addNameDialog.model.memberType">団体会員</label>
+                            <label><input type="radio" value="3" ng-model="addNameDialog.model.memberType">賛助会員</label>
+                            <label><input type="radio" value="4" ng-model="addNameDialog.model.memberType">購読</label>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="16" class="u-center">
-                            <button type="button">登録する</button>
-                            <button type="button" ng-click="addNameDialog.requestClose()">キャンセル</button>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">会員名</th>
+                        <td class="c-field-data" colspan="8">
+                            <input type="text" class="size-m u-p100" />
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <td class="c-field-data" colspan="4">
+                        </td>
+                        <td class="c-field-data" colspan="8">
+                            <button type="button">会員証プレビュー（PDF）</button>
                         </td>
                     </tr>
                 </table>
             </fieldset>
+            <h3 class="c-legend">ひろば</h3>
+            <table class="c-field-table">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr class="c-field-row">
+                    <td class="c-field-data" colspan="1"></td>
+                    <th class="c-field-head u-left" colspan="15">
+                        <label><input type="checkbox" ng-model="addNameDialog.send" value="true">ひろばを発送します。</label>
+                    </th>
+                </tr>
+            </table>
+            <fieldset ng-disabled="!(addNameDialog.send)">
+                <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">発送の区分</th>
+                        <td class="c-field-data" colspan="12">
+                            <label><input type="radio" ng-model="addNameDialog.sendModel.sendType" value="">会員種別と同じ</label>
+                            <label><input type="radio" ng-model="addNameDialog.sendModel.sendType" value="O">大口</label>
+                            <label><input type="radio" ng-model="addNameDialog.sendModel.sendType" value="P">寄贈</label>
+
+                            <label><input type="radio" ng-model="addNameDialog.sendModel.sendType" value="G">府市</label>
+                            <input type="text" ng-model="addNameDialog.sendModel.govNumber" class="size-m u-16p2" ng-disabled="addNameDialog.sendModel.sendType!=='G'" />
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">ひろば　部数</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="number" ng-model="addNameDialog.sendModel.hirobaNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">Focus　部数</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="number" ng-model="addNameDialog.sendModel.focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <hr class="c-sep-vertical">
+            <table class="c-field-table margin-top20">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr>
+                    <td colspan="16" class="u-center">
+                        <input type="checkbox">登録内容を見直しました。
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="16" class="u-center">
+                        <button type="button">登録する</button>
+                        <button type="button" ng-click="addNameDialog.requestClose()">キャンセル</button>
+                    </td>
+                </tr>
+            </table>
         </form>
     </dialog>
 </div>
