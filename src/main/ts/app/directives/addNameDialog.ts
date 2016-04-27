@@ -6,30 +6,49 @@ import {DialogDirectiveController} from './dialog';
 import {NameResource} from '../resources/nameResource';
 import {appName, templateBaseUrl} from '../constants';
 import {Dialog} from '../common/dialog'
-import {matchUnlessHashkey} from '../common/util';
+import {matchUnlessHashkey, removeHashkey, assign} from '../common/util';
 
-interface AddNameModel {
-    name_en     : string;
-    name_jp     : string;
-    name_kn     : string;
-    alias       : string;
-    honorific   : string;
-    category1   : string;
-    category2   : string;
-    tels        : Array<string>;
-    fax         : string;
-    sendindex   : string;
-    addresses   : Array<{zip:string, address:string}>;
-    url         : string;
-    country     : string;
-    contrem_en  : string;
-    contrem_jp  : string;
-    cd_nametype : string;
+interface Models {
+    name : NameModel;
+    send : SendModel;
+}
+class NameModel {
+    public name_en     : string;
+    public name_jp     : string;
+    public name_kn     : string;
+    public alias       : string;
+    public honorific   : string;
+    public category1   : string;
+    public category2   : string;
+    public tels        : Array<string>;
+    public fax         : string;
+    public sendindex   : string = '0';
+    public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
+    public url         : string;
+    public country     : string;
+    public contrem_en  : string;
+    public contrem_jp  : string;
+    public cd_nametype : string;
+    public memberType  : string = '1';
+    public memberName  : string;
+    public expiredOn   : string;
+    public reciptedOn  : string;
+}
+class SendModel {
+    public sendType    : string = '';
+    public govNumber   : string = '';
+    public hirobaNum   : string = '';
+    public forcusNum   : string = '';
 }
 
 class AddNameDialogDirectiveController extends DialogSupportController {
-    public initModel: AddNameModel;
-    public model:     AddNameModel;
+    public initModels: Models =
+        <Models>{
+            name : new NameModel(),
+            send : new SendModel(),
+        };
+    public name: NameModel;
+    public send: SendModel;
 
     constructor() {
         super();
@@ -41,7 +60,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     public requestClose() {
-        if (!matchUnlessHashkey(this.model, this.initModel)) {
+        if (!matchUnlessHashkey(this.name, this.initModels.name)) {
             Dialog.show({
                 text: '編集内容を破棄します。よろしいですか？',
                 buttons: {ok: 'OK', ng: 'Cancel'},
@@ -59,31 +78,25 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     public addAddress() {
-        this.model.addresses.push(this.createPlainAddress());
+        this.name.addresses.push(this.createPlainAddress());
         this.onResizeCall();
     }
 
     public removeAddress(index: string) {
         const numIdx = Number(index);
-        const numSendIdx =  Number(this.model.sendindex);
-        this.model.addresses.splice(numIdx, 1);
+        const numSendIdx =  Number(this.name.sendindex);
+        this.name.addresses.splice(numIdx, 1);
         this.onResizeCall();
         if (numIdx === numSendIdx) {
-            this.model.sendindex = '0';
+            this.name.sendindex = '0';
         } else if (numIdx < numSendIdx) {
-            this.model.sendindex = (numSendIdx - 1).toString();
+            this.name.sendindex = (numSendIdx - 1).toString();
         }
     }
 
     public clearModels() {
-        this.initModel = <AddNameModel>{
-            sendindex : '0',
-            addresses : [this.createPlainAddress()],
-        };
-        this.model = <AddNameModel>{
-            sendindex : '0',
-            addresses : [this.createPlainAddress()],
-        };
+        this.name = <NameModel>assign({}, this.initModels.name);
+        this.send = <SendModel>assign({}, this.initModels.send);
     }
 
     private createPlainAddress() {

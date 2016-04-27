@@ -26,11 +26,12 @@ class TransactionService extends Service {
      * 実行するサービスを登録する
      *
      * @param $tranid
+     * @param $index
      * @param $serviceName
      * @param $method
      * @param $param
      */
-    public function addExecute($tranid, $serviceName, $method, $param) {
+    public function setExecute($tranid, $index, $serviceName, $method, $param) {
         $session = new Session($tranid);
         if (!$session->exisits('used')) {
             throw new Exception('トランザクションがありません。id:'.$tranid);
@@ -43,7 +44,7 @@ class TransactionService extends Service {
         ];
 
         $services = $session->get('services');
-        array_push($services, $service);
+        $services[(int)$index] = $service;
         $session->set('services', $services);
     }
 
