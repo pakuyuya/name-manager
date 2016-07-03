@@ -52,9 +52,7 @@ class TransactionService extends Service {
      * トランザクションの実行およびcommitを行う
      *
      * @param $tranid
-     * @param $serviceName
-     * @param $method
-     * @param $param
+     * @return result
      */
     public function commit($tranid) {
         $session = new Session($tranid);
@@ -65,6 +63,7 @@ class TransactionService extends Service {
         $services = $session->get('services');
 
         $components = [];
+        $results = [];
         try {
             foreach ($services as $service) {
                 $component = Loader::loadService($service['name']);
@@ -74,8 +73,9 @@ class TransactionService extends Service {
                 $classname = get_class($component);
 
                 $component->begin();
-                (new ReflectionMethod($classname, $method))->invoke($component, $param);
-                array_push($coponents);
+                $result = (new ReflectionMethod($classname, $method))->invoke($component, $param);
+                array_push($components, $component);
+                array_push($results, $result);
             }
 
             foreach ($components as $component) {
