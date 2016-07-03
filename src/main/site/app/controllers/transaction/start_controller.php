@@ -4,16 +4,22 @@
  * Class TransactionController
  * トランザクション処理を開始します。
  */
-class TransactionController extends JsonBaseController
+class StartController extends JsonBaseController
 {
     public function __construct(){
         $this->setEnabledLoginCheck(false);
     }
 
     public function post() {
-
         $transaction = $this->service('TransactionService');
-        $tranid = $transaction->start();
+
+        $params = $this->getRequest()->getRestParams();
+
+        $transactionParam = [];
+        $transactionParam['num'] = getOr($params, 'num', 1);
+        $transactionParam['requireSequence'] = true;
+
+        $tranid = $transaction->start($transactionParam);
 
         $this->view->json = [
             'result'  => true,

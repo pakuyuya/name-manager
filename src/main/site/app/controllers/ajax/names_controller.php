@@ -17,9 +17,7 @@ class NamesController extends RestfullBaseController
      * @param params {array} リクエストパラメタ
      */
     protected function fetchList($params) {
-        $name = $this->service('NameService');
-
-        $this->json = $name->find($params);
+        // no implements
     }
 
     /**
@@ -30,7 +28,9 @@ class NamesController extends RestfullBaseController
      * @param params {array} リクエストパラメタ
      */
     protected function fetchOne($tranid, $id, $params) {
-        // 実装なし
+        $name = $this->service('NameService');
+
+        $this->json = $name->findById($id);
     }
 
     /**
@@ -40,7 +40,8 @@ class NamesController extends RestfullBaseController
      * @return mixed
      */
     protected function saveAsNew($tranid, $params) {
-        // 実装なし
+        $name = $this->service('NameService');
+
     }
 
     /**

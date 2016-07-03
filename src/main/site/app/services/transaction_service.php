@@ -9,7 +9,7 @@ class TransactionService extends Service {
      * トランザクションを開始する
      * @return mixed transaction id;
      */
-    public function start() {
+    public function start($param) {
         while(true) {
             $guid = com_create_guid();
             $session = new Session($guid);
@@ -19,6 +19,18 @@ class TransactionService extends Service {
         }
         $session->set('uses', true);
         $session->set('services', []);
+
+        // 制約
+        $constraints = [];
+        if (isset($param['num'])) {
+            $constraints['num'] = $param['num'];
+        }
+        if (isset($param['requireSequence']) && $param['requireSequence']) {
+            $constraints['sequence'] = true;
+        }
+
+        $session->set('constraints',$constraints);
+
         return $guid;
     }
 
@@ -30,6 +42,7 @@ class TransactionService extends Service {
      * @param $serviceName
      * @param $method
      * @param $param
+     * @throws Exception
      */
     public function setExecute($tranid, $index, $serviceName, $method, $param) {
         $session = new Session($tranid);
@@ -53,6 +66,7 @@ class TransactionService extends Service {
      *
      * @param $tranid
      * @return result
+     * @throws Exception
      */
     public function commit($tranid) {
         $session = new Session($tranid);
@@ -94,6 +108,8 @@ class TransactionService extends Service {
 
     /**
      * トランザクションのrollback
+     * @param $tarnid
+     * @throws Exception
      */
     public function rollback($tranid) {
         $session = new Session($tranid);
@@ -103,5 +119,35 @@ class TransactionService extends Service {
 
         $session->clear();
         $session->closeWrite();
+    }
+
+    /**
+     * トランザクションの検証
+     * @param $tranid
+     * @throws Exception
+     */
+    public function validateConstraints($tranid) {
+        $session = new Session($tranid);
+        if (!$session->exisits('used')) {
+            throw new Exception('トランザクションがありません。id:'.$tranid);
+        }
+
+        $constraints = $session->get('constraints');
+
+        if (isset($constraints['num'])) {
+            $num = $session->get('num');
+            $services = $session->get('services');
+            if (count($services) !== (int)$num) {
+                throw new Exception('トランザクション開始時に指定された操作の数と一致しません。');
+            }
+        }
+        if (isset($constraints['sequence'])) {
+            $services = $session->get('services');
+            for ($i = 0,$len = count($services); $i < $len; $i++) {
+                if (!isset($services[$i])) {
+                    throw new Exception('トランザクション要求に不足があります。');
+                }
+            }
+        }
     }
 }
