@@ -34,10 +34,10 @@ export class TransactionService {
     }
 
     public parallelRequestAry(tranid :string, reqs: RequestSetting[]) : IPromise<Array<any>> {
-        let promises : Array<IPromise<any>> = reqs.map((requestSetting) => {
+        let promises : Array<IPromise<any>> = reqs.map((requestSetting, i) => {
             const method = requestSetting.method || 'PUT';
             const url = requestSetting.url;
-            const data = assign({tranid : tranid}, requestSetting.data);
+            const data = assign({tranid : tranid, transeq : i}, requestSetting.data);
 
             return this.$http({method:method, url:url, data:data});
         });

@@ -9,7 +9,7 @@ class TransactionService extends Service {
      * トランザクションを開始する
      * @return mixed transaction id;
      */
-    public function start($param) {
+    public function start($num, $param) {
         while(true) {
             $guid = com_create_guid();
             $session = new Session($guid);
@@ -22,9 +22,7 @@ class TransactionService extends Service {
 
         // 制約
         $constraints = [];
-        if (isset($param['num'])) {
-            $constraints['num'] = $param['num'];
-        }
+        $constraints['num'] = $num;
         if (isset($param['requireSequence']) && $param['requireSequence']) {
             $constraints['sequence'] = true;
         }
@@ -38,13 +36,12 @@ class TransactionService extends Service {
      * 実行するサービスを登録する
      *
      * @param $tranid
-     * @param $index
      * @param $serviceName
      * @param $method
      * @param $param
      * @throws Exception
      */
-    public function setExecute($tranid, $index, $serviceName, $method, $param) {
+    public function setExecute($tranid, $transeq, $serviceName, $method, $param) {
         $session = new Session($tranid);
         if (!$session->exisits('used')) {
             throw new Exception('トランザクションがありません。id:'.$tranid);
@@ -53,12 +50,10 @@ class TransactionService extends Service {
         $service = [
             'name' => $serviceName,
             'method' => $method,
-            'param' => $param
+            'param' => $param,
         ];
 
-        $services = $session->get('services');
-        $services[(int)$index] = $service;
-        $session->set('services', $services);
+        $services = $session->set((string)$transeq, $service);
     }
 
     /**
@@ -74,6 +69,14 @@ class TransactionService extends Service {
             throw new Exception('トランザクションがありません。id:'.$tranid);
         }
 
+        $constraints = $session->get('constraints');
+
+        $num = $constraints['num'];
+        for ($i = 0; $i<$num; ++$i) {
+            if (!$session->exists((string)$i)) {
+                throw new Exception('トランザクション開始時に予約したサービス数に達していません。');
+            }
+        }
         $services = $session->get('services');
 
         $components = [];

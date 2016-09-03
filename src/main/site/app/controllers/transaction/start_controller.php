@@ -15,11 +15,11 @@ class StartController extends JsonBaseController
 
         $params = $this->getRequest()->getRestParams();
 
+        $num = getOr($params, 'num', 1);
         $transactionParam = [];
-        $transactionParam['num'] = getOr($params, 'num', 1);
         $transactionParam['requireSequence'] = true;
 
-        $tranid = $transaction->start($transactionParam);
+        $tranid = $transaction->start($num, $transactionParam);
 
         $this->view->json = [
             'result'  => true,
