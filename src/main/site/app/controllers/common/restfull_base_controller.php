@@ -31,7 +31,7 @@ abstract class RestfullBaseController extends JsonBaseController {
 
         $urlParams = $this->getRequest()->getParams();
         if(!isset($urlParams[0])){
-            $this->responseDenyed();
+            $this->responseDenied();
         }
         $tranId = $urlParams[0];
 
@@ -46,7 +46,7 @@ abstract class RestfullBaseController extends JsonBaseController {
 
         $urlParams = $this->getRequest()->getParams();
         if(!isset($urlParams[0]) && !isset($urlParams[1])){
-            $this->responseDenyed();
+            $this->responseDenied();
         }
         $tranId = $urlParams[0];
         $id = $urlParams[1];
@@ -62,7 +62,7 @@ abstract class RestfullBaseController extends JsonBaseController {
 
         $urlParams = $this->getRequest()->getParams();
         if(!isset($urlParams[0]) && !isset($urlParams[1])){
-            $this->responseDenyed();
+            $this->responseDenied();
         }
         $tranId = $urlParams[0];
         $id = $urlParams[1];
@@ -76,7 +76,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param params {array} リクエストパラメタ
      */
     protected function fetchList($params) {
-        $this->responseDenyed();
+        $this->responseDenied();
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param params {array} リクエストパラメタ
      */
     protected function fetchOne($tranId, $id, $params) {
-        $this->responseDenyed();
+        $this->responseDenied();
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @return mixed
      */
     protected function saveAsNew($tranId, $params) {
-        $this->responseDenyed();
+        $this->responseDenied();
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @return mixed
      */
     protected function save($tranId, $params) {
-        $this->responseDenyed();
+        $this->responseDenied();
     }
 
     /**
@@ -119,6 +119,6 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param $params {array} リクエストパラメタ
      */
     protected function destroy($tranId, $params) {
-        $this->responseDenyed();
+        $this->responseDenied();
     }
 }

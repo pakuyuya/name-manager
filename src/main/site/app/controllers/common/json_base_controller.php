@@ -21,7 +21,7 @@ abstract class JsonBaseController extends BaseController {
 
         if ($this->isEnabledLoginCheck()) {
             if (!$this->checkLogin()) {
-                $this->responseDenyed();
+                $this->responseDenied();
             }
         }
         $this->getRequest()->setAutoTrim(true);

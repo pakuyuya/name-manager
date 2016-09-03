@@ -40,7 +40,7 @@ abstract class BaseController extends RestController {
     /**
      * 処理を即中断し、403レスポンスを返す。
      */
-    protected function responseDenyed(){
+    protected function responseDenied(){
         $this->response->setHttpStatus(403);
         $this->response->send();
     }
