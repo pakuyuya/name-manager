@@ -6,7 +6,7 @@ import {DialogDirectiveController} from './dialog';
 import {NameResource} from '../resources/nameResource';
 import {appName, templateBaseUrl} from '../constants';
 import {Dialog} from '../common/dialog'
-import {matchUnlessHashkey, removeHashkey, assign} from '../common/util';
+import {matchUnlessHashkey, removeHashkey, assignModel} from '../common/util';
 
 interface Models {
     name : NameModel;
@@ -95,8 +95,8 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     public clearModels() {
-        this.name = <NameModel>assign({}, this.initModels.name);
-        this.send = <SendModel>assign({}, this.initModels.send);
+        this.name = <NameModel>assignModel({}, this.initModels.name);
+        this.send = <SendModel>assignModel({}, this.initModels.send);
     }
 
     private createPlainAddress() {

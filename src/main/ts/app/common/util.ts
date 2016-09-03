@@ -6,7 +6,7 @@ export function matchUnlessHashkey(o1:any, o2:any) {
 export function removeHashkey(src:any) {
     var output = Object();
     for (var nextKey in src) {
-        if (nextKey.startWith('$$hashKey')) {
+        if (nextKey.indexOf('$$hashKey') === 0) {
             continue;
         }
         if (src.hasOwnProperty(nextKey)) {
@@ -16,7 +16,14 @@ export function removeHashkey(src:any) {
     return output;
 }
 
-export function assign<T>(target:T, ...args: any[]):T {
+export function assign<T extends U, U>(target: T, source: U): T {
+    for (let id in source) {
+        target[id] = source[id];
+    }
+    return target;
+}
+
+export function assignModel<T>(target:T, ...args: any[]):T {
     'use strict';
     if (target === undefined || target === null) {
         throw new TypeError('Cannot convert undefined or null to object');
@@ -25,7 +32,7 @@ export function assign<T>(target:T, ...args: any[]):T {
     for (const source of args) {
         if (source !== undefined && source !== null) {
             for (const nextKey in source) {
-                if (typeof(nextKey) === 'string' && nextKey.startsWith('$$hashKey')) {
+                if (typeof(nextKey) === 'string' && nextKey.indexOf('$$hashKey') === 0) {
                     continue;
                 }
                 if (source.hasOwnProperty(nextKey)) {
