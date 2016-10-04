@@ -39,4 +39,22 @@ abstract class JsonBaseController extends BaseController {
     public function postProcess() {
         $this->response->json($this->json);
     }
+
+    public function setOKResponse($statusCode, $data = null) {
+        $this->response->setHttpStatus($statusCode);
+        if(!$data !== null) {
+            $this->setJson($data);
+        }
+    }
+    public function setErrorResponse($statusCode, $errors = null) {
+        $this->response->setHttpStatus($statusCode);
+        if(!empty($errors)) {
+            $json = ['error' => $errors];
+            $this->setJson($json);
+        }
+    }
+
+    public function setJson($data) {
+        $this->json = $data;
+    }
 }

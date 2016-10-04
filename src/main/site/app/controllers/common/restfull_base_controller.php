@@ -19,7 +19,7 @@ abstract class RestfullBaseController extends JsonBaseController {
         if(!isset($uriParams[0])){
             $this->fetchList($params);
         } else {
-            $this->fetchOne($$params);
+            $this->fetchOne($uriParams[0], $params);
         }
     }
 
@@ -31,11 +31,11 @@ abstract class RestfullBaseController extends JsonBaseController {
 
         $urlParams = $this->getRequest()->getParams();
         if(!isset($urlParams[0])){
-            $this->responseDenied();
+            $this->setErrorResponse(400, 'URL must contains id.');
         }
-        $tranId = $urlParams[0];
+        $id = $urlParams[0];
 
-        $this->saveAsNew($tranId, $params);
+        $this->saveAsNew($id, $params);
     }
 
     /**
@@ -45,13 +45,12 @@ abstract class RestfullBaseController extends JsonBaseController {
         $params = $this->getRequest()->getRestParams();
 
         $urlParams = $this->getRequest()->getParams();
-        if(!isset($urlParams[0]) && !isset($urlParams[1])){
-            $this->responseDenied();
+        if(!isset($urlParams[0])){
+            $this->setErrorResponse(400, 'URL must contains id.');
         }
-        $tranId = $urlParams[0];
-        $id = $urlParams[1];
+        $id = $urlParams[0];
 
-        $this->save($tranId, $id, $params);
+        $this->save($id, $params);
     }
 
     /**
@@ -61,13 +60,12 @@ abstract class RestfullBaseController extends JsonBaseController {
         $params = $this->getRequest()->getRestParams();
 
         $urlParams = $this->getRequest()->getParams();
-        if(!isset($urlParams[0]) && !isset($urlParams[1])){
-            $this->responseDenied();
+        if(!isset($urlParams[0])){
+            $this->setErrorResponse(400, 'URL must contains id.');
         }
-        $tranId = $urlParams[0];
-        $id = $urlParams[1];
+        $id = $urlParams[0];
 
-        $this->destroy($tranId, $id, $params);
+        $this->destroy($id, $params);
     }
 
     /**
@@ -76,7 +74,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param params {array} リクエストパラメタ
      */
     protected function fetchList($params) {
-        $this->responseDenied();
+        $this->setErrorResponse(404, "Unsupported query.");
     }
 
     /**
@@ -86,8 +84,8 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param id {string} 主キー
      * @param params {array} リクエストパラメタ
      */
-    protected function fetchOne($tranId, $id, $params) {
-        $this->responseDenied();
+    protected function fetchOne($id, $params) {
+        $this->setErrorResponse(404, "Unsupported query.");
     }
 
     /**
@@ -96,8 +94,8 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param $params {array} 追加
      * @return mixed
      */
-    protected function saveAsNew($tranId, $params) {
-        $this->responseDenied();
+    protected function saveAsNew($params) {
+        $this->setErrorResponse(404, "Unsupported query.");
     }
 
     /**
@@ -108,8 +106,8 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param $params
      * @return mixed
      */
-    protected function save($tranId, $params) {
-        $this->responseDenied();
+    protected function save($id, $params) {
+        $this->setErrorResponse(404, "Unsupported query.");
     }
 
     /**
@@ -118,7 +116,7 @@ abstract class RestfullBaseController extends JsonBaseController {
      * @param $id     {int}   ID
      * @param $params {array} リクエストパラメタ
      */
-    protected function destroy($tranId, $params) {
-        $this->responseDenied();
+    protected function destroy($id, $params) {
+        $this->setErrorResponse(404, "Unsupported query.");
     }
 }

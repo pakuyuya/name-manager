@@ -82,4 +82,50 @@ class NameService extends SimpleRestService {
 
         return $select;
     }
+
+    /**
+     * 名簿情報を検証する
+     * @param $name
+     * @return エラーメッセージ
+     */
+    public function validate($name) {
+        $errors = [];
+        // TODO:
+
+        return $errors;
+    }
+
+    /**
+     * JSONフォーマットの項目をJSONデコードする
+     * @param $name モデル
+     * @return mixed フォーマット後のモデル
+     */
+    public function field_json_decode($name) {
+        $fields = ['entry_tels', 'entry_fax', 'entry_mails', 'entry_addresses'];
+
+        foreach ($fields as $field) {
+            if (is_set($name[$field]) && is_string($name[$field])) {
+                $name[$field] = json_decode($name[$field]);
+            }
+        };
+
+        return $name;
+    }
+
+    /**
+     * JSONフォーマットの項目をJSONエンコードする
+     * @param $name モデル
+     * @return mixed フォーマット後のモデル
+     */
+    public function field_json_encode($name) {
+        $fields = ['entry_tels', 'entry_fax', 'entry_mails', 'entry_addresses'];
+
+        foreach ($fields as $field) {
+            if (is_set($name[$field]) && !is_string($name[$field])) {
+                $name[$field] = json_encode($name[$field]);
+            }
+        };
+
+        return $name;
+    }
 }

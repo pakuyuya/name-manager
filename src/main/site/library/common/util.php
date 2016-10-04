@@ -33,7 +33,7 @@ function whiteboxOr($value, $whiteboxlist, $ifnotexists) {
     return $ifnotexists;
 }
 
-function keysCamel2Sanake($ary) {
+function keysCamel2Snake($ary) {
     $newary = [];
     foreach ($ary as $k => $v) {
         $newary[camel2snakecase($k)] = $v;

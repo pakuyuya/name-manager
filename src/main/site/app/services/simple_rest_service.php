@@ -23,14 +23,14 @@ abstract class SimpleRestService extends Service {
     public function create($values) {
         $model = $this->createModel();
         return $model->insert()
-            ->values(keysCamel2Sanake($values))
+            ->values(keysCamel2Snake($values))
             ->execute();
     }
 
     public function update($id, $values) {
         $model = $this->createModel();
         $model->update()
-            ->values(keysCamel2Sanake($values))
+            ->values(keysCamel2Snake($values))
             ->where('id = :id')
             ->params('id', $id)
             ->execute();
