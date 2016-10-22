@@ -12,3 +12,4 @@
 /.idea
 /src/main/js/
 /*.iml
+/gulp/powered-test-rest

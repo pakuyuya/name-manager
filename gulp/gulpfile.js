@@ -26,6 +26,9 @@ var typescript = require('gulp-tsc');
 var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 
+var espower = require('gulp-espower');
+
+var mocha = require('gulp-mocha');
 
 // clean-全コンパイル
 gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'compile-typescript', 'compile-compass']);
@@ -193,4 +196,16 @@ gulp.task('watch-php-app', function() {
 
 gulp.task('watch-html', function() {
     gulp.watch(SRC_DIR + 'html/**/*', ['copy-html'] );
+});
+
+gulp.task('generate-test-rest', function() {
+    return gulp
+        .src('../test-rest/**/*.js', {base: '../test-rest'})
+        .pipe(espower())
+        .pipe(gulp.dest('powered-test-rest'));
+});
+
+gulp.task("test-rest", ["generate-test-rest"], function() {
+  gulp.src("powered-test-rest/**/*.js")
+      .pipe(mocha());
 });
