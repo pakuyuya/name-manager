@@ -43,6 +43,10 @@ var SRC_DIR = path.resolve('../src/main') + '/';
 // タスク定義
 //
 
+gulp.task('default', function(){
+    // no scripts
+});
+
 // ビルドディレクトリ初期化
 gulp.task('initdir', function(){
 
