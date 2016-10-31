@@ -31,7 +31,7 @@ var espower = require('gulp-espower');
 var mocha = require('gulp-mocha');
 
 // clean-全コンパイル
-gulp.task('build', ['initdir', 'clean', 'copy-lib', 'copy-php', 'copy-html', 'compile-typescript', 'compile-compass']);
+gulp.task('build', ['initdir', 'copy-lib', 'copy-php', 'copy-html', 'compile-typescript', 'compile-compass']);
 
 // ディレクトリパス取得
 // Note: gulp-compass実行パスとプロジェクトのルートディレクトリを別にする場合、
@@ -109,7 +109,7 @@ gulp.task('clean-html', ['initdir'], function(cb){
 gulp.task('clean', ['clean-php', 'clean-lib', 'clean-webcontent', 'clean-html']);
 
 // PHPファイルコピー
-gulp.task('copy-php',['clean-php'], function() {
+gulp.task('copy-php', function() {
     gulp.src(
         [
             SRC_DIR + 'index.php',
@@ -127,7 +127,7 @@ gulp.task('copy-php',['clean-php'], function() {
 });
 
 // HTMLファイルコピー
-gulp.task('copy-html', ['clean-html'], function() {
+gulp.task('copy-html', function() {
     gulp.src(
         [
             SRC_DIR + 'html/**/*',
@@ -137,7 +137,7 @@ gulp.task('copy-html', ['clean-html'], function() {
 });
 
 // ライブラリコピー
-gulp.task('copy-lib',['clean-lib'], function(){
+gulp.task('copy-lib', function(){
     gulp.src([SRC_DIR + 'lib/**/*'], {base : SRC_DIR})
         .pipe(gulp.dest(BUILD_DIR));
 });
@@ -177,12 +177,11 @@ gulp.task('compile-compass', function(){
             config_file: SRC_DIR + 'sass/config.rb',
             comments: false,
             project: SRC_DIR,
-            css: 'css',
-            scss: SRC_DIR + 'sass',
+            css: SRC_DIR + 'css',
             image: SRC_DIR + 'sass/images'
         }))
         .pipe(debug ? gulp.noop() : minifyCss())
-        .pipe(gulp.dest(BUILD_DIR + 'css/'));
+        .pipe(gulp.dest(BUILD_DIR + 'css'));
 });
 
 // コマンドラインで常駐させて、変更があったscssのみ再コンパイル
