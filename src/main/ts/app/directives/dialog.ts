@@ -7,6 +7,7 @@ import {ZIndexer} from '../common/z-indexer';
 export class DialogDirectiveController {
     private MOVE_DURATION = 500; // ぐぬぬ
 
+    private $element:JQuery = null;
     private $dlg:JQuery = null;
     private $filter:JQuery = null;
     public isOpened: boolean = false;
@@ -23,6 +24,8 @@ export class DialogDirectiveController {
     }
 
     public link(scope, element:JQuery, attrs) {
+        this.$element = element;
+
         this.dialogOffset.top  = attrs.offsetTop  || this.dialogOffset.top;
         this.dialogOffset.left = attrs.offsetLeft || this.dialogOffset.left;
 
@@ -104,8 +107,13 @@ export class DialogDirectiveController {
     }
 
     public dialogfy(element: JQuery) {
+        // const $dlg = $('<div>').addClass('c-dialog');
+        // $dlg.appendTo($(document.body));
+        //
+        // element.appendTo($dlg);
+        // this.$dlg = $dlg;
         const $dlg = $('<div>').addClass('c-dialog');
-        $dlg.appendTo($(document.body));
+        $dlg.appendTo(element.parent());
 
         element.appendTo($dlg);
         this.$dlg = $dlg;
@@ -115,6 +123,10 @@ export class DialogDirectiveController {
 
     public adjustOnResize() {
         setTimeout(()=>{ this.replaceFilter(); }, 0);
+    }
+
+    public getDialogRef() : JQuery {
+        return this.$dlg;
     }
 
     private refreshDisplay() {

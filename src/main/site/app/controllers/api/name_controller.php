@@ -141,6 +141,13 @@ class NameController extends RestfullBaseController
      * @param $params {array} リクエストパラメタ
      */
     protected function destroy($id, $params) {
-        // 実装なし
+        $nameService = $this->service('NameService');
+
+        if (!$nameService->findById($id)) {
+            $this->setErrorResponse(404, ['resource not found.']);
+            return;
+        }
+
+        $this->setErrorResponse(204);
     }
 }

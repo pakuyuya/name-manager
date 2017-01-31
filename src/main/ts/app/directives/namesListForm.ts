@@ -2,7 +2,6 @@
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
 import {appName} from '../constants';
-import {NamesService, NamesDto} from '../services/namesService';
 
 class NamesListFormDirectiveController {
 
@@ -10,7 +9,7 @@ class NamesListFormDirectiveController {
 
 class NamesListFormDirective {
     restrict = 'E';
-    controller = ['Names', NamesListFormDirectiveController];
+    controller = [NamesListFormDirectiveController];
     controllerAs = 'namesListForm';
     replace = true;
 };

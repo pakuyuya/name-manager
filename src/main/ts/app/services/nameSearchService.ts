@@ -1,11 +1,9 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
-import {appName, apiBaseUrl} from '../constants'
-import {NamesResource, NamesResourceClass} from "../resources/namesResource";
-import {NamesCountResource, NamesCountResourceClass} from "../resources/namesCountResource";
+import {appName, apiBaseUrl} from '../constants';
 import {CheckedNameService} from './checkedNameService';
-import {MemberTypesService} from "./memberTypesService";
+import {MemberTypeService} from "./memberTypeService";
 import IHttpService = angular.IHttpService;
 import IQService = angular.IQService;
 import IRequestShortcutConfig = angular.IRequestShortcutConfig;
@@ -16,7 +14,7 @@ import IPromise = angular.IPromise;
  */
 export class NameSearchService {
     constructor(private $http:IHttpService, private $q:IQService,
-                 private CheckedName:CheckedNameService, private MemberTypes:MemberTypesService) {
+                 private CheckedName:CheckedNameService, private MemberTypes:MemberTypeService) {
     }
 
     /**
@@ -41,7 +39,7 @@ export class NameSearchService {
                                 new NameSearchDto(
                                     value.id,
                                     self.CheckedName.contains(value.id),
-                                    self.MemberTypes.resolveName(value.membertype_id),
+                                    value.membertype,
                                     value.entry_name_e,
                                     value.entry_name_j,
                                     value.send_expire_on

@@ -1,12 +1,14 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
+import systemUI = require('../common/systemui');
 import {DialogSupportController} from './common/dialogSupport';
 import {DialogDirectiveController} from './dialog';
 import {NameResource} from '../resources/nameResource';
 import {appName, templateBaseUrl} from '../constants';
 import {Dialog} from '../common/dialog'
 import {matchUnlessHashkey, removeHashkey, assignModel} from '../common/util';
+import IQService = angular.IQService;
 
 interface Models {
     name : NameModel;
@@ -49,14 +51,18 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         };
     public name: NameModel;
     public send: SendModel;
+    public loading: boolean;
 
-    constructor() {
+    private element: JQuery;
+
+    constructor(private $q:IQService, private nameResource:NameResource) {
         super();
         this.clearModels();
     }
 
     public link(scope, element, attrs) {
         this.initDialogSupport(element);
+        this.element = element;
     }
 
     public requestClose() {
@@ -102,11 +108,47 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private createPlainAddress() {
         return {zip : '', address : ''};
     }
+
+    public tryRegister() {
+        if (this.validateForm()) {
+            this.register();
+        }
+    }
+
+    private validateForm() {
+        let result = true;
+
+        this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
+
+        this.element.find('input,textarea')
+             .each(function(idx, el) : any {
+                 result = result && (<any>el).checkValidity();
+                 return true;
+             });
+
+        return result;
+    }
+    private register() {
+        this.loading = true;
+
+        console.log('submited');
+
+        this.$q.all([
+        ]).catch((reason) => {
+            this.loading = false;
+            console.error(reason);
+            systemUI.systemErr();
+        })
+        .then(() => {
+            this.loading = false;
+            this.requestClose();
+        });
+    }
 };
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = [AddNameDialogDirectiveController];
+    controller = ['$q', 'NameResource', AddNameDialogDirectiveController];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';

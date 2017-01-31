@@ -20,12 +20,13 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     cd_nametype : string;
 }
 
-export interface NamesResourceClass extends ng.resource.IResourceClass<NameResource> {
+export interface NameResourceClass extends ng.resource.IResourceClass<NameResource> {
+    update(model: any) : NameResource;
 }
 
-export function nameFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
-    var url = apiBaseUrl + '/name/:id';
-    var params = {
+export function nameFactory($resource: ng.resource.IResourceService) : NameResourceClass {
+    const url = apiBaseUrl + '/name/:id';
+    const params = {
         name_en: '@name_en',
         name_jp: '@name_jp',
         name_kn: '@name_kn',
@@ -41,8 +42,14 @@ export function nameFactory($resource: ng.resource.IResourceService) : NamesReso
         contrem_jp : '@contrem_jp',
         cd_nametype : '@cd_nametype',
     };
+    const actions = {
+        get:    {method: 'GET'},
+        save:   {method: 'POST'},
+        update: {method: 'PUT'},
+        remove: {method: 'DELETE'},
+    };
 
-    return <NamesResourceClass> $resource(url, params);
+    return <NameResourceClass> $resource(url, params, actions);
 }
 
 angular.module(appName).factory('NameResource', ['$resource', nameFactory]);

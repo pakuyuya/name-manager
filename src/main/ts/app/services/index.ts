@@ -1,5 +1,4 @@
-import './memberTypesService'
-import './namesService'
+import './memberTypeService'
 import './nameSearchService'
 
 import './checkedNameService'

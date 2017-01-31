@@ -13,7 +13,7 @@ export interface NamesResourceClass extends ng.resource.IResourceClass<NamesReso
 }
 
 export function namesFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
-    var url = `${apiBaseUrl}` + 'names';
+    var url = `${apiBaseUrl}/namesearch`;
     var params = {
         lang: '@lang',
         name: '@name',

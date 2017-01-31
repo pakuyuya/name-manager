@@ -1,9 +1,10 @@
 /// <reference path="../../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../../lib/definitely/angularjs/angular.d.ts" />
 
+import {DialogDirectiveController} from '../dialog';
 
 export abstract class DialogSupportController {
-    protected ctrlDlg:any = null;
+    protected ctrlDlg:DialogDirectiveController = null;
 
     protected initDialogSupport(elm:JQuery) {
         const $dlg = elm.find('.c-dialog-wrapper');
@@ -13,7 +14,7 @@ export abstract class DialogSupportController {
         }
 
         this.ctrlDlg = angular.element($dlg.get(0)).controller('dialog');
-        console.assert(this.ctrlDlg, `DialogDirective unregistered!`);
+        console.assert(this.ctrlDlg !== null, `DialogDirective unregistered!`);
     }
 
     public onResizeCall() {
@@ -29,5 +30,8 @@ export abstract class DialogSupportController {
         if (this.ctrlDlg) {
             this.ctrlDlg.close();
         }
+    }
+    public getDialog() : JQuery {
+        return this.ctrlDlg.getDialogRef();
     }
 }

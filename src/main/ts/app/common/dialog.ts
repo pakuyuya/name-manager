@@ -5,11 +5,12 @@ import {minDlgZIndex} from '../constants'
 
 export module Dialog{
     /**
-     * ダイアログを呼び出す。
+     * ダイアログを作成し返却します。
      *
      * @param options
+     * @return ダイアログの参照
      */
-    export function show(options : any){
+    export function show(options : any) : JQuery {
         // オプション作成
         options = $.extend({
             caption : 'Message',
@@ -23,6 +24,8 @@ export module Dialog{
         var $dialog : JQuery = createDialog(options);
         var $filter : JQuery = createFilter();
         setDlgOnDOM($dialog, $filter);
+
+        return $dialog;
     }
 
     /**

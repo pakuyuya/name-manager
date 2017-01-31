@@ -23,7 +23,7 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（英語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.name.name_e">
+                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.name.name_e" required>
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -244,9 +244,13 @@
                     </td>
                 </tr>
                 <tr class="c-field-row">
-                    <td colspan="16" class="u-center">
-                        <button type="button">登録する</button>
-                        <button type="button" ng-click="addNameDialog.requestClose()">キャンセル</button>
+                    <td colspan="3"></td>
+                    <td colspan="10" class="u-center">
+                        <button type="button" ng-disabled="addNameDialog.loading" ng-click="addNameDialog.tryRegister()">登録する</button>
+                        <button type="button" ng-disabled="addNameDialog.loading" ng-click="addNameDialog.requestClose()">キャンセル</button>
+                    </td>
+                    <td colspan="3">
+                        <img src="images/loading-mid.gif" alt="loading" ng-if="addNameDialog.loading">
                     </td>
                 </tr>
             </table>

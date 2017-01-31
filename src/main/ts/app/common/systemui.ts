@@ -10,3 +10,94 @@ import {Dialog} from './dialog';
 export function systemErr( text? : string ){
     Dialog.show({ text: text || 'A system error occurred! Please contact the system administrator.'});
 }
+
+const defaultErrorMessages = {
+    'valueMissing' : '必須項目です',
+    'typeMismatch' : '入力値が不正です',
+    'patternMismatch' : '入力フォーマットが不正です',
+    'tooLong' : '文字が長すぎます',
+    'tooShort' : '文字が短すぎます',
+    'rangeUnderflow' : '入力値が小さすぎます',
+    'rangeOverflow' : '入力値が大きすぎます',
+    'stepMismatch' : '入力値が不正です',
+};
+const validTargets = [
+    'valueMissing',
+    'typeMismatch',
+    'patternMismatch',
+    'tooLong',
+    'tooShort',
+    'rangeUnderflow',
+    'rangeOverflow',
+    'stepMismatch',
+];
+
+/**
+ * コントロール要素から、検証エラーメッセージを取得します。
+ *
+ * @param element 対象の要素
+ * @param errorMessages エラーメッセージの一覧。
+ * @param errorMessages.valueMissing
+ * @param errorMessages.typeMismatch
+ * @param errorMessages.patternMismatch
+ * @param errorMessages.tooLong
+ * @param errorMessages.tooShort
+ * @param errorMessages.rangeUnderflow
+ * @param errorMessages.rangeOverflow
+ * @param errorMessages.stepMismatch
+ * @param errorMessages.badInput
+ *
+ * @returns {string} 戻り値
+ */
+export function getInvalidMessage(element: Element, errorMessages = {}) : string {
+    if ((<any>element).willValidate && (<any>element).validity.valid) {
+
+        for (const validTarget of validTargets) {
+            if (!(<any>element).validity[validTarget]) {
+                return element.getAttribute('title')
+                    || errorMessages[validTarget] || defaultErrorMessages[validTarget];
+            }
+        }
+    }
+    return '';
+}
+
+/**
+ * コントロール要素に標準エラーメッセージを仕込みます。
+ * setCustomValidityメソッドを使用しているため、
+ * 再度setCustomValidityを使用しないとメッセージが更新されません。
+ *
+ * @param element
+ * @param errorMessages
+ */
+export function chargeInvalidMessage(element: Element, errorMessages = defaultErrorMessages){
+    const msg = getInvalidMessage(element, errorMessages);
+    (<any>element).setCustomValidity(msg);
+}
+
+/**
+ *
+ * @param form
+ */
+export function popFormErrorsAsync(form: Element) {
+    let $btn = $(document.createElement('button'))
+                    .css('display', 'none')
+                    .click((ev) => {
+                        console.log(ev);
+                    });
+
+    const onsubmit = (event) => {
+        event.preventDefault();
+    };
+
+    form.addEventListener('submit', onsubmit);
+
+    $(form).append($btn);
+    setTimeout(() => {
+        $btn.click();
+        setTimeout(() => {
+            form.removeEventListener('submit', onsubmit);
+            $btn.remove();
+        });
+    }, 0);
+}
