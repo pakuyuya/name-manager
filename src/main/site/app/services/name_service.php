@@ -44,11 +44,11 @@ class NameService extends SimpleRestService {
             $freeword = '%' . escapeLike($param['freeword']) . '%';
 
             $where =
-                'entry_name_j like :freeword'
-                .' or entry_name_j_kana like :freeword'
-                .' or entry_name_e like :freeword'
-                .' or entry_alias like :freeword'
-                .' or entry_category1 like :freeword'
+                'name_j like :freeword'
+                .' or name_k like :freeword'
+                .' or name_e like :freeword'
+                .' or alias like :freeword'
+                .' or category1 like :freeword'
                 .' or member_name like :freeword';
 
             $select->where($where, ['freeword' => $freeword]);
@@ -58,9 +58,9 @@ class NameService extends SimpleRestService {
             $name = escapeLike($param['name']);
 
             $where =
-                'entry_name_j like :name'
-                .' or entry_name_j_kana like :name'
-                .' or entry_name_e like :name';
+                'name_j like :name'
+                .' or name_j_kana like :name'
+                .' or name_e like :name';
 
             $select->whereLike($where, ['name' => $name]);
         }
@@ -101,7 +101,7 @@ class NameService extends SimpleRestService {
      * @return mixed フォーマット後のモデル
      */
     public function field_json_decode($name) {
-        $fields = ['entry_tels', 'entry_fax', 'entry_mails', 'entry_addresses'];
+        $fields = ['tels', 'fax', 'mails', 'addresses'];
 
         foreach ($fields as $field) {
             if (is_set($name[$field]) && is_string($name[$field])) {
@@ -118,7 +118,7 @@ class NameService extends SimpleRestService {
      * @return mixed フォーマット後のモデル
      */
     public function field_json_encode($name) {
-        $fields = ['entry_tels', 'entry_fax', 'entry_mails', 'entry_addresses'];
+        $fields = ['tels', 'fax', 'mails', 'addresses'];
 
         foreach ($fields as $field) {
             if (is_set($name[$field]) && !is_string($name[$field])) {

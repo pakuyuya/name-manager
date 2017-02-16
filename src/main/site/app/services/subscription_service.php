@@ -8,10 +8,10 @@
 
 Loader::loadService('SimpleRestService');
 
-class EntrySendService extends SimpleRestService
+class SubscriptionService extends SimpleRestService
 {
     public function createModel()
     {
-        return $this->model('EntrySend');
+        return $this->model('EntrySubscription');
     }
 }

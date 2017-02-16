@@ -1,18 +1,26 @@
 /// <reference path="../../lib/definitely/jquery/jquery.d.ts" />
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
+/// <reference path="../../lib/definitely/rxjs/rx.all.d.ts" />
 
-import systemUI = require('../common/systemui');
-import {DialogSupportController} from './common/dialogSupport';
-import {DialogDirectiveController} from './dialog';
-import {NameResource} from '../resources/nameResource';
-import {appName, templateBaseUrl} from '../constants';
-import {Dialog} from '../common/dialog'
-import {matchUnlessHashkey, removeHashkey, assignModel} from '../common/util';
+
 import IQService = angular.IQService;
+
+import {appName, templateBaseUrl} from '../constants';
+
+import {Dialog} from '../common/dialog'
+import systemUI = require('../common/systemui');
+import {matchUnlessHashkey, isBlank, assignModel} from '../common/util';
+
+import {DialogSupportController} from './common/dialogSupport';
+
+import {NameResource, NameResourceClass} from '../resources/nameResource';
+import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subscriptionResource';
+
+import {SendItemType} from '../services/sendItemTypeService';
 
 interface Models {
     name : NameModel;
-    send : SendModel;
+    subscription : SubscriptionModel;
 }
 class NameModel {
     public name_en     : string;
@@ -36,26 +44,29 @@ class NameModel {
     public expiredOn   : string;
     public reciptedOn  : string;
 }
-class SendModel {
+class SubscriptionModel {
     public sendType    : string = '';
     public govNumber   : string = '';
     public hirobaNum   : string = '';
-    public forcusNum   : string = '';
+    public focusNum   : string = '';
 }
 
 class AddNameDialogDirectiveController extends DialogSupportController {
     public initModels: Models =
         <Models>{
             name : new NameModel(),
-            send : new SendModel(),
+            subscription : new SubscriptionModel(),
         };
     public name: NameModel;
-    public send: SendModel;
+    public subscription: SubscriptionModel;
+    public isMember:boolean = false;
+    public isSend:boolean = false;
     public loading: boolean;
 
     private element: JQuery;
 
-    constructor(private $q:IQService, private nameResource:NameResource) {
+    constructor(private $q:IQService, private nameResource:NameResourceClass,
+                  private subscriptionResource:SubscriptionResourceClass) {
         super();
         this.clearModels();
     }
@@ -102,7 +113,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
     public clearModels() {
         this.name = <NameModel>assignModel({}, this.initModels.name);
-        this.send = <SendModel>assignModel({}, this.initModels.send);
+        this.subscription = <SubscriptionModel>assignModel({}, this.initModels.subscription);
     }
 
     private createPlainAddress() {
@@ -118,8 +129,18 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private validateForm() {
         let result = true;
 
-        this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
+        let msgName = isBlank(this.name.name_en) && isBlank(this.name.name_jp) ?
+                            '英語、日本語の名前のいずれかが必須です。' : '';
+        (<any>$('#addNameDialog_name_en').get(0)).setCustomValidity(msgName);
+        
+        let msgSendNum = this.isSend && !(this.subscription.hirobaNum || 0) && !(this.subscription.focusNum || 0) ?
+                            '配送数は必須です。' : '';
+        (<any>$('#addNameDialog_subscription_hirobaNum').get(0)).setCustomValidity(msgName);
 
+
+        // エラーメッセージをポップ
+        this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
+        
         this.element.find('input,textarea')
              .each(function(idx, el) : any {
                  result = result && (<any>el).checkValidity();
@@ -128,27 +149,67 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         return result;
     }
+
+    /**
+     * 登録処理
+     */
     private register() {
+        // Note: サービス化したい
+
         this.loading = true;
 
-        console.log('submited');
+        let failed = false;
 
-        this.$q.all([
-        ]).catch((reason) => {
+        let name : NameResource = null;
+        let hirobaSubs : SubscriptionResource = null;
+        let forcusSubs : SubscriptionResource = null;
+
+        var onError = (reason) => {
             this.loading = false;
             console.error(reason);
             systemUI.systemErr();
-        })
-        .then(() => {
-            this.loading = false;
-            this.requestClose();
-        });
+            failed = true;
+            this.$q.reject(reason);
+        };
+
+        this.$q(() => name = this.nameResource.save(this.name))
+            .catch(onError)
+            .then((name:any) => {
+                var createSubs = (num, type) => {
+                        return (!this.subscription || !num) ? null
+                                                             : <SubscriptionResource> {
+                                                                 entry_id: name.id,
+                                                                 send_num: num,
+                                                                 send_item_id: type,
+                                                                 sendtype_id: this.subscription.sendType,
+                                                                 send_enabled: true,
+                                                              };
+                    };
+
+                return this.$q.all([
+                    this.$q((resolve) => { resolve(hirobaSubs = createSubs(SendItemType.Hiroba, this.subscription.hirobaNum)) }),
+                    this.$q((resolve) => { resolve(forcusSubs = createSubs(SendItemType.Forcus, this.subscription.focusNum)) }),
+                ]);
+            })
+            .catch(onError)
+            .then(() => {
+                this.loading = false;
+                this.requestClose();
+            })
+            .finally(() => {
+                if (failed) {
+                    if (name) { this.nameResource.remove(name); }
+                    if (hirobaSubs) { this.subscriptionResource.remove(hirobaSubs); }
+                    if (forcusSubs) { this.subscriptionResource.remove(hirobaSubs); }
+                }
+            });
     }
+
 };
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = ['$q', 'NameResource', AddNameDialogDirectiveController];
+    controller = ['$q', 'NameResource', 'SubscriptionResource', AddNameDialogDirectiveController];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';

@@ -23,81 +23,81 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（英語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.name.name_e" required>
+                            <input id="addNameDialog_name_name_e" type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_e" maxlength="250">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（日本語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_j">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_j" maxlength="250">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（かな）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.name.name_k">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_k" maxlength="250">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">別名</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m"ng-model="addNameDialog.name.alias">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.alias" maxlength="200">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">カテゴリ－</th>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.category1" placeholder="1)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.category1" placeholder="1)" maxlength="50">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.category2" placeholder="2)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.category2" placeholder="2)" maxlength="50">
                         </td>
                         <td colspan="4"></td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">電話番号</th>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[0]" placeholder="1)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[0]" placeholder="1)" maxlength="100">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[1]" placeholder="2)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[1]" placeholder="2)" maxlength="100">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[2]" placeholder="3)">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[2]" placeholder="3)" maxlength="100">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">FAX</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.entry_fax">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.fax" maxlength="100">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">メールアドレス１</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.mails[0]">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.mails[0]" maxlength="255">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">メールアドレス２</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.mails[1]">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.mails[1]" maxlength="255">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">URL</th>
-                        <th class="c-field-data" colspan="12"><input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.e"></th>
+                        <th class="c-field-data" colspan="12"><input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.url" maxlength="255"></th>
                     </tr>
                     <tr class="c-field-row-elastic">
                         <th class="c-field-head" colspan="4">コンタクト備考（英語）</th>
                         <th class="c-field-data" colspan="12">
-                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.e"></textarea>
+                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.contact_e" maxlength="4000"></textarea>
                         </th>
                     </tr>
                     <tr class="c-field-row-elastic">
                         <th class="c-field-head" colspan="4">コンタクト備考（日本語）</th>
                         <th class="c-field-data" colspan="12">
-                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.e"></textarea>
+                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.contact_e" maxlength="4000"></textarea>
                         </th>
                     </tr>
                 </table>
@@ -128,8 +128,8 @@
                             <div class="u-right text-s">住所&nbsp;</div>
                         </td>
                         <td class="c-field-data" colspan="11">
-                            <div><input type="text" class="u-p25 size-m" ng-model="address.zip"></div>
-                            <div><input type="text" class="u-p95 size-m" ng-model="address.address"></div>
+                            <div><input type="text" class="u-p25 size-m" ng-model="address.zip" required maxlength="30"></div>
+                            <div><input type="text" class="u-p95 size-m" ng-model="address.address" required maxlength="255"></div>
                         </td>
                         <td class="c-field-data">
                             <button type="button" tabindex="-1" ng-click="addNameDialog.removeAddress($index)">×</button>
@@ -166,19 +166,19 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員名(必須)</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="text" class="size-m u-p100" required />
+                            <input type="text" class="size-m u-p100" required maxlength="100" />
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">期限(必須)</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" ng-model="addNameDialog.member.expiredOn" required />
+                            <input type="date" class="size-m" ng-model="addNameDialog.name.expiredOn" placeholder="yyyy/mm/dd" required />
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head" colspan="4">受領記録</th>
+                        <th class="c-field-head" colspan="4">会費受領日</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" ng-model="addNameDialog.member.reciptedOn" />
+                            <input type="date" class="size-m" ng-model="addNameDialog.member.reciptedOn" placeholder="yyyy/mm/dd" />
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -210,24 +210,24 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">発送の区分</th>
                         <td class="c-field-data" colspan="12">
-                            <label><input type="radio" ng-model="addNameDialog.send.sendType" value="">会員種別と同じ</label>
-                            <label><input type="radio" ng-model="addNameDialog.send.sendType" value="O">大口</label>
-                            <label><input type="radio" ng-model="addNameDialog.send.sendType" value="P">寄贈</label>
+                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="">会員種別と同じ</label>
+                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="O">大口</label>
+                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="P">寄贈</label>
 
-                            <label><input type="radio" ng-model="addNameDialog.send.sendType" value="G">府市</label>
-                            <input type="text" ng-model="addNameDialog.send.govNumber" class="size-m u-16p2" ng-disabled="addNameDialog.send.sendType!=='G'" />
+                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="G">府市</label>
+                            <input type="text" ng-model="addNameDialog.subscription.govNumber" class="size-m u-16p2" ng-disabled="addNameDialog.subscription.sendType!=='G'" required />
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">ひろば　部数</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="number" ng-model="addNameDialog.send.hirobaNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                            <input id="addNameDialog_subscription_hirobaNum" type="number" ng-model="addNameDialog.subscription.hirobaNum" class="size-m u-16p1 u-right" min="0" max="999" >
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">Focus　部数</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="number" ng-model="addNameDialog.send.focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                            <input type="number" ng-model="addNameDialog.subscription.focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
                         </td>
                     </tr>
                 </table>

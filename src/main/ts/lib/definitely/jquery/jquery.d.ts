@@ -939,7 +939,7 @@ interface JQueryStatic {
     /**
      * Takes a string and throws an exception containing it.
      *
-     * @param message The message to send out.
+     * @param message The message to subscription out.
      */
     error(message: any): JQuery;
 

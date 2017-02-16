@@ -44,3 +44,7 @@ export function assignModel<T>(target:T, ...args: any[]):T {
         return output;
     }
 }
+
+export function isBlank(str: string):boolean {
+    return (!str || /^\s*$/.test(str));
+}

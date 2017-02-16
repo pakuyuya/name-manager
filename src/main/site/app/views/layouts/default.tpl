@@ -10,13 +10,13 @@ _{foreach from=$meta key=key item=content}_
 <meta _{$attr}_>="_{$key}_" content="_{$content}_" />
 _{/foreach}_
 _{/foreach}_
-<script src="_{$request.base_path}_/lib/jquery/jquery-2.1.3.min.js"></script>
-<script src="_{$request.base_path}_/lib/jquery-ui/jquery-ui.min.js"></script>
-<script src="_{$request.base_path}_/lib/angularjs/angular.min.js"></script>
-<script src="_{$request.base_path}_/lib/angularjs/angular-resource.min.js"></script>
-<script src="_{$request.base_path}_/lib/checklist-model/checklist-model.js"></script>
+<script src="_{$request.base_path}_/lib/jquery/jquery-2.1.3.min.js" defer></script>
+<script src="_{$request.base_path}_/lib/jquery-ui/jquery-ui.min.js" defer></script>
+<script src="_{$request.base_path}_/lib/angularjs/angular.min.js" defer></script>
+<script src="_{$request.base_path}_/lib/angularjs/angular-resource.min.js" defer></script>
+<script src="_{$request.base_path}_/lib/checklist-model/checklist-model.js" defer></script>
 _{foreach from=$javascripts item=js}_
-<script type="text/javascript" src="_{$request.base_path}_/js/_{$js}_"></script>
+<script type="text/javascript" src="_{$request.base_path}_/js/_{$js}_" defer></script>
 _{/foreach}_
 
 <link rel="stylesheet" type="text/css" href="_{$request.base_path}_/lib/jquery-ui/jquery-ui.min.css" />

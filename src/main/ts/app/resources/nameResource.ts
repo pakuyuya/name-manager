@@ -3,21 +3,34 @@
 import {appName, apiBaseUrl} from '../constants';
 
 export interface NameResource extends ng.resource.IResource<NameResource> {
-    name_en     : string;
-    name_jp     : string;
-    name_kn     : string;
-    alias       : string;
-    honorific   : string;
-    category1   : string;
-    category2   : string;
-    tels        : Array<string>;
-    fax         : string;
-    addresses   : Array<{send:boolean, zip:string, address:string}>;
-    url         : string;
-    country     : string;
-    contrem_en  : string;
-    contrem_jp  : string;
-    cd_nametype : string;
+    id              : number;
+    name_e          : string;
+    name_j          : string;
+    name_k          : string;
+    alias           : string;
+    honorific       : string;
+    category1       : string;
+    category2       : string;
+    tels            : Array<string>;
+    fax             : string;
+    mails           : string;
+    url             : string;
+    country         : string;
+    rem_j           : string;
+    rem_e           : string;
+    addresses       : Array<{send:boolean, zip:string, address:string}>;
+    send_zipcode    : string;
+    send_address    : string;
+    postalzone      : string;
+    officertype_id  : number;
+    cd_mbmbertype   : string;
+    member_name     : string;
+    member_rem      : string;
+    member_expire_on: string;
+    send_expire_on  : string;
+    term_id         : number;
+    term            : string;
+    label           : string;
 }
 
 export interface NameResourceClass extends ng.resource.IResourceClass<NameResource> {
@@ -25,22 +38,36 @@ export interface NameResourceClass extends ng.resource.IResourceClass<NameResour
 }
 
 export function nameFactory($resource: ng.resource.IResourceService) : NameResourceClass {
-    const url = apiBaseUrl + '/name/:id';
+    const url = `${apiBaseUrl}/name/:id`;
     const params = {
-        name_en: '@name_en',
-        name_jp: '@name_jp',
-        name_kn: '@name_kn',
-        alias  : '@alias',
+        id : '@id',
+        name_e : '@name_e',
+        name_j : '@name_j',
+        name_k : '@name_k',
+        alias : '@alias',
         honorific : '@honorific',
-        category : '@category',
+        category1 : '@category1',
+        category2 : '@category2',
         tels : '@tels',
-        fax : '@fax,',
-        addresses : '@addresses',
+        fax : '@fax',
+        mails : '@mails',
         url : '@url',
         country : '@country',
-        contrem_en : '@contrem_en',
-        contrem_jp : '@contrem_jp',
-        cd_nametype : '@cd_nametype',
+        rem_j : '@rem_j',
+        rem_e : '@rem_e',
+        addresses : '@addresses',
+        send_zipcode : '@send_zipcode',
+        send_address : '@send_address',
+        postalzone : '@postalzone',
+        officertype_id : '@officertype_id',
+        cd_mbmbertype : '@cd_mbmbertype',
+        member_name : '@member_name',
+        member_rem : '@member_rem',
+        member_expire_on : '@member_expire_on',
+        send_expire_on : '@send_expire_on',
+        term_id : '@term_id',
+        term : '@term',
+        label : '@label',
     };
     const actions = {
         get:    {method: 'GET'},

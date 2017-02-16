@@ -7,7 +7,7 @@ Loader::loadController ( 'JsonBaseController', 'common' );
  * @author yu
  *
  */
-abstract class RestfullBaseController extends JsonBaseController {
+abstract class RestfulBaseController extends JsonBaseController {
 
     /**
      * GETリクエストを受けるアクション
