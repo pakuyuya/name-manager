@@ -23,26 +23,29 @@ interface Models {
     subscription : SubscriptionModel;
 }
 class NameModel {
-    public name_en     : string;
-    public name_jp     : string;
-    public name_kn     : string;
+    public name_e     : string;
+    public name_j     : string;
+    public name_k     : string;
     public alias       : string;
-    public honorific   : string;
     public category1   : string;
     public category2   : string;
     public tels        : Array<string>;
     public fax         : string;
+    public mails       : Array<string>;
+    public url         : string;
+    public rem_en      : string;
+    public rem_jp      : string;
     public sendindex   : string = '0';
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
-    public url         : string;
     public country     : string;
-    public contrem_en  : string;
-    public contrem_jp  : string;
     public cd_nametype : string;
-    public memberType  : string = '1';
-    public memberName  : string;
-    public expiredOn   : string;
-    public reciptedOn  : string;
+    public cd_membertype  : string = '1';
+    public member_name  : string;
+    public member_expire_on   : string;
+    public recipted_on  : string;
+}
+class MemberModel {
+    public memberType : string;
 }
 class SubscriptionModel {
     public sendType    : string = '';
@@ -59,6 +62,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         };
     public name: NameModel;
     public subscription: SubscriptionModel;
+    public sendindex: number;
     public isMember:boolean = false;
     public isSend:boolean = false;
     public loading: boolean;
@@ -129,7 +133,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private validateForm() {
         let result = true;
 
-        let msgName = isBlank(this.name.name_en) && isBlank(this.name.name_jp) ?
+        let msgName = isBlank(this.name.name_e) && isBlank(this.name.name_j) ?
                             '英語、日本語の名前のいずれかが必須です。' : '';
         (<any>$('#addNameDialog_name_en').get(0)).setCustomValidity(msgName);
         
