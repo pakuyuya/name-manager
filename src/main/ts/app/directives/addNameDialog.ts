@@ -9,7 +9,7 @@ import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog'
 import systemUI = require('../common/systemui');
-import {matchUnlessHashkey, isBlank, assignModel, assign} from '../common/util';
+import {matchUnlessHashkey, isBlank, assignModel, assign, isString} from '../common/util';
 
 import {DialogSupportController} from './common/dialogSupport';
 
@@ -25,29 +25,29 @@ interface Models {
     subscription : SubscriptionModel;
 }
 class NameModel {
-    public name_e     : string;
-    public name_j     : string;
-    public name_k     : string;
-    public alias       : string;
-    public category1   : string;
-    public category2   : string;
-    public tels        : Array<string>;
-    public fax         : string;
+    public name_e     : string = '';
+    public name_j     : string = '';
+    public name_k     : string = '';
+    public alias       : string = '';
+    public category1   : string = '';
+    public category2   : string = '';
+    public tels        : Array<string> = [''];
+    public fax         : string = '';
     public mails       : Array<string>;
-    public url         : string;
-    public rem_e      : string;
-    public rem_j      : string;
+    public url         : string = '';
+    public rem_e      : string = '';
+    public rem_j      : string = '';
     public sendindex   : string = '0';
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
-    public country     : string;
-    public cd_nametype : string;
+    public country     : string = '';
+    public cd_nametype : string = '';
     public cd_membertype  : string = '1';
-    public member_name  : string;
-    public member_expire_on   : string;
-    public recipted_on  : string;
+    public member_name  : string = '';
+    public member_expire_on   : string = '';
+    public recipted_on  : string = '';
 }
 class MemberModel {
-    public memberType : string;
+    public memberType : string = '';
 }
 class SubscriptionModel {
     public sendType    : string = '';
@@ -185,8 +185,8 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         this.createNameResource().$save()
             .catch(onError)
-            .then((retname: NameResource) => {
-                name = retname;
+            .then((data: NameResource) => {
+                name = data;
                 return this.$q.all([
                     this.createSubspriction(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum))
                         .$save()
@@ -195,11 +195,13 @@ class AddNameDialogDirectiveController extends DialogSupportController {
                         .$save()
                         .then((subs) => { focusSubs = subs}),
                 ]);
-            })
+            }, onError)
+            .catch(onError)
             .then(() => {
                 this.loading = false;
                 this.forceClose();
-            })
+            }, onError)
+            .catch(onError)
             .finally(() => {
                 if (failed) {
                     if (name) { this.nameResource.remove(name); }

@@ -104,7 +104,7 @@ class NameService extends SimpleRestService {
         $fields = ['tels', 'fax', 'mails', 'addresses'];
 
         foreach ($fields as $field) {
-            if (is_set($name[$field]) && is_string($name[$field])) {
+            if (isset($name[$field]) && is_string($name[$field])) {
                 $name[$field] = json_decode($name[$field]);
             }
         };
@@ -121,7 +121,7 @@ class NameService extends SimpleRestService {
         $fields = ['tels', 'fax', 'mails', 'addresses'];
 
         foreach ($fields as $field) {
-            if (is_set($name[$field]) && !is_string($name[$field])) {
+            if (isset($name[$field]) && !is_string($name[$field])) {
                 $name[$field] = json_encode($name[$field]);
             }
         };

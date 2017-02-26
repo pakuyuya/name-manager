@@ -1,5 +1,5 @@
 <?php
-Loader::loadController('RestfullBaseController', 'common');
+Loader::loadController('JsonBaseController', 'common');
 Loader::loadLibrary('util', 'common');
 Loader::loadLibrary('ValidatorEx');
 

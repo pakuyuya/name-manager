@@ -1,5 +1,5 @@
 <?php
-Loader::loadController('Controller', 'common');
+Loader::loadController('SimpleRestfulController', 'common');
 
 /**
  * 名簿リソース
@@ -15,7 +15,7 @@ class NameController extends SimpleRestfulController
         return $this->service('NameService');
     }
 
-    protected function getFields()
+    protected function getDefaultValues()
     {
         $current_date = date('Y-n-d H:i:s');
         return [

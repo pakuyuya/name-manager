@@ -9,9 +9,6 @@ class ErrorHandler extends ErrorHandlerStandard
 {
     public function error()
     {
-        // ↓正しくはこうなんだけど、効かない。。
-        // $this->response->setHttpStatus(500);
         http_response_code(500);
-        die('{ "error" : true }');
     }
 }

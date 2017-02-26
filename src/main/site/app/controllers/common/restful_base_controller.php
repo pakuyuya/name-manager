@@ -29,13 +29,7 @@ abstract class RestfulBaseController extends JsonBaseController {
     public function post() {
         $params = $this->getRequest()->getRestParams();
 
-        $urlParams = $this->getRequest()->getParams();
-        if(!isset($urlParams[0])){
-            $this->setErrorResponse(400, 'URL must contains id.');
-        }
-        $id = $urlParams[0];
-
-        $this->saveAsNew($id, $params);
+        $this->saveAsNew($params);
     }
 
     /**
@@ -118,5 +112,12 @@ abstract class RestfulBaseController extends JsonBaseController {
      */
     protected function destroy($id, $params) {
         $this->setErrorResponse(404, "Unsupported query.");
+    }
+
+    /**
+     * 事前処理
+     */
+    public function preProcess() {
+
     }
 }

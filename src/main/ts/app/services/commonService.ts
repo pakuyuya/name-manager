@@ -12,14 +12,11 @@ export class CommonService {
     }
 
     public noopResource<T>() : angular.resource.IResource<T> {
-        let promise = this.$q((resolve) => resolve(null));
-        let extend = {
+        return {
             $save : this.null$q(),
             $update : this.null$q(),
             $remove : this.null$q(),
-        };
-
-        return assign(promise, extend) as any;
+        } as any;
     }
 
     private null$q() { return () => this.$q((resolve) => resolve(null)); }

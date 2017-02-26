@@ -1,6 +1,6 @@
 <?php
 
-Loader::loadLibrary('util');
+Loader::loadLibrary('util', 'common');
 
 /**
  * Created by IntelliJ IDEA.

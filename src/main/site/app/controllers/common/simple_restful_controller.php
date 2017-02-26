@@ -20,7 +20,7 @@ abstract class SimpleRestfulController extends RestfulBaseController
      * @param id {string} 主キー
      * @param params {array} リクエストパラメタ
      */
-    protected function fetchOne($id) {
+    protected function fetchOne($id, $param) {
         $service = $this->createService();
 
         $result = $service->findById($id);
@@ -50,21 +50,18 @@ abstract class SimpleRestfulController extends RestfulBaseController
             return;
         }
 
-        // 登録処理
-        $resName = $this->registerName($fields);
-
         // 補完、不要インデックスのフィルター
         $current_date = date('Y-n-d H:i:s');
         $defValueMap = $this->getDefaultValues();
-        $safeName = [];
+        $safeValue = [];
         foreach($defValueMap as $k => $v) {
-            $safeName[$k] = isset($fields[$k]) ? $fields[$k] : $v;
+            $safeValue[$k] = isset($fields[$k]) ? $fields[$k] : $v;
         }
 
-        $safeName = $service->field_json_encode($safeName);
+        $safeValue = $service->field_json_encode($safeValue);
 
         // 登録
-        $result = $service->create($safeName);
+        $result = $service->create($safeValue);
 
 
         $this->setOKResponse(200, $result);
@@ -144,14 +141,14 @@ abstract class SimpleRestfulController extends RestfulBaseController
      *
      * @return mixed
      */
-    abstract protected function getFields();
+    abstract protected function getDefaultValues();
 
     protected function parseParams($params) {
         return $params;
     }
 
     protected function validateField($fields) {
-        $service = createService();
+        $service = $this->createService();
         return method_exists($service, 'validate') ? $service->validate($fields) : true;
     }
 }

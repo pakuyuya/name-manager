@@ -5,10 +5,9 @@ function forceArray($v) {
 }
 
 function camel2snakeCase($str) {
-    return preg_replace(
-            '([A-Z])', '\\u$1',
-            preg_replace('^([A-Z])', '\\u$1')
-    );
+    return preg_replace('/([A-Z])/', '\\u$1',
+                preg_replace('/^([A-Z])/', '\\u$1', $str)
+            );
 }
 
 function replace_each($str, ...$entries) {
