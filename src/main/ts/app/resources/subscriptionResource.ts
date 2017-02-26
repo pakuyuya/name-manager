@@ -6,7 +6,7 @@ export interface SubscriptionResource extends ng.resource.IResource<Subscription
     id       : number,
     entry_id : number,
     send_num : number,
-    send_item_id : number,
+    send_item_id : string,
     sendtype_id  : string,
     send_rem     : string,
     send_enabled : boolean,

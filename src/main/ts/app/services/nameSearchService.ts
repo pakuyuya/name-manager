@@ -40,8 +40,8 @@ export class NameSearchService {
                                     value.id,
                                     self.CheckedName.contains(value.id),
                                     value.membertype,
-                                    value.entry_name_e,
-                                    value.entry_name_j,
+                                    value.name_e,
+                                    value.name_j,
                                     value.send_expire_on
                                 )
                         ),

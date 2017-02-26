@@ -22,7 +22,7 @@ class NamesListDirectiveController {
     public search() {
         const self = this;
         this.NameSearch.query(this.query)
-            .then(function(greeting : NameSearchResult){
+            .then(function(greeting : NameSearchResult) {
                 self.idxfrom = greeting.idxfrom;
                 self.idxto = greeting.idxto;
                 self.total = greeting.total;

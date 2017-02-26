@@ -2,85 +2,27 @@
 /// <reference path="../../lib/definitely/angularjs/angular.d.ts" />
 
 import {appName} from '../constants'
+import {assign} from '../common/util'
 
 /**
- * チェックした名簿のIDを保持するサービス<br>
- * 実態はSetの実装。
+ * ユーティリティクラス
  */
-export class CheckedNameService {
-    static idset: Object;
-    static len: number;
-
-    constructor() {
-        this.clear();
+export class CommonService {
+    constructor(private $q:angular.IQService) {
     }
 
-    /**
-     * 名簿IDを記憶する
-     * @param id
-     */
-    public clip(id: string) {
-        if (!CheckedNameService.idset[id]) {
-            CheckedNameService.idset[id] = true;
-            CheckedNameService.len++;
-        }
+    public noopResource<T>() : angular.resource.IResource<T> {
+        let promise = this.$q((resolve) => resolve(null));
+        let extend = {
+            $save : this.null$q(),
+            $update : this.null$q(),
+            $remove : this.null$q(),
+        };
+
+        return assign(promise, extend) as any;
     }
 
-    /**
-     * 名簿IDのチェックを外す
-     * @param id
-     */
-    public unclip(id: string) {
-        if (CheckedNameService.idset[id]) {
-            delete CheckedNameService.idset[id];
-            CheckedNameService.len--;
-        }
-    }
-
-    /**
-     * クリップを全て消去する
-     */
-    public clear() {
-        CheckedNameService.idset = {};
-        CheckedNameService.len   = 0;
-    }
-
-    /**
-     * 保持するIDすべてを連想配列で取得する
-     * @returns {Object} IDがindexとなる連想配列
-     */
-    public getIdset() : Object {
-        return  CheckedNameService.idset;
-    }
-
-    /**
-     * 保持するIDすべてを整数添字の配列で取得する
-     * @returns {Array} IDを値に持つ配列
-     */
-    public getIds() : Array<string> {
-        var ids = [];
-        for (let id in CheckedNameService.idset) {
-            ids.push(id);
-        }
-        return ids;
-    }
-
-    /**
-     * 現在のIDの個数を取得する
-     * @returns {number} 個数
-     */
-    public length() : number {
-        return CheckedNameService.len;
-    }
-
-    /**
-     * 指定したIDが含まれているか
-     * @param id
-     * @returns {boolean}
-     */
-    public contains(id: string) : boolean {
-        return !!CheckedNameService.idset[id];
-    }
+    private null$q() { return () => this.$q((resolve) => resolve(null)); }
 }
 
-angular.module(appName).factory('CheckedName', [() => {return new CheckedNameService(); }]);
+angular.module(appName).factory('Common', [ '$q', ($q) => {return new CommonService($q); }]);

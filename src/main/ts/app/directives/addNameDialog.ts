@@ -9,7 +9,7 @@ import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog'
 import systemUI = require('../common/systemui');
-import {matchUnlessHashkey, isBlank, assignModel} from '../common/util';
+import {matchUnlessHashkey, isBlank, assignModel, assign} from '../common/util';
 
 import {DialogSupportController} from './common/dialogSupport';
 
@@ -17,6 +17,8 @@ import {NameResource, NameResourceClass} from '../resources/nameResource';
 import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subscriptionResource';
 
 import {SendItemType} from '../services/sendItemTypeService';
+
+import {CommonService} from '../services/commonService';
 
 interface Models {
     name : NameModel;
@@ -33,8 +35,8 @@ class NameModel {
     public fax         : string;
     public mails       : Array<string>;
     public url         : string;
-    public rem_en      : string;
-    public rem_jp      : string;
+    public rem_e      : string;
+    public rem_j      : string;
     public sendindex   : string = '0';
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
     public country     : string;
@@ -62,7 +64,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         };
     public name: NameModel;
     public subscription: SubscriptionModel;
-    public sendindex: number;
+    public sendindex: number = 0;
     public isMember:boolean = false;
     public isSend:boolean = false;
     public loading: boolean;
@@ -70,7 +72,8 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private element: JQuery;
 
     constructor(private $q:IQService, private nameResource:NameResourceClass,
-                  private subscriptionResource:SubscriptionResourceClass) {
+                  private subscriptionResource:SubscriptionResourceClass,
+                  private common:CommonService) {
         super();
         this.clearModels();
     }
@@ -94,6 +97,10 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             });
             return;
         }
+        this.forceClose();
+    }
+
+    public forceClose() {
         this.close();
         this.clearModels();
     }
@@ -135,21 +142,19 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         let msgName = isBlank(this.name.name_e) && isBlank(this.name.name_j) ?
                             '英語、日本語の名前のいずれかが必須です。' : '';
-        (<any>$('#addNameDialog_name_en').get(0)).setCustomValidity(msgName);
-        
+
         let msgSendNum = this.isSend && !(this.subscription.hirobaNum || 0) && !(this.subscription.focusNum || 0) ?
                             '配送数は必須です。' : '';
-        (<any>$('#addNameDialog_subscription_hirobaNum').get(0)).setCustomValidity(msgName);
 
 
         // エラーメッセージをポップ
-        this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
-        
-        this.element.find('input,textarea')
-             .each(function(idx, el) : any {
-                 result = result && (<any>el).checkValidity();
-                 return true;
-             });
+        // this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
+        //
+        // this.element.find('input,textarea')
+        //      .each(function(idx, el) : any {
+        //          result = result && (<any>el).checkValidity();
+        //          return true;
+        //      });
 
         return result;
     }
@@ -166,54 +171,72 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         let name : NameResource = null;
         let hirobaSubs : SubscriptionResource = null;
-        let forcusSubs : SubscriptionResource = null;
+        let focusSubs : SubscriptionResource = null;
 
         var onError = (reason) => {
             this.loading = false;
             console.error(reason);
             systemUI.systemErr();
             failed = true;
+
+            throw reason;
             this.$q.reject(reason);
         };
 
-        this.$q(() => name = this.nameResource.save(this.name))
+        this.createNameResource().$save()
             .catch(onError)
-            .then((name:any) => {
-                var createSubs = (num, type) => {
-                        return (!this.subscription || !num) ? null
-                                                             : <SubscriptionResource> {
-                                                                 entry_id: name.id,
-                                                                 send_num: num,
-                                                                 send_item_id: type,
-                                                                 sendtype_id: this.subscription.sendType,
-                                                                 send_enabled: true,
-                                                              };
-                    };
-
+            .then((retname: NameResource) => {
+                name = retname;
                 return this.$q.all([
-                    this.$q((resolve) => { resolve(hirobaSubs = createSubs(SendItemType.Hiroba, this.subscription.hirobaNum)) }),
-                    this.$q((resolve) => { resolve(forcusSubs = createSubs(SendItemType.Forcus, this.subscription.focusNum)) }),
+                    this.createSubspriction(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum))
+                        .$save()
+                        .then((subs) => { hirobaSubs = subs}),
+                    this.createSubspriction(name, SendItemType.Forcus, Number(this.subscription.focusNum))
+                        .$save()
+                        .then((subs) => { focusSubs = subs}),
                 ]);
             })
-            .catch(onError)
             .then(() => {
                 this.loading = false;
-                this.requestClose();
+                this.forceClose();
             })
             .finally(() => {
                 if (failed) {
                     if (name) { this.nameResource.remove(name); }
                     if (hirobaSubs) { this.subscriptionResource.remove(hirobaSubs); }
-                    if (forcusSubs) { this.subscriptionResource.remove(hirobaSubs); }
+                    if (focusSubs) { this.subscriptionResource.remove(focusSubs); }
                 }
             });
     }
 
+    private createNameResource() : NameResource {
+        let name:NameResource = assign(this.name, {}) as any;
+
+        // 送信先住所の作成
+        const sendAddress = this.name.addresses[this.name.sendindex];
+        name.send_zipcode = sendAddress.zip;
+        name.send_address = sendAddress.address;
+
+        return new this.nameResource(name);
+    }
+
+    private createSubspriction(name: NameResource, type: string, num: number) : SubscriptionResource {
+        if (!this.subscription || !num)
+            return this.common.noopResource() as SubscriptionResource;
+
+        return new this.subscriptionResource({
+            entry_id: name.id,
+            send_num: num,
+            send_item_id: type,
+            sendtype_id: this.subscription.sendType,
+            send_enabled: true,
+        });
+    }
 };
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = ['$q', 'NameResource', 'SubscriptionResource', AddNameDialogDirectiveController];
+    controller = ['$q', 'NameResource', 'SubscriptionResource', 'Common', AddNameDialogDirectiveController];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';

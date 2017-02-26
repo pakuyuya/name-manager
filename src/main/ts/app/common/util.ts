@@ -16,7 +16,7 @@ export function removeHashkey(src:any) {
     return output;
 }
 
-export function assign<T extends U, U>(target: T, source: U): T {
+export function assign<T, U>(target: T, source: U): T {
     for (let id in source) {
         target[id] = source[id];
     }
