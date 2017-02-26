@@ -180,7 +180,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             failed = true;
 
             throw reason;
-            this.$q.reject(reason);
         };
 
         this.createNameResource().$save()

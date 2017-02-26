@@ -37,7 +37,7 @@ class NameController extends SimpleRestfulController
             'send_address' => '',
             'postalzone' => '',
             'officertype_id' => '0',
-            'cd_mebertype' => '0',
+            'cd_membertype' => '0',
             'member_name' => '',
             'member_rem' =>  '',
             'member_expire_on' => null,

@@ -27,7 +27,7 @@ abstract class RestfulBaseController extends JsonBaseController {
      * POSTリクエストを受けるアクション
      */
     public function post() {
-        $params = $this->getRequest()->getRestParams();
+        $params = $this->getRequest()->getQuery();
 
         $this->saveAsNew($params);
     }
@@ -36,7 +36,7 @@ abstract class RestfulBaseController extends JsonBaseController {
      * PUTリクエストを受けるアクション
      */
     public function put(){
-        $params = $this->getRequest()->getRestParams();
+        $params = $this->getRequest()->getQuery();
 
         $urlParams = $this->getRequest()->getParams();
         if(!isset($urlParams[0])){
@@ -51,7 +51,7 @@ abstract class RestfulBaseController extends JsonBaseController {
      * DELETEリクエストを受けるアクション
      */
     public function delete() {
-        $params = $this->getRequest()->getRestParams();
+        $params = $this->getRequest()->getQuery();
 
         $urlParams = $this->getRequest()->getParams();
         if(!isset($urlParams[0])){

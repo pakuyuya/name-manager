@@ -51,7 +51,6 @@ abstract class SimpleRestfulController extends RestfulBaseController
         }
 
         // 補完、不要インデックスのフィルター
-        $current_date = date('Y-n-d H:i:s');
         $defValueMap = $this->getDefaultValues();
         $safeValue = [];
         foreach($defValueMap as $k => $v) {
@@ -61,10 +60,10 @@ abstract class SimpleRestfulController extends RestfulBaseController
         $safeValue = $service->field_json_encode($safeValue);
 
         // 登録
-        $result = $service->create($safeValue);
+        $id = $service->create($safeValue);
+        $safeValue['id'] = $id;
 
-
-        $this->setOKResponse(200, $result);
+        $this->setOKResponse(200, $safeValue);
     }
 
     /**
