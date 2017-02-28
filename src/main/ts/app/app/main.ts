@@ -14,7 +14,7 @@ import '../resources/index'
 import '../services/index';
 import '../directives/index';
 
-import {MemberTypeService} from '../services/memberTypeService';
+import {MemberTypeStoreService} from '../services/memberTypeStoreService';
 
 app.controller('HeaderCtrl', ['$scope', function($scope){
 }]);
@@ -24,8 +24,8 @@ app.controller('HeaderCtrl', ['$scope', function($scope){
 //
 
 class MainController {
-    constructor(private MemberTypes: MemberTypeService) {
-        this.MemberTypes.query().then((memberTypes) => { this.memberTypes = memberTypes });
+    constructor(private MemberTypes: MemberTypeStoreService) {
+        this.MemberTypes.getAllAsync().then((memberTypes) => { this.memberTypes = memberTypes });
     }
     public selectedNum = 0;
     public memberTypes = [];
@@ -33,7 +33,7 @@ class MainController {
 
 class MainDirective {
     restrict = 'E';
-    controller = ['MemberTypes', MainController];
+    controller = ['MemberTypeStore', MainController];
     controllerAs = 'main';
     replace = true;
 }

@@ -52,3 +52,7 @@ export function isBlank(str: string):boolean {
 export function isString(json: any):any {
     return Object.prototype.toString.call(json) === '[Object String]';
 }
+
+export function dateToSQLString(date: Date) : string {
+    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+}

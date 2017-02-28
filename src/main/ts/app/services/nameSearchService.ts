@@ -3,7 +3,7 @@
 
 import {appName, apiBaseUrl} from '../constants';
 import {CheckedNameService} from './checkedNameService';
-import {MemberTypeService} from "./memberTypeService";
+import {MemberTypeStoreService} from "./memberTypeStoreService";
 import IHttpService = angular.IHttpService;
 import IQService = angular.IQService;
 import IRequestShortcutConfig = angular.IRequestShortcutConfig;
@@ -14,7 +14,7 @@ import IPromise = angular.IPromise;
  */
 export class NameSearchService {
     constructor(private $http:IHttpService, private $q:IQService,
-                 private CheckedName:CheckedNameService, private MemberTypes:MemberTypeService) {
+                 private CheckedName:CheckedNameService, private MemberTypeStore:MemberTypeStoreService) {
     }
 
     /**
@@ -80,6 +80,6 @@ export class NameSearchResult {
 }
 
 angular.module(appName).factory('NameSearch',
-    ['$http', '$q', 'CheckedName', 'MemberTypes',
-        ($http, $q, CheckedName, MemberTypes) =>
-            new NameSearchService($http, $q, CheckedName, MemberTypes)]);
+    ['$http', '$q', 'CheckedName', 'MemberTypeStore',
+        ($http, $q, CheckedName, MemberTypeStore) =>
+            new NameSearchService($http, $q, CheckedName, MemberTypeStore)]);

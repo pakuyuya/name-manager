@@ -9,7 +9,7 @@ import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog'
 import systemUI = require('../common/systemui');
-import {matchUnlessHashkey, isBlank, assignModel, assign, isString} from '../common/util';
+import {matchUnlessHashkey, isBlank, assignModel, assign, dateToSQLString} from '../common/util';
 
 import {DialogSupportController} from './common/dialogSupport';
 
@@ -19,6 +19,7 @@ import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subs
 import {SendItemType} from '../services/sendItemTypeService';
 
 import {CommonService} from '../services/commonService';
+import {MemberTypeStoreService} from "../services/memberTypeStoreService";
 
 interface Models {
     name : NameModel;
@@ -43,8 +44,8 @@ class NameModel {
     public cd_nametype : string = '';
     public cd_membertype  : string = '1';
     public member_name  : string = '';
-    public member_expire_on   : string = '';
-    public recipted_on  : string = '';
+    public member_expire_on : string = '';
+    public receipted_on  : string = '';
 }
 class MemberModel {
     public memberType : string = '';
@@ -57,13 +58,11 @@ class SubscriptionModel {
 }
 
 class AddNameDialogDirectiveController extends DialogSupportController {
-    public initModels: Models =
-        <Models>{
-            name : new NameModel(),
-            subscription : new SubscriptionModel(),
-        };
+    public initModels: Models;
     public name: NameModel;
     public subscription: SubscriptionModel;
+    public member_expire_on: Date = null;
+    public recepted_on: Date = null;
     public sendindex: number = 0;
     public isMember:boolean = false;
     public isSend:boolean = false;
@@ -71,10 +70,13 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
     private element: JQuery;
 
-    constructor(private $q:IQService, private nameResource:NameResourceClass,
-                  private subscriptionResource:SubscriptionResourceClass,
+    constructor(private $q: IQService, private nameResource: NameResourceClass,
+                  private subscriptionResource: SubscriptionResourceClass,
+                  private memberTypeStore: MemberTypeStoreService,
                   private common:CommonService) {
         super();
+
+        this.setupInitModels();
         this.clearModels();
     }
 
@@ -120,6 +122,19 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         } else if (numIdx < numSendIdx) {
             this.name.sendindex = (numSendIdx - 1).toString();
         }
+    }
+
+    private setupInitModels() {
+        let name = new NameModel;
+        name.cd_membertype = this.memberTypeStore.getDefault().value;
+
+        let subscription = new SubscriptionModel();
+
+        this.initModels =
+            <Models>{
+                name : name,
+                subscription : subscription,
+            };
     }
 
     public clearModels() {
@@ -174,6 +189,10 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         let focusSubs : SubscriptionResource = null;
 
         var onError = (reason) => {
+            if (failed) {
+                return;
+            }
+
             this.loading = false;
             console.error(reason);
             systemUI.systemErr();
@@ -184,17 +203,19 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         this.createNameResource().$save()
             .catch(onError)
-            .then((data: NameResource) => {
+            .then((data: any) : any => {
                 name = data;
                 return this.$q.all([
                     this.createSubspriction(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum))
                         .$save()
-                        .then((subs) => { hirobaSubs = subs}),
+                        .catch(onError)
+                        .then((subs :any) => { hirobaSubs = subs }),
                     this.createSubspriction(name, SendItemType.Forcus, Number(this.subscription.focusNum))
                         .$save()
-                        .then((subs) => { focusSubs = subs}),
+                        .catch(onError)
+                        .then((subs :any) => { focusSubs = subs}),
                 ]);
-            }, onError)
+            })
             .catch(onError)
             .then(() => {
                 this.loading = false;
@@ -218,6 +239,21 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         name.send_zipcode = sendAddress.zip;
         name.send_address = sendAddress.address;
 
+
+        if (this.isMember) {
+            // 会員の場合に補正
+
+            this.name.member_expire_on = (this.member_expire_on)
+                ? dateToSQLString(this.member_expire_on)
+                : null;
+
+        } else {
+            // 会員ではない場合に補正
+            name.cd_mbmbertype = this.memberTypeStore.getNone().value;
+            name.member_name = '';
+            name.member_expire_on = null;
+        }
+
         return new this.nameResource(name);
     }
 
@@ -233,11 +269,15 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             send_enabled: true,
         });
     }
+
+    private createRecepted(name: NameResource, recepted_on: string) {
+        // TODO:
+    }
 };
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = ['$q', 'NameResource', 'SubscriptionResource', 'Common', AddNameDialogDirectiveController];
+    controller = ['$q', 'NameResource', 'SubscriptionResource', 'MemberTypeStore', 'Common', AddNameDialogDirectiveController];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';
