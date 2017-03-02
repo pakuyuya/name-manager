@@ -8,11 +8,11 @@
 
 Loader::loadService('SimpleRestService');
 
-class SubscriptionService extends SimpleRestService
+class ReceiptService extends SimpleRestService
 {
     public function createModel()
     {
-        return $this->model('EntrySubscription');
+        return $this->model('EntryReceipt');
     }
 
     public function validate($fields)
@@ -29,7 +29,7 @@ class SubscriptionService extends SimpleRestService
         $model = $this->createModel();
 
         return $model->delete()
-                    ->where('entry_id', $name_id)
-                    ->execute();
+            ->where('entry_id', $name_id)
+            ->execute();
     }
 }

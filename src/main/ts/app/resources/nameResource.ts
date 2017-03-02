@@ -23,7 +23,7 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     send_address    : string;
     postalzone      : string;
     officertype_id  : number;
-    cd_mbmbertype   : string;
+    cd_membertype   : string;
     member_name     : string;
     member_rem      : string;
     member_expire_on: string;

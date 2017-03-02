@@ -19,7 +19,8 @@ import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subs
 import {SendItemType} from '../services/sendItemTypeService';
 
 import {CommonService} from '../services/commonService';
-import {MemberTypeStoreService} from "../services/memberTypeStoreService";
+import {MemberTypeStoreService, MemberTypeDto} from "../services/memberTypeStoreService";
+import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResource";
 
 interface Models {
     name : NameModel;
@@ -62,7 +63,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public name: NameModel;
     public subscription: SubscriptionModel;
     public member_expire_on: Date = null;
-    public recepted_on: Date = null;
+    public receipted_on: Date = null;
     public sendindex: number = 0;
     public isMember:boolean = false;
     public isSend:boolean = false;
@@ -73,6 +74,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     constructor(private $q: IQService, private nameResource: NameResourceClass,
                   private subscriptionResource: SubscriptionResourceClass,
                   private memberTypeStore: MemberTypeStoreService,
+                  private receiptResource: ReceiptResourceClass,
                   private common:CommonService) {
         super();
 
@@ -185,8 +187,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         let failed = false;
 
         let name : NameResource = null;
-        let hirobaSubs : SubscriptionResource = null;
-        let focusSubs : SubscriptionResource = null;
 
         var onError = (reason) => {
             if (failed) {
@@ -206,14 +206,15 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             .then((data: any) : any => {
                 name = data;
                 return this.$q.all([
-                    this.createSubspriction(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum))
+                    this.createSubscription(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum))
                         .$save()
-                        .catch(onError)
-                        .then((subs :any) => { hirobaSubs = subs }),
-                    this.createSubspriction(name, SendItemType.Forcus, Number(this.subscription.focusNum))
+                        .catch(onError),
+                    this.createSubscription(name, SendItemType.Forcus, Number(this.subscription.focusNum))
                         .$save()
-                        .catch(onError)
-                        .then((subs :any) => { focusSubs = subs}),
+                        .catch(onError),
+                    this.createReceipt(name)
+                        .$save()
+                        .catch(onError),
                 ]);
             })
             .then(() => {
@@ -223,8 +224,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             .finally(() => {
                 if (failed) {
                     if (name) { this.nameResource.remove(name); }
-                    if (hirobaSubs) { this.subscriptionResource.remove(hirobaSubs); }
-                    if (focusSubs) { this.subscriptionResource.remove(focusSubs); }
                 }
             });
     }
@@ -247,7 +246,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         } else {
             // 会員ではない場合に補正
-            name.cd_mbmbertype = this.memberTypeStore.getNone().value;
+            name.cd_membertype = this.memberTypeStore.getNone().value;
             name.member_name = '';
             name.member_expire_on = null;
         }
@@ -255,7 +254,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         return new this.nameResource(name);
     }
 
-    private createSubspriction(name: NameResource, type: string, num: number) : SubscriptionResource {
+    private createSubscription(name: NameResource, type: string, num: number) : SubscriptionResource {
         if (!this.subscription || !num)
             return this.common.noopResource() as SubscriptionResource;
 
@@ -270,14 +269,22 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         });
     }
 
-    private createRecepted(name: NameResource, recepted_on: string) {
-        // TODO:
+    private createReceipt(name: NameResource) : ReceiptResource {
+        if (!this.subscription || !this.receipted_on) {
+            return this.common.noopResource() as ReceiptResource;
+        }
+        return new this.receiptResource({
+                entry_id: name.id,
+                receipt_date: dateToSQLString(this.receipted_on),
+                receipt_type: this.memberTypeStore.get(name.cd_membertype).receiptTypeValue,
+                receipt_rem: '',
+            });
     }
 };
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = ['$q', 'NameResource', 'SubscriptionResource', 'MemberTypeStore', 'Common', AddNameDialogDirectiveController];
+    controller = ['$q', 'NameResource', 'SubscriptionResource', 'MemberTypeStore', 'ReceiptResource', 'Common', AddNameDialogDirectiveController];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';

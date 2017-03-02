@@ -12,6 +12,7 @@ export interface MemberTypeDto {
     value : string;
     none  : boolean;
     def   : boolean;
+    receiptTypeValue: string;
 }
 
 export class MemberTypeStoreService {
@@ -57,11 +58,11 @@ export class MemberTypeStoreService {
     public refleshStore() : angular.IPromise<MemberTypeDto[]> {
         return queryPromise = this.$q((resolve, reject) => {
             store = [
-                {name: 'なし', value: '0', none: true, def: false,},
-                {name: '個人会員', value: '1', none: false, def: true,},
-                {name: '団体会員', value: '2', none: false, def: false,},
-                {name: '賛助会員', value: '3', none: false, def: false,},
-                {name: '購読', value: '4', none: false, def: false,},
+                {name: 'なし', value: '0', none: true, def: false, receiptTypeValue: '0',},
+                {name: '個人会員', value: '1', none: false, def: true, receiptTypeValue: '1',},
+                {name: '団体会員', value: '2', none: false, def: false, receiptTypeValue: '1',},
+                {name: '賛助会員', value: '3', none: false, def: false, receiptTypeValue: '1',},
+                {name: '購読', value: '4', none: false, def: false, receiptTypeValue: '0',},
             ];
 
             isInitStore = true;

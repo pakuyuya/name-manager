@@ -49,4 +49,15 @@ class NameController extends SimpleRestfulController
             'update_at' => $current_date,
         ];
     }
+
+
+    protected function destroy($id, $params) {
+        parent::destroy($id, $params);
+
+        $this->service('SubscriptionService')
+                ->deleteByNameId($id);
+
+        $this->service('ReceiptService')
+                ->deleteByNameId($id);
+    }
 }

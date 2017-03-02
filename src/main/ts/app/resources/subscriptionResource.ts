@@ -16,7 +16,7 @@ export interface SubscriptionResourceClass extends ng.resource.IResourceClass<Su
     update(model: any) : SubscriptionResource;
 }
 
-export function nameFactory($resource: ng.resource.IResourceService) : SubscriptionResourceClass {
+export function subscriptionFactory($resource: ng.resource.IResourceService) : SubscriptionResourceClass {
     const url = `${apiBaseUrl}/subscription/:id`;
     const params = {
         entry_id: '@entry_id',
@@ -36,4 +36,4 @@ export function nameFactory($resource: ng.resource.IResourceService) : Subscript
     return <SubscriptionResourceClass> $resource(url, params, actions);
 }
 
-angular.module(appName).factory('SubscriptionResource', ['$resource', nameFactory]);
+angular.module(appName).factory('SubscriptionResource', ['$resource', subscriptionFactory]);
