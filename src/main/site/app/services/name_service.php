@@ -65,9 +65,9 @@ class NameService extends SimpleRestService {
             $select->whereLike($where, ['name' => $name]);
         }
 
-        if (!empty($param['membertype_id'])) {
-            $member_type_id = forceArray($param['membertype_id']);
-            $select->whereIn('membertype_id', $member_type_id);
+        if (!empty($param['cd_membertype'])) {
+            $member_type_id = forceArray($param['cd_membertype']);
+            $select->whereIn('cd_membertype', $member_type_id);
         }
 
         if (!empty($param['send_expire_from'])) {

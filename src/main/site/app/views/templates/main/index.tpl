@@ -38,7 +38,7 @@
                                 <h3 class="p-search-condition-label">役員・会員・ひろば発送</h3>
                                 <div>
                                     <label ng-repeat="type in main.memberTypes">
-                                        <input type="checkbox" checklist-model="namesList.query.membertype_id" checklist-value="type.value" />{{ type.name }}
+                                        <input type="checkbox" checklist-model="namesList.query.cd_membertype" checklist-value="type.value" />{{ type.name }}
                                     </label>
                                 </div>
                             </div>
