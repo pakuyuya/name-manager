@@ -22,8 +22,8 @@ export function nameFactory($resource: ng.resource.IResourceService) : Subscript
         entry_id: '@entry_id',
         send_num: '@send_num',
         send_item_id: '@send_item_id',
-        sendtype_id : '@sendtype_id ',
-        send_rem    : '@send_rem    ',
+        sendtype_id : '@sendtype_id',
+        send_rem    : '@send_rem',
         send_enabled: '@send_enabled',
     };
     const actions = {

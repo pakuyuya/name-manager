@@ -60,7 +60,7 @@ export function nameFactory($resource: ng.resource.IResourceService) : NameResou
         send_address : '@send_address',
         postalzone : '@postalzone',
         officertype_id : '@officertype_id',
-        cd_mbmbertype : '@cd_mbmbertype',
+        cd_membertype : '@cd_membertype',
         member_name : '@member_name',
         member_rem : '@member_rem',
         member_expire_on : '@member_expire_on',

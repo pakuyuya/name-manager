@@ -14,4 +14,10 @@ class SubscriptionService extends SimpleRestService
     {
         return $this->model('EntrySubscription');
     }
+
+    public function validate($fields)
+    {
+        // TODO:
+        return [];
+    }
 }

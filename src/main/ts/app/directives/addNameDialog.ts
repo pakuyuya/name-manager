@@ -216,12 +216,10 @@ class AddNameDialogDirectiveController extends DialogSupportController {
                         .then((subs :any) => { focusSubs = subs}),
                 ]);
             })
-            .catch(onError)
             .then(() => {
                 this.loading = false;
                 this.forceClose();
-            }, onError)
-            .catch(onError)
+            })
             .finally(() => {
                 if (failed) {
                     if (name) { this.nameResource.remove(name); }
@@ -260,6 +258,8 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private createSubspriction(name: NameResource, type: string, num: number) : SubscriptionResource {
         if (!this.subscription || !num)
             return this.common.noopResource() as SubscriptionResource;
+
+        console.log('new subscription type:' + type);
 
         return new this.subscriptionResource({
             entry_id: name.id,

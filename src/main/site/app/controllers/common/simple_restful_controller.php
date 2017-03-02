@@ -35,13 +35,15 @@ abstract class SimpleRestfulController extends RestfulBaseController
     /**
      * 新規登録
      *
-     * @param $params {array} 追加
+     * @param fields {array} 追加
      * @return mixed
      */
-    protected function saveAsNew($params) {
+    protected function saveAsNew($fields) {
         $service = $this->createService();
 
-        $fields = $service->field_json_decode($params);
+        if (method_exists($service, 'field_json_decode')) {
+            $fields = $service->field_json_decode($fields);
+        }
 
         // 事前検証
         $errors = $service->validate($fields);
@@ -57,7 +59,9 @@ abstract class SimpleRestfulController extends RestfulBaseController
             $safeValue[$k] = isset($fields[$k]) ? $fields[$k] : $v;
         }
 
-        $safeValue = $service->field_json_encode($safeValue);
+        if (method_exists($service, 'field_json_encode')) {
+            $safeValue = $service->field_json_encode($safeValue);
+        }
 
         // 登録
         $id = $service->create($safeValue);
@@ -69,18 +73,19 @@ abstract class SimpleRestfulController extends RestfulBaseController
     /**
      * 更新
      *
-     * @param tranid {string} トランザクションID
      * @param id {string} 主キー
-     * @param $params
+     * @param fields
      * @return mixed
      */
-    protected function save($id, $params) {
+    protected function save($id, $fields) {
         $service = $this->createService();
 
-        $fields = parseParams($params);
+        if (method_exists($service, 'field_json_decode')) {
+            $fields = $service->field_json_decode($fields);
+        }
 
         // 事前検証
-        $errors = $service->validate($params);
+        $errors = $service->validate($fields);
         if (!empty($errors)) {
             $this->setErrorResponse(400, $errors);
             return;
@@ -94,7 +99,9 @@ abstract class SimpleRestfulController extends RestfulBaseController
             return;
         }
 
-        $fields = $service->field_json_encode($fields);
+        if (method_exists($service, 'field_json_encode')) {
+            $fields = $service->field_json_encode($fields);
+        }
         $current_date = date('Y-n-d H:i:s');
         $fields = array_merge($fields,
             [
@@ -125,6 +132,8 @@ abstract class SimpleRestfulController extends RestfulBaseController
             return;
         }
 
+        $service->delete($id);
+
         $this->setErrorResponse(204);
     }
 
@@ -141,10 +150,6 @@ abstract class SimpleRestfulController extends RestfulBaseController
      * @return mixed
      */
     abstract protected function getDefaultValues();
-
-    protected function parseParams($params) {
-        return $params;
-    }
 
     protected function validateField($fields) {
         $service = $this->createService();

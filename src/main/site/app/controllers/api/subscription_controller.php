@@ -15,17 +15,18 @@ class SubscriptionController extends SimpleRestfulController
         return $this->service('SubscriptionService');
     }
 
-    protected function getFields()
+    protected function getDefaultValues()
     {
         $current_date = date('Y-n-d H:i:s');
         return [
             'entry_id' => '',
-            'receipt_date' => null,
-            'receipt_type' => '',
-            'receipt_rem' => '',
+            'send_num' => null,
+            'send_item_id' => 0,
+            'sendtype_id' => 0,
+            'send_rem' => '',
+            'send_enabled' => 1,
             'create_at' => $current_date,
             'update_at' => $current_date,
         ];
     }
-
 }
