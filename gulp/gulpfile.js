@@ -1,10 +1,12 @@
 "use strict";
 
-const debug = false;
+const debug = true;
 
 // モジュールのロード
 var fs = require('fs');
 var path = require('path');
+
+var noop = require('gulp-noop');
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
@@ -163,7 +165,7 @@ gulp.task('compile-typescript', function(){
                         .bundle()
                         .pipe(source(filename))
                         .pipe(buffer())
-                        .pipe(debug ? gutil.noop() : uglify())
+                        .pipe(debug ? noop() : uglify())
                         .pipe(gulp.dest(BUILD_DIR + 'js'));
                 }))
         });
@@ -180,7 +182,7 @@ gulp.task('compile-compass', function(){
             css: SRC_DIR + 'css',
             image: SRC_DIR + 'sass/images'
         }))
-        .pipe(debug ? gulp.noop() : minifyCss())
+        .pipe(debug ? noop() : minifyCss())
         .pipe(gulp.dest(BUILD_DIR + 'css'));
 });
 
@@ -194,7 +196,7 @@ gulp.task('watch-typescript', function(){
 });
 
 gulp.task('watch-php-app', function() {
-    gulp.watch(SRC_DIR + 'site/app/**/*', function(){ runSequence('clean-php', 'copy-php') });
+    gulp.watch(SRC_DIR + 'site/app/**/*', function(){ runSequence(['clean-php', 'copy-php']) });
 });
 
 gulp.task('watch-html', function() {
