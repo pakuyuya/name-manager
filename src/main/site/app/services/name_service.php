@@ -101,7 +101,7 @@ class NameService extends SimpleRestService {
      * @return mixed フォーマット後のモデル
      */
     public function field_json_decode($name) {
-        $fields = ['tels', 'fax', 'mails', 'addresses'];
+        $fields = ['tels', 'mails', 'addresses'];
 
         foreach ($fields as $field) {
             if (isset($name[$field]) && is_string($name[$field])) {

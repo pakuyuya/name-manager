@@ -22,7 +22,7 @@ class SubscriptionController extends SimpleRestfulController
             'entry_id' => '',
             'send_num' => null,
             'send_item_id' => 0,
-            'sendtype_id' => 0,
+            'cd_sendtype' => 0,
             'send_rem' => '',
             'send_enabled' => 1,
             'create_at' => $current_date,

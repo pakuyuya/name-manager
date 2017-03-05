@@ -11,14 +11,15 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     honorific       : string;
     category1       : string;
     category2       : string;
-    tels            : Array<string>;
+    tels            : string;
     fax             : string;
     mails           : string;
     url             : string;
     country         : string;
     rem_j           : string;
     rem_e           : string;
-    addresses       : Array<{send:boolean, zip:string, address:string}>;
+    sendindex       : number;
+    addresses       : string;
     send_zipcode    : string;
     send_address    : string;
     postalzone      : string;
@@ -55,6 +56,7 @@ export function nameFactory($resource: ng.resource.IResourceService) : NameResou
         country : '@country',
         rem_j : '@rem_j',
         rem_e : '@rem_e',
+        sendidex : '@sendindex',
         addresses : '@addresses',
         send_zipcode : '@send_zipcode',
         send_address : '@send_address',

@@ -9,7 +9,7 @@ import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog'
 import systemUI = require('../common/systemui');
-import {matchUnlessHashkey, isBlank, assignModel, assign, dateToSQLString} from '../common/util';
+import {matchUnlessHashkey, isBlank, assignModel, assign, dateToSQLString, jsonizeModelDeep} from '../common/util';
 
 import {DialogSupportController} from './common/dialogSupport';
 
@@ -39,7 +39,7 @@ class NameModel {
     public url         : string = '';
     public rem_e      : string = '';
     public rem_j      : string = '';
-    public sendindex   : string = '0';
+    public sendindex   : number = 0;
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
     public country     : string = '';
     public cd_nametype : string = '';
@@ -64,7 +64,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public subscription: SubscriptionModel;
     public member_expire_on: Date = null;
     public receipted_on: Date = null;
-    public sendindex: number = 0;
     public isMember:boolean = false;
     public isSend:boolean = false;
     public loading: boolean;
@@ -116,13 +115,13 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
     public removeAddress(index: string) {
         const numIdx = Number(index);
-        const numSendIdx =  Number(this.name.sendindex);
+        const numSendIdx =  this.name.sendindex;
         this.name.addresses.splice(numIdx, 1);
         this.onResizeCall();
         if (numIdx === numSendIdx) {
-            this.name.sendindex = '0';
+            this.name.sendindex = 0;
         } else if (numIdx < numSendIdx) {
-            this.name.sendindex = (numSendIdx - 1).toString();
+            this.name.sendindex = (numSendIdx - 1);
         }
     }
 
@@ -236,7 +235,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         name.send_zipcode = sendAddress.zip;
         name.send_address = sendAddress.address;
 
-
         if (this.isMember) {
             // 会員の場合に補正
 
@@ -250,8 +248,14 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             name.member_name = '';
             name.member_expire_on = null;
         }
+        let returnResource = new this.nameResource(jsonizeModelDeep(name));
+        console.log(returnResource);
 
-        return new this.nameResource(name);
+        // // POSTすると、[{}]が{}になってしまう。。苦肉の策
+        // returnResource.addresses = JSON.stringify(name.addresses);
+        // returnResource.tels = JSON.stringify(name.tels);
+        //
+        return returnResource;
     }
 
     private createSubscription(name: NameResource, type: string, num: number) : SubscriptionResource {
@@ -264,7 +268,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             entry_id: name.id,
             send_num: num,
             send_item_id: type,
-            sendtype_id: this.subscription.sendType,
+            cd_sendtype: this.subscription.sendType,
             send_enabled: true,
         });
     }
