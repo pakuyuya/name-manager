@@ -44,17 +44,19 @@ class NameModel {
     public country     : string = '';
     public cd_nametype : string = '';
     public cd_membertype  : string = '1';
+    public cd_officertype: string = '0';
     public member_name  : string = '';
     public member_expire_on : string = '';
+    public send_expire_on : string = '';
     public receipted_on  : string = '';
 }
 class MemberModel {
     public memberType : string = '';
 }
 class SubscriptionModel {
-    public sendType    : string = '';
-    public govNumber   : string = '';
-    public hirobaNum   : string = '';
+    public cd_sendtype    : string = '';
+    public send_govnumber   : string = '';
+    public hirobaNum   : string = '1';
     public focusNum   : string = '';
 }
 
@@ -63,9 +65,10 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public name: NameModel;
     public subscription: SubscriptionModel;
     public member_expire_on: Date = null;
+    public send_expire_on: Date = null;
     public receipted_on: Date = null;
-    public isMember:boolean = false;
-    public isSend:boolean = false;
+    public isMemberable:boolean = false;
+    public isMatchExpire:boolean = true;
     public loading: boolean;
 
     private element: JQuery;
@@ -156,13 +159,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private validateForm() {
         let result = true;
 
-        let msgName = isBlank(this.name.name_e) && isBlank(this.name.name_j) ?
-                            '英語、日本語の名前のいずれかが必須です。' : '';
-
-        let msgSendNum = this.isSend && !(this.subscription.hirobaNum || 0) && !(this.subscription.focusNum || 0) ?
-                            '配送数は必須です。' : '';
-
-
         // エラーメッセージをポップ
         // this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
         //
@@ -184,7 +180,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         this.loading = true;
 
         let failed = false;
-
         let name : NameResource = null;
 
         var onError = (reason) => {
@@ -235,12 +230,15 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         name.send_zipcode = sendAddress.zip;
         name.send_address = sendAddress.address;
 
-        if (this.isMember) {
+        if (this.isMemberable) {
             // 会員の場合に補正
-
             this.name.member_expire_on = (this.member_expire_on)
                 ? dateToSQLString(this.member_expire_on)
                 : null;
+
+            this.name.send_expire_on = (this.isMatchExpire)
+                ? this.name.member_expire_on
+                : dateToSQLString(this.send_expire_on);
 
         } else {
             // 会員ではない場合に補正
@@ -262,19 +260,20 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         if (!this.subscription || !num)
             return this.common.noopResource() as SubscriptionResource;
 
-        console.log('new subscription type:' + type);
+        let cd_sendtype = this.subscription.cd_sendtype
+                           || this.memberTypeStore.get(this.name.cd_membertype).cd_cendtype;
 
         return new this.subscriptionResource({
             entry_id: name.id,
             send_num: num,
             send_item_id: type,
-            cd_sendtype: this.subscription.sendType,
+            cd_sendtype: cd_sendtype,
             send_enabled: true,
         });
     }
 
     private createReceipt(name: NameResource) : ReceiptResource {
-        if (!this.subscription || !this.receipted_on) {
+        if (!this.isMemberable || !this.receipted_on) {
             return this.common.noopResource() as ReceiptResource;
         }
         return new this.receiptResource({

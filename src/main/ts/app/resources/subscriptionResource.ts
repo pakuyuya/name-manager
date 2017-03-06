@@ -8,6 +8,7 @@ export interface SubscriptionResource extends ng.resource.IResource<Subscription
     send_num : number,
     send_item_id : string,
     cd_sendtype  : string,
+    send_govnumber: string,
     send_rem     : string,
     send_enabled : boolean,
 }
@@ -23,6 +24,7 @@ export function subscriptionFactory($resource: ng.resource.IResourceService) : S
         send_num: '@send_num',
         send_item_id: '@send_item_id',
         cd_sendtype : '@cd_sendtype',
+        send_govnumber: '@send_govnumber',
         send_rem    : '@send_rem',
         send_enabled: '@send_enabled',
     };

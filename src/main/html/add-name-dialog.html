@@ -91,13 +91,13 @@
                     <tr class="c-field-row-elastic">
                         <th class="c-field-head" colspan="4">コンタクト備考（英語）</th>
                         <th class="c-field-data" colspan="12">
-                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.contact_e" maxlength="4000"></textarea>
+                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.rem_e" maxlength="4000"></textarea>
                         </th>
                     </tr>
                     <tr class="c-field-row-elastic">
                         <th class="c-field-head" colspan="4">コンタクト備考（日本語）</th>
                         <th class="c-field-data" colspan="12">
-                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.contact_j" maxlength="4000"></textarea>
+                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.rem_j" maxlength="4000"></textarea>
                         </th>
                     </tr>
                 </table>
@@ -137,7 +137,7 @@
                     </tr>
                 </table>
             </fieldset>
-            <h3 class="c-legend">会員</h3>
+            <h3 class="c-legend">会員・ひろば</h3>
             <table class="c-field-table">
                 <colgroup>
                     <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
@@ -145,15 +145,19 @@
                 <tr class="c-field-row">
                     <td class="c-field-data" colspan="1"></td>
                     <th class="c-field-head u-left" colspan="15">
-                        <label><input type="checkbox" ng-model="addNameDialog.isMember" value="true">会員として登録します。</label>
+                        <label></label>
+                        <label><input type="checkbox" ng-model="addNameDialog.isMemberable" value="true">会員、ひろばの発送を登録します。</label>
                     </th>
                 </tr>
             </table>
-            <fieldset ng-disabled="!(addNameDialog.isMember)">
+            <fieldset ng-disabled="!(addNameDialog.isMemberable)">
                 <table class="c-field-table">
                     <colgroup>
                         <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
                     </colgroup>
+                    <tr class="c-field-row">
+                        <td class="c-field-data" colspan="16">※発送だけを登録する場合、会員情報は不要です。</td>
+                    </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員種別</th>
                         <td class="c-field-data" colspan="12">
@@ -170,9 +174,9 @@
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head" colspan="4">期限(必須)</th>
+                        <th class="c-field-head" colspan="4">期限</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" ng-model="addNameDialog.member_expire_on" placeholder="yyyy/mm/dd" required />
+                            <input type="date" class="size-m" ng-model="addNameDialog.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -188,34 +192,17 @@
                             <button type="button">会員証プレビュー（PDF）</button>
                         </td>
                     </tr>
-                </table>
-            </fieldset>
-            <h3 class="c-legend">ひろば</h3>
-            <table class="c-field-table">
-                <colgroup>
-                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
-                </colgroup>
-                <tr class="c-field-row">
-                    <td class="c-field-data" colspan="1"></td>
-                    <th class="c-field-head u-left" colspan="15">
-                        <label><input type="checkbox" ng-model="addNameDialog.isSend" value="true">ひろばを発送します。</label>
-                    </th>
-                </tr>
-            </table>
-            <fieldset ng-disabled="!(addNameDialog.isSend)">
-                <table class="c-field-table">
                     <colgroup>
                         <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
                     </colgroup>
                     <tr class="c-field-row">
-                        <th class="c-field-head" colspan="4">発送の区分</th>
+                        <th class="c-field-head" colspan="4">ひろば発送区分</th>
                         <td class="c-field-data" colspan="12">
-                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="">会員種別と同じ</label>
-                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="O">大口</label>
-                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="P">寄贈</label>
-
-                            <label><input type="radio" ng-model="addNameDialog.subscription.sendType" value="G">府市</label>
-                            <input type="text" ng-model="addNameDialog.subscription.govNumber" class="size-m u-16p2" ng-disabled="addNameDialog.subscription.sendType!=='G'" required />
+                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="">会員種別と同じ</label>
+                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="5">大口</label>
+                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="6">寄贈</label>
+                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="7">府市</label>
+                            <input type="text" ng-model="addNameDialog.subscription.send_govnumber" class="size-m u-16p2" ng-disabled="addNameDialog.subscription.cd_sendtype!=='7'" required />
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -230,8 +217,32 @@
                             <input type="number" ng-model="addNameDialog.subscription.focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
                         </td>
                     </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">配布期限</th>
+                        <td class="c-field-data" colspan="12">
+                            <label><input type="checkbox" ng-model="addNameDialog.isMatchExpire">会員期限と同様</label>
+                            <input type="date" ng-model="addNameDialog.send_expire_on" ng-disabled="addNameDialog.isMatchExpire">
+                        </td>
+                    </tr>
                 </table>
             </fieldset>
+            <hr class="c-sep-vertical">
+            <h3 class="c-legend">その他設定</h3>
+            <table class="c-field-table margin-top20">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr>
+                    <th class="c-field-head" colspan="4">役員</th>
+                    <td class="c-field-data" colspan="12">
+                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="0">なし</label>
+                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="1">役員１</label>
+                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="2">役員２</label>
+                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="3">役員３</label>
+                    </td>
+                </tr>
+            </table>
             <hr class="c-sep-vertical">
             <table class="c-field-table margin-top20">
                 <colgroup>
