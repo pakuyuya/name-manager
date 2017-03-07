@@ -7,6 +7,8 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     name_e          : string;
     name_j          : string;
     name_k          : string;
+    send_name_index : string;
+    label           : string;
     alias           : string;
     honorific       : string;
     category1       : string;
@@ -23,7 +25,7 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     send_zipcode    : string;
     send_address    : string;
     postalzone      : string;
-    officertype_id  : number;
+    cd_officertype  : number;
     cd_membertype   : string;
     member_name     : string;
     member_rem      : string;
@@ -31,7 +33,6 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     send_expire_on  : string;
     term_id         : number;
     term            : string;
-    label           : string;
 }
 
 export interface NameResourceClass extends ng.resource.IResourceClass<NameResource> {
@@ -45,6 +46,7 @@ export function nameFactory($resource: ng.resource.IResourceService) : NameResou
         name_e : '@name_e',
         name_j : '@name_j',
         name_k : '@name_k',
+        send_name_index : '@send_name_index',
         alias : '@alias',
         honorific : '@honorific',
         category1 : '@category1',
@@ -67,8 +69,7 @@ export function nameFactory($resource: ng.resource.IResourceService) : NameResou
         member_rem : '@member_rem',
         member_expire_on : '@member_expire_on',
         send_expire_on : '@send_expire_on',
-        term_id : '@term_id',
-        term : '@term',
+        cd_term : '@cd_term',
         label : '@label',
     };
     const actions = {

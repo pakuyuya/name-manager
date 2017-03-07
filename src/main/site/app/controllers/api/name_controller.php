@@ -22,6 +22,7 @@ class NameController extends SimpleRestfulController
             'name_j' => '',
             'name_k' => '',
             'name_e' => '',
+            'send_name_index' => '0',
             'alias' => '',
             'category1' => '',
             'category2' => '',

@@ -5,4 +5,6 @@ import './nameSearchService'
 import './checkedNameService'
 
 import './commonService'
-import './termService'
+import './sendItemTypeService'
+import './sendNameIndexStoreService'
+import './termStoreService'

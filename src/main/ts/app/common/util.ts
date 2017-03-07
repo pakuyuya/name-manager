@@ -108,7 +108,7 @@ export function assignModel<T>(target:T, ...args: any[]):T {
 }
 
 export function isBlank(str: string):boolean {
-    return (!str || /^\s*$/.test(str));
+    return (str === '' || /^\s*$/.test(str));
 }
 
 export function isString(json: any):any {

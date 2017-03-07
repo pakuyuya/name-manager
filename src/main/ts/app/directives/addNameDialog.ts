@@ -21,6 +21,8 @@ import {SendItemType} from '../services/sendItemTypeService';
 import {CommonService} from '../services/commonService';
 import {MemberTypeStoreService, MemberTypeDto} from "../services/memberTypeStoreService";
 import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResource";
+import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameIndexStoreService";
+import {TermStoreService, TermDto} from "../services/termStoreService";
 
 interface Models {
     name : NameModel;
@@ -30,6 +32,8 @@ class NameModel {
     public name_e     : string = '';
     public name_j     : string = '';
     public name_k     : string = '';
+    public send_name_index: string = 'e';
+    public cd_term    : string = '1';
     public alias       : string = '';
     public category1   : string = '';
     public category2   : string = '';
@@ -56,8 +60,8 @@ class MemberModel {
 class SubscriptionModel {
     public cd_sendtype    : string = '';
     public send_govnumber   : string = '';
-    public hirobaNum   : string = '1';
-    public focusNum   : string = '';
+    public hirobaNum   : number = 1;
+    public focusNum   : number;
 }
 
 class AddNameDialogDirectiveController extends DialogSupportController {
@@ -71,14 +75,20 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public isMatchExpire:boolean = true;
     public loading: boolean;
 
+    public terms: TermDto[];
+
     private element: JQuery;
 
     constructor(private $q: IQService, private nameResource: NameResourceClass,
                   private subscriptionResource: SubscriptionResourceClass,
                   private memberTypeStore: MemberTypeStoreService,
+                  private sendNameIndexStore: SendNameIndexStoreService,
+                  private termStore: TermStoreService,
                   private receiptResource: ReceiptResourceClass,
                   private common:CommonService) {
         super();
+
+        this.terms = this.termStore.getAll();
 
         this.setupInitModels();
         this.clearModels();
@@ -225,6 +235,19 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     private createNameResource() : NameResource {
         let name:NameResource = assign(this.name, {}) as any;
 
+        // ラベル用の名前作成
+        const sendNameIndex:SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
+        const term:TermDto = this.termStore.get(this.name.cd_term);
+
+        let label = this.name[sendNameIndex.column];
+        if (term.prefix) {
+            label = `${term.prefix} ${label}`;
+        }
+        if (term.suffix) {
+            label = `${label} ${term.suffix}`;
+        }
+        name.label = label;
+
         // 送信先住所の作成
         const sendAddress = this.name.addresses[this.name.sendindex];
         name.send_zipcode = sendAddress.zip;
@@ -245,9 +268,9 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             name.cd_membertype = this.memberTypeStore.getNone().value;
             name.member_name = '';
             name.member_expire_on = null;
+            name.send_expire_on = null;
         }
         let returnResource = new this.nameResource(jsonizeModelDeep(name));
-        console.log(returnResource);
 
         // // POSTすると、[{}]が{}になってしまう。。苦肉の策
         // returnResource.addresses = JSON.stringify(name.addresses);
@@ -283,11 +306,17 @@ class AddNameDialogDirectiveController extends DialogSupportController {
                 receipt_rem: '',
             });
     }
+
+    public autosetSendNameIndex(autosetIndex: string) {
+        if (isBlank(this.name.name_e) && isBlank(this.name.name_j) && isBlank(this.name.name_k)) {
+            this.name.send_name_index = autosetIndex;
+        }
+    }
 };
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = ['$q', 'NameResource', 'SubscriptionResource', 'MemberTypeStore', 'ReceiptResource', 'Common', AddNameDialogDirectiveController];
+    controller = ['$q', 'NameResource', 'SubscriptionResource', 'MemberTypeStore', 'SendNameIndexStore', 'TermStore', 'ReceiptResource', 'Common', AddNameDialogDirectiveController];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';
