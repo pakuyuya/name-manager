@@ -144,3 +144,26 @@ export function uuid() : string {
     }
     return uuid;
 }
+
+/**
+ * @see https://jquery.nj-clucker.com/change-double-byte-to-half-width/
+ * @param strVal
+ * @returns {string}
+ */
+export function toHalfWidth(strVal){
+    // 半角変換
+    var halfVal = strVal.replace(/[！-～]/g,
+        function( tmpStr ) {
+            // 文字コードをシフト
+            return String.fromCharCode( tmpStr.charCodeAt(0) - 0xFEE0 );
+        }
+    );
+
+    // 文字コードシフトで対応できない文字の変換
+    return halfVal.replace(/”/g, "\"")
+        .replace(/’/g, "'")
+        .replace(/‘/g, "`")
+        .replace(/￥/g, "\\")
+        .replace(/　/g, " ")
+        .replace(/〜/g, "~");
+}

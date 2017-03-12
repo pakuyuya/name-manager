@@ -7,7 +7,9 @@
 
 .c-popup {
   position : absolute;
-  display : inline-block;
+  display : block;
+  word-wrap: normal;
+  cursor : pointer;
 }
 
 .c-popup__inner {

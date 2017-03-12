@@ -15,17 +15,18 @@ interface PopupOptions {
 
 export class Popup {
     private $popup: JQuery;
-    private showRequested:boolean = false;
-    private hideRequested:boolean =  false;
-    private options : PopupOptions = 
+    private showRequested: boolean = false;
+    private hideRequested: boolean =  false;
+    private disposed: boolean = false;
+    private options : PopupOptions =
         {
             duration : 0,
             hideon : ['click'],
             hideon_elm : [],
             fadeInTime : 200,
             fadeOutTime : 200,
-            x_offset   : 10,
-            y_offset   : -5,
+            x_offset   : 5,
+            y_offset   : -2,
             datakey    : uuid(),
             shown      : false,
         };
@@ -82,18 +83,21 @@ export class Popup {
     }
 
     private showPopup($popup: JQuery) {
+        $popup.css({'opacity': '0.0', 'top' : '0', 'left' : '0'});
         this.$element.after($popup);
 
         setTimeout(() => {
             // async 1
+            $popup.css('opacity', '');
             let parentOffset = $(this.$element).offset();
-            let h = $popup.height();
+            let h = $popup.innerHeight();
 
             $popup.offset({
                     top : parentOffset.top - h + this.options.y_offset,
                     left : parentOffset.left + this.options.x_offset,
                 });
 
+            $popup.hide();
             $popup.fadeIn(this.options.fadeInTime, () => {
                 // async 2
                 this.setHideTrigger($popup);
@@ -122,9 +126,18 @@ export class Popup {
 
     private hidePopup() {
         this.$popup.fadeOut(this.options.fadeOutTime, () => {
-            this.dettach(this.$element);
-            this.$popup.remove();
-            this.$popup = null;
+            this.dispose();
         });
     }
+
+    public dispose() {
+        if (this.disposed) {
+            return;
+        }
+        this.disposed = true;
+        this.dettach(this.$element);
+        this.$popup.remove();
+        this.$popup = null;
+    }
+
 }

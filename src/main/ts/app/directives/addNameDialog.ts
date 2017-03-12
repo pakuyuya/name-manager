@@ -11,7 +11,7 @@ import {Dialog} from '../common/dialog';
 import {Popup} from '../common/popup';
 
 import systemUI = require('../common/systemui');
-import {matchUnlessHashkey, isBlank, assignModel, assign, dateToSQLString, jsonizeModelDeep} from '../common/util';
+import * as U from '../common/util';
 
 import {DialogSupportController} from './common/dialogSupport';
 
@@ -80,6 +80,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public terms: TermDto[];
 
     private element: JQuery;
+    private popups : any = {};
 
     constructor(private $q: IQService, private nameResource: NameResourceClass,
                   private subscriptionResource: SubscriptionResourceClass,
@@ -102,7 +103,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     public requestClose() {
-        if (!matchUnlessHashkey(this.name, this.initModels.name)) {
+        if (!U.matchUnlessHashkey(this.name, this.initModels.name)) {
             Dialog.show({
                 text: '編集内容を破棄します。よろしいですか？',
                 buttons: {ok: 'OK', ng: 'Cancel'},
@@ -121,6 +122,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public forceClose() {
         this.close();
         this.clearModels();
+        this.removeAllPopups();
     }
 
     public addAddress() {
@@ -154,8 +156,8 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     public clearModels() {
-        this.name = <NameModel>assignModel({}, this.initModels.name);
-        this.subscription = <SubscriptionModel>assignModel({}, this.initModels.subscription);
+        this.name = <NameModel>U.assignModel({}, this.initModels.name);
+        this.subscription = <SubscriptionModel>U.assignModel({}, this.initModels.subscription);
     }
 
     private createPlainAddress() {
@@ -165,22 +167,78 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public tryRegister() {
         if (this.validateForm()) {
             this.register();
+        } else {
+            Dialog.show({
+                text: '入力内容に警告があります。無視して登録しますか？',
+                buttons: {ok: 'OK', ng: 'Cancel'},
+                callback: (id) => {
+                    if (id === 'ok') {
+                        this.register();
+                    }
+                }
+            });
         }
     }
 
-    private validateForm() {
+    public toHerfValue($event) {
+        let $target = $($event.target);
+        $target.val(U.toHalfWidth($target.val()));
+    }
+
+    private validateForm() : boolean {
         let result = true;
 
-        // エラーメッセージをポップ
-        // this.element.find('form').each((idx, el) => systemUI.popFormErrorsAsync(el));
-        //
-        // this.element.find('input,textarea')
-        //      .each(function(idx, el) : any {
-        //          result = result && (<any>el).checkValidity();
-        //          return true;
-        //      });
+        // HTML5の標準Validatorを使ってエラーメッセージをポップ
+        this.element.find('input,textarea')
+            .each((idx, el) => {
+                let hiel = el as HTMLInputElement;
+                if (!hiel.disabled && !hiel.checkValidity() ) {
+                   this.popupWarning(`#${el.id}`, systemUI.getErrorMessage(el));
+                   result = false;
+                }
+                return true;
+            });
+
+        // 名
+        if (this.name.send_name_index === 'e' && this.name.name_e === '') {
+            this.popupWarning('#addNameDialog_name_e', '住所ラベルに設定した連絡先が未記入です。');
+            result = false;
+        }
+        if (this.name.send_name_index === 'j' && this.name.name_j === '') {
+            this.popupWarning('#addNameDialog_name_j', '住所ラベルに設定した連絡先が未記入です。');
+            result = false;
+        }
+        if (this.name.send_name_index === 'k' && this.name.name_k === '') {
+            this.popupWarning('#addNameDialog_name_k', '住所ラベルに設定した連絡先が未記入です。');
+            result = false;
+        }
 
         return result;
+    }
+
+    private popupWarning(selector:string, text:string) {
+        if (this.popups[selector]) {
+            this.removePopup(selector);
+        }
+
+        let options = {
+            shown : true,
+            hideon_elm: ['blur'],
+        };
+        this.popups[selector] = new Popup($(selector), text, options);
+    }
+
+    private removePopup(selector:string) {
+        if (this.popups[selector]) {
+            this.popups[selector].dispose();
+            delete this.popups[selector];
+        }
+    }
+
+    private removeAllPopups() {
+        for (let selector in this.popups) {
+            this.removePopup(selector);
+        }
     }
 
     /**
@@ -235,7 +293,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     }
 
     private createNameResource() : NameResource {
-        let name:NameResource = assign(this.name, {}) as any;
+        let name:NameResource = U.assign(this.name, {}) as any;
 
         // ラベル用の名前作成
         const sendNameIndex:SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
@@ -258,12 +316,12 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         if (this.isMemberable) {
             // 会員の場合に補正
             this.name.member_expire_on = (this.member_expire_on)
-                ? dateToSQLString(this.member_expire_on)
+                ? U.dateToSQLString(this.member_expire_on)
                 : null;
 
             this.name.send_expire_on = (this.isMatchExpire)
                 ? this.name.member_expire_on
-                : dateToSQLString(this.send_expire_on);
+                : U.dateToSQLString(this.send_expire_on);
 
         } else {
             // 会員ではない場合に補正
@@ -272,7 +330,7 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             name.member_expire_on = null;
             name.send_expire_on = null;
         }
-        let returnResource = new this.nameResource(jsonizeModelDeep(name));
+        let returnResource = new this.nameResource(U.jsonizeModelDeep(name));
 
         // // POSTすると、[{}]が{}になってしまう。。苦肉の策
         // returnResource.addresses = JSON.stringify(name.addresses);
@@ -303,14 +361,14 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         }
         return new this.receiptResource({
                 entry_id: name.id,
-                receipt_date: dateToSQLString(this.receipted_on),
+                receipt_date: U.dateToSQLString(this.receipted_on),
                 receipt_type: this.memberTypeStore.get(name.cd_membertype).receiptTypeValue,
                 receipt_rem: '',
             });
     }
 
     public autosetSendNameIndex(autosetIndex: string) {
-        if (isBlank(this.name.name_e) && isBlank(this.name.name_j) && isBlank(this.name.name_k)) {
+        if (U.isBlank(this.name.name_e) && U.isBlank(this.name.name_j) && U.isBlank(this.name.name_k)) {
             this.name.send_name_index = autosetIndex;
         }
     }

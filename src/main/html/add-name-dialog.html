@@ -22,19 +22,19 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（英語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input id="addNameDialog_name_e" type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_e" ng-focus="addNameDialog.autosetSendNameIndex('e')" maxlength="250">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_e" ng-model="addNameDialog.name.name_e" ng-focus="addNameDialog.autosetSendNameIndex('e')" maxlength="250">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（日本語）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_j" ng-focus="addNameDialog.autosetSendNameIndex('j')" maxlength="250">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_j" ng-model="addNameDialog.name.name_j" ng-focus="addNameDialog.autosetSendNameIndex('j')" maxlength="250">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">連絡先名（かな）</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.name_k" ng-focus="addNameDialog.autosetSendNameIndex('k')" maxlength="250">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_k" ng-model="addNameDialog.name.name_k" ng-focus="addNameDialog.autosetSendNameIndex('k')" maxlength="250">
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -58,7 +58,7 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">別名</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.alias" maxlength="200">
+                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.alias" ng-click="addNameDialog.fifi($event)" maxlength="200">
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -74,47 +74,49 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">電話番号</th>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[0]" placeholder="1)" maxlength="100">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_tels0" ng-model="addNameDialog.name.tels[0]" placeholder="1)" maxlength="100" ng-blur="addNameDialog.toHerfValue($event)">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[1]" placeholder="2)" maxlength="100">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_tels1" ng-model="addNameDialog.name.tels[1]" placeholder="2)" maxlength="100" ng-change="addNameDialog.toHerfValue($event)">
                         </td>
                         <td class="c-field-data" colspan="4">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.tels[2]" placeholder="3)" maxlength="100">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_tels2" ng-model="addNameDialog.name.tels[2]" placeholder="3)" maxlength="100" ng-change="addNameDialog.toHerfValue($event)">
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">FAX</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.fax" maxlength="100">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_fax" ng-model="addNameDialog.name.fax" maxlength="100" ng-change="addNameDialog.toHerfValue($event)">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">メールアドレス１</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.mails[0]" maxlength="255">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_mail0" ng-model="addNameDialog.name.mails[0]" maxlength="255" ng-change="addNameDialog.toHerfValue($event)">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">メールアドレス２</th>
                         <th class="c-field-data" colspan="12">
-                            <input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.mails[1]" maxlength="255">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_mail1" ng-model="addNameDialog.name.mails[1]" maxlength="255" ng-change="addNameDialog.toHerfValue($event)">
                         </th>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">URL</th>
-                        <th class="c-field-data" colspan="12"><input type="text" class="u-p100 size-m" ng-model="addNameDialog.name.url" maxlength="255"></th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" id="addNameDialog_name_url" ng-model="addNameDialog.name.url" maxlength="255" ng-change="addNameDialog.toHerfValue($event)">
+                        </th>
                     </tr>
                     <tr class="c-field-row-elastic">
                         <th class="c-field-head" colspan="4">コンタクト備考（英語）</th>
                         <th class="c-field-data" colspan="12">
-                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.rem_e" maxlength="4000"></textarea>
+                            <textarea rows="3" class="u-p100 size-s" id="addNameDialog_name_rem_e" ng-model="addNameDialog.name.rem_e" maxlength="4000"></textarea>
                         </th>
                     </tr>
                     <tr class="c-field-row-elastic">
                         <th class="c-field-head" colspan="4">コンタクト備考（日本語）</th>
                         <th class="c-field-data" colspan="12">
-                            <textarea rows="3" class="u-p100 size-s" ng-model="addNameDialog.name.rem_j" maxlength="4000"></textarea>
+                            <textarea rows="3" class="u-p100 size-s" id="addNameDialog_name_rem_j" ng-model="addNameDialog.name.rem_j" maxlength="4000"></textarea>
                         </th>
                     </tr>
                 </table>
@@ -145,8 +147,8 @@
                             <div class="u-right text-s">住所&nbsp;</div>
                         </td>
                         <td class="c-field-data" colspan="11">
-                            <div><input type="text" class="u-p25 size-m" ng-model="address.zip" required maxlength="30"></div>
-                            <div><input type="text" class="u-p95 size-m" ng-model="address.address" required maxlength="255"></div>
+                            <div><input type="text" class="u-p25 size-m" id="addNameDialog_name_zip{{$index}}" ng-model="address.zip" required maxlength="30"></div>
+                            <div><input type="text" class="u-p95 size-m" id="addNameDialog_name_address{{$index}}" ng-model="address.address" required maxlength="255"></div>
                         </td>
                         <td class="c-field-data">
                             <button type="button" tabindex="-1" ng-click="addNameDialog.removeAddress($index)">×</button>
@@ -187,19 +189,19 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員名(必須)</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="text" class="size-m u-p100" ng-model="addNameDialog.name.member_name" required maxlength="100" />
+                            <input type="text" class="size-m u-p100" id="addNameDialog_name_member_name" ng-model="addNameDialog.name.member_name" required maxlength="100" />
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会費受領日</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" ng-model="addNameDialog.receipted_on" placeholder="yyyy/mm/dd" />
+                            <input type="date" class="size-m" id="addNameDialog_reciepted_on" ng-model="addNameDialog.receipted_on" placeholder="yyyy/mm/dd" />
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員期限</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" ng-model="addNameDialog.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
+                            <input type="date" class="size-m" id="addNameDialog_member_expire_on" ng-model="addNameDialog.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -219,26 +221,26 @@
                             <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="5">大口</label>
                             <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="6">寄贈</label>
                             <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="7">府市</label>
-                            <input type="text" ng-model="addNameDialog.subscription.send_govnumber" class="size-m u-16p2" ng-disabled="addNameDialog.subscription.cd_sendtype!=='7'" required />
+                            <input type="text" ng-model="addNameDialog.subscription.send_govnumber" class="size-m u-16p2" id="addNameDialog_subscription_send_govnumber" ng-disabled="addNameDialog.subscription.cd_sendtype!=='7'" required />
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">ひろば　部数</th>
                         <td class="c-field-data" colspan="12">
-                            <input id="addNameDialog_subscription_hirobaNum" type="number" ng-model="addNameDialog.subscription.hirobaNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                            <input id="addNameDialog_subscription_hirobaNum" type="number" id="addNameDialog_subcription_hirobaNum" ng-model="addNameDialog.subscription.hirobaNum" class="size-m u-16p1 u-right" min="0" max="999" >
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">Focus　部数</th>
                         <td class="c-field-data" colspan="12">
-                            <input type="number" ng-model="addNameDialog.subscription.focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                            <input type="number" ng-model="addNameDialog.subscription.focusNum" id="addNameDialog_subcription_focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">配布期限</th>
                         <td class="c-field-data" colspan="12">
                             <label><input type="checkbox" ng-model="addNameDialog.isMatchExpire">会員期限と同様</label>
-                            <input type="date" ng-model="addNameDialog.send_expire_on" ng-disabled="addNameDialog.isMatchExpire">
+                            <input type="date" id="addNameDialog_send_expire_on" ng-model="addNameDialog.send_expire_on" ng-disabled="addNameDialog.isMatchExpire">
                         </td>
                     </tr>
                 </table>
