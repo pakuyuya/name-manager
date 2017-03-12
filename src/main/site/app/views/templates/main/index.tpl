@@ -2,7 +2,7 @@
 <div ng-app="app">
     <header class="p-header u-flex" id="header" ng-controller="HeaderCtrl as header">
         <div class="u-p95">
-            ヒューライツ大阪名簿データベース
+            名簿管理アプリケーション
         </div>
         <!-- ボタン -->
         <gmenu class="p-header-buttons u-p5">
