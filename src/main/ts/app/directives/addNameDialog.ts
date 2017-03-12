@@ -7,7 +7,9 @@ import IQService = angular.IQService;
 
 import {appName, templateBaseUrl} from '../constants';
 
-import {Dialog} from '../common/dialog'
+import {Dialog} from '../common/dialog';
+import {Popup} from '../common/popup';
+
 import systemUI = require('../common/systemui');
 import {matchUnlessHashkey, isBlank, assignModel, assign, dateToSQLString, jsonizeModelDeep} from '../common/util';
 

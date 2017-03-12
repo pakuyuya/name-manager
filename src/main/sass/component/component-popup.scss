@@ -1,0 +1,53 @@
+@import "compass";
+
+// Popup
+
+// @see https://zxcvbnmnbvcxz.com/pure-css3-balloons/
+// ほしいレイアウトに合わせて改変させていただきました。
+
+.c-popup {
+  position : absolute;
+  display : inline-block;
+}
+
+.c-popup__inner {
+  font-size: 12px;
+  position: relative;
+  display: inline-block;
+  padding: 0 10px;
+  width: auto;
+  min-width: 115px;
+  height: 28px;
+  line-height: 24px;
+  border-radius: 2px;
+  text-align: left;
+  color : #dd9910;
+  background: #ffffdd;
+  border: 2px solid #dd9910;
+  z-index: 0;
+}
+.c-popup__inner:before {
+  content: "";
+  position: absolute;
+  bottom: -9px;
+  left: 20px;
+  margin-left: -8px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 9px 9px 0 9px;
+  border-color: #ffffdd transparent transparent transparent;
+  z-index: 0;
+}
+.c-popup__inner:after {
+  content: "";
+  position: absolute;
+  bottom: -11px; left: 20px;
+  margin-left: -9px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: #dd9910 transparent transparent transparent;
+  z-index: -1;
+}
