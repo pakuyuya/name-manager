@@ -1,4 +1,4 @@
-# ヒューライツ大阪　名簿システム ver2
+# 名簿管理システム
 
 
 ## 1. プロジェクトについて
@@ -15,7 +15,7 @@
 
 * TypeScript
   * AltJSとしてTypeScriptを採用
-  * ver >= 1.7
+  * ver >= 2.1
   * Angularjs
   * jQuery
 
@@ -31,10 +31,10 @@
 
 ## 3. 開発環境について
 
- * Eclipse 4.4
-
- * ER Master
-
+ * ~~Eclipse 4.4~~ IntelliJ IDEA
+ 
+ * ~~ERMaster~~ 廃止
+ 
  * Node.js
 
 ## 4. 開発のために必要なもの
@@ -44,7 +44,7 @@
   * Gulp
   * TypeScript
 
-Node.jsのパッケージインストールコマンドまとめ
+Node.jsパッケージインストールコマンドまとめ
 ```
 npm install -g gulp
 npm install -g typescript
@@ -55,8 +55,7 @@ npm install -g typescript
   * Sass
   * Compass
 
-
-Rubyのパッケージインストールコマンドまとめ
+Rubyパッケージインストールコマンドまとめ
 ```
 gem update --system
 gem install sass
@@ -70,7 +69,7 @@ gem install compass
   * ```(プロジェクト)/gulp``` に移動し、```npm install``` (かなり時間かかります。）
 
 * コンパイル
-  * ```gulp compile-all``` 実行
+  * ```gulp build``` 実行
   * Webルートに置くファイル・ディレクトリが /build にコピーされます。
 * 時々失敗します。。（削除時に排他ロックがかかってるところへコピーするため）もう一度実行すると正常終了することが多いです。
 
