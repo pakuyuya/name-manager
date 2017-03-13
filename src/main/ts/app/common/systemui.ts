@@ -39,6 +39,28 @@ export function popFormErrorsAsync(form: Element) {
     }, 0);
 }
 
+
+const defaultErrorMessages = {
+    valueMissing : '必須項目です',
+    typeMismatch : '入力値が不正です',
+    patternMismatch : '入力フォーマットが不正です',
+    tooLong : '文字が長すぎます',
+    tooShort : '文字が短すぎます',
+    rangeUnderflow : '入力値が小さすぎます',
+    rangeOverflow : '入力値が大きすぎます',
+    stepMismatch : '入力値が不正です',
+};
+const validTargets = [
+    'valueMissing',
+    'typeMismatch',
+    'patternMismatch',
+    'tooLong',
+    'tooShort',
+    'rangeUnderflow',
+    'rangeOverflow',
+    'stepMismatch',
+];
+
 /**
 * コントロール要素に設定されたValidatorAPIを参照して、
 * カスタムされた検証メッセージを取得します。
@@ -58,31 +80,14 @@ export function popFormErrorsAsync(form: Element) {
 * @returns {string} 戻り値
 */
 export function getErrorMessage(element : any, errorMessages? : any) {
-    const defaultErrorMessages = {
-        valueMissing : '必須項目です',
-        typeMismatch : '入力値が不正です',
-        patternMismatch : '入力フォーマットが不正です',
-        tooLong : '文字が長すぎます',
-        tooShort : '文字が短すぎます',
-        rangeUnderflow : '入力値が小さすぎます',
-        rangeOverflow : '入力値が大きすぎます',
-        stepMismatch : '入力値が不正です',
-    };
-    const validTargets = [
-        'valueMissing',
-        'typeMismatch',
-        'patternMismatch',
-        'tooLong',
-        'tooShort',
-        'rangeUnderflow',
-        'rangeOverflow',
-        'stepMismatch',
-    ];
-    var e : HTMLInputElement;
     errorMessages = errorMessages || {};
     if (element.willValidate && !element.validity.valid) {
         for (const validTarget of validTargets) {
-            if (!element.validity[validTarget]) {
+            console.log(element.validity[validTarget]);
+        }
+
+        for (const validTarget of validTargets) {
+            if (element.validity[validTarget]) {
                 return element.getAttribute('title')
                     || errorMessages[validTarget] || defaultErrorMessages[validTarget];
             }
