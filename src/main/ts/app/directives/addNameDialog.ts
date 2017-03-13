@@ -14,6 +14,7 @@ import systemUI = require('../common/systemui');
 import * as U from '../common/util';
 
 import {DialogSupportController} from './common/dialogSupport';
+import {FormUtilSupport} from './common/formUtilSupport';
 
 import {NameResource, NameResourceClass} from '../resources/nameResource';
 import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subscriptionResource';
@@ -25,6 +26,7 @@ import {MemberTypeStoreService, MemberTypeDto} from "../services/memberTypeStore
 import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResource";
 import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameIndexStoreService";
 import {TermStoreService, TermDto} from "../services/termStoreService";
+
 
 interface Models {
     name : NameModel;
@@ -66,7 +68,8 @@ class SubscriptionModel {
     public focusNum   : number;
 }
 
-class AddNameDialogDirectiveController extends DialogSupportController {
+class AddNameDialogDirectiveController extends DialogSupportController
+    implements FormUtilSupport {
     public initModels: Models;
     public name: NameModel;
     public subscription: SubscriptionModel;
@@ -80,7 +83,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
     public terms: TermDto[];
 
     private element: JQuery;
-    private popups : any = {};
 
     constructor(private $q: IQService, private nameResource: NameResourceClass,
                   private subscriptionResource: SubscriptionResourceClass,
@@ -180,11 +182,6 @@ class AddNameDialogDirectiveController extends DialogSupportController {
         }
     }
 
-    public toHerfValue($event) {
-        let $target = $($event.target);
-        $target.val(U.toHalfWidth($target.val()));
-    }
-
     private validateForm() : boolean {
         let result = true;
 
@@ -201,44 +198,26 @@ class AddNameDialogDirectiveController extends DialogSupportController {
 
         // 名
         if (this.name.send_name_index === 'e' && this.name.name_e === '') {
-            this.popupWarning('#addNameDialog_name_e', '住所ラベルに設定した連絡先が未記入です。');
+            this.popupWarning('#addNameDialog_name_e', '住所ラベル用の連絡先は必須です');
             result = false;
         }
         if (this.name.send_name_index === 'j' && this.name.name_j === '') {
-            this.popupWarning('#addNameDialog_name_j', '住所ラベルに設定した連絡先が未記入です。');
+            this.popupWarning('#addNameDialog_name_j', '住所ラベル用の連絡先は必須です');
             result = false;
         }
         if (this.name.send_name_index === 'k' && this.name.name_k === '') {
-            this.popupWarning('#addNameDialog_name_k', '住所ラベルに設定した連絡先が未記入です。');
+            this.popupWarning('#addNameDialog_name_k', '住所ラベル用の連絡先は必須です');
             result = false;
         }
 
+        if (this.isMemberable) {
+            if (this.subscription.hirobaNum === 0 && this.subscription.focusNum === 0) {
+                this.popupWarning('#addNameDialog_subscription_hirobaNum', '配布対象がありません');
+                result = false;
+            }
+        }
+
         return result;
-    }
-
-    private popupWarning(selector:string, text:string) {
-        if (this.popups[selector]) {
-            this.removePopup(selector);
-        }
-
-        let options = {
-            shown : true,
-            hideon_elm: ['blur'],
-        };
-        this.popups[selector] = new Popup($(selector), text, options);
-    }
-
-    private removePopup(selector:string) {
-        if (this.popups[selector]) {
-            this.popups[selector].dispose();
-            delete this.popups[selector];
-        }
-    }
-
-    private removeAllPopups() {
-        for (let selector in this.popups) {
-            this.removePopup(selector);
-        }
     }
 
     /**
@@ -372,7 +351,21 @@ class AddNameDialogDirectiveController extends DialogSupportController {
             this.name.send_name_index = autosetIndex;
         }
     }
+
+    // mixin declaration
+
+    // FormUtilSupport
+    popups: any = {};
+    public popupWarning: (selector:string, text:string) => void;
+    public removePopup: (selector:string) => void;
+    public removeAllPopups: () => void;
+    public toHerfValue: ($event:any) => void;
+    public toHerfSpace: ($event:any) => void;
 };
+
+// mixin
+U.applyMixins(AddNameDialogDirectiveController, [FormUtilSupport]);
+
 
 class AddNameDialogDirective {
     restrict = 'E';

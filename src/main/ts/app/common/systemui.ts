@@ -42,6 +42,7 @@ export function popFormErrorsAsync(form: Element) {
 
 const defaultErrorMessages = {
     valueMissing : '必須項目です',
+    badInput : '入力値が不正です',
     typeMismatch : '入力値が不正です',
     patternMismatch : '入力フォーマットが不正です',
     tooLong : '文字が長すぎます',
@@ -52,6 +53,7 @@ const defaultErrorMessages = {
 };
 const validTargets = [
     'valueMissing',
+    'badInput',
     'typeMismatch',
     'patternMismatch',
     'tooLong',
@@ -82,9 +84,7 @@ const validTargets = [
 export function getErrorMessage(element : any, errorMessages? : any) {
     errorMessages = errorMessages || {};
     if (element.willValidate && !element.validity.valid) {
-        for (const validTarget of validTargets) {
-            console.log(element.validity[validTarget]);
-        }
+        console.log(element.validity);
 
         for (const validTarget of validTargets) {
             if (element.validity[validTarget]) {
