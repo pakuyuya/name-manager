@@ -4,9 +4,9 @@
 import {DialogDirectiveController} from '../dialog';
 
 export abstract class DialogSupportController {
-    protected ctrlDlg:DialogDirectiveController = null;
+    public ctrlDlg:any = null;
 
-    protected initDialogSupport(elm:JQuery) {
+    public initDialogSupport(elm:JQuery) {
         const $dlg = elm.find('.c-dialog-wrapper');
         if ($dlg.length <= 0) {
             console.error(`<dialog> is not found! at following...`);

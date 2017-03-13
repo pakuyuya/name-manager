@@ -27,7 +27,6 @@ import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResourc
 import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameIndexStoreService";
 import {TermStoreService, TermDto} from "../services/termStoreService";
 
-
 interface Models {
     name : NameModel;
     subscription : SubscriptionModel;
@@ -68,8 +67,8 @@ class SubscriptionModel {
     public focusNum   : number;
 }
 
-class AddNameDialogDirectiveController extends DialogSupportController
-    implements FormUtilSupport {
+class AddNameDialogDirectiveController
+    implements FormUtilSupport, DialogSupportController {
     public initModels: Models;
     public name: NameModel;
     public subscription: SubscriptionModel;
@@ -91,8 +90,6 @@ class AddNameDialogDirectiveController extends DialogSupportController
                   private termStore: TermStoreService,
                   private receiptResource: ReceiptResourceClass,
                   private common:CommonService) {
-        super();
-
         this.terms = this.termStore.getAll();
 
         this.setupInitModels();
@@ -354,6 +351,14 @@ class AddNameDialogDirectiveController extends DialogSupportController
 
     // mixin declaration
 
+    // DialogSupport
+    public ctrlDlg:any = null;
+    public initDialogSupport: (elm:JQuery) => void;
+    public onResizeCall: () => void;
+    public open: () => void;
+    public close: () => void;
+    public getDialog: () => JQuery;
+
     // FormUtilSupport
     popups: any = {};
     public popupWarning: (selector:string, text:string) => void;
@@ -364,7 +369,7 @@ class AddNameDialogDirectiveController extends DialogSupportController
 };
 
 // mixin
-U.applyMixins(AddNameDialogDirectiveController, [FormUtilSupport]);
+U.applyMixins(AddNameDialogDirectiveController, [DialogSupportController, FormUtilSupport]);
 
 
 class AddNameDialogDirective {
