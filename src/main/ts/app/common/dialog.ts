@@ -3,7 +3,7 @@
 import {ZIndexer} from './z-indexer'
 import {minDlgZIndex} from '../constants'
 
-export module Dialog{
+export module Dialog {
     /**
      * ダイアログを作成し返却します。
      *
@@ -19,11 +19,12 @@ export module Dialog{
             callback : {},
             buttons : { ok : 'OK' },
             focusedButton : 'ok',
+            fixed : false,
         }, options || {});
 
         var $dialog : JQuery = createDialog(options);
         var $filter : JQuery = createFilter();
-        setDlgOnDOM($dialog, $filter);
+        setDlgOnDOM($dialog, $filter, options);
 
         return $dialog;
     }
@@ -118,32 +119,36 @@ export module Dialog{
         return $('<div>').addClass('c-dialog-filter');
     }
 
-    function setDlgOnDOM($dialog : JQuery, $filter : JQuery){
-
+    function setDlgOnDOM($dialog : JQuery, $filter : JQuery, options?:any){
         $filter.css('z-index', ZIndexer.next(minDlgZIndex).toString());
         $dialog.css('z-index', ZIndexer.next(minDlgZIndex).toString());
 
         //フィルターサイズ設定
+        var $doc = $(window.document);
         var $wnd = $(window);
 
-        var fnResizeDlgs = function(){
+        var fnResizeDlg = () => {
             var wnd_w = $wnd.width();
             var wnd_h = $wnd.height();
-
             var wnd_scr_top = $wnd.scrollTop();
             var wnd_scr_lft = $wnd.scrollLeft();
-
-            $filter.width(wnd_w);
-            $filter.height(wnd_h);
-
             $dialog.offset({
                 top : wnd_scr_top + wnd_h/2 - $dialog.height(),
                 left: wnd_scr_lft + wnd_w/2 - $dialog.width()/2,
             });
-            $filter.offset({top : wnd_scr_top, left : wnd_scr_lft});
         };
 
-        var fnResizeWnd = function(){
+        var fnResizeDlgs = function() {
+            $filter.width($doc.outerWidth());
+            $filter.height($doc.outerHeight());
+
+            if (!options.fixed) {
+                fnResizeDlg();
+            }
+            $filter.offset({top : 0, left : 0});
+        };
+
+        var fnResizeWnd = function() {
             $dialog.addClass('u-no-transition');
             $filter.addClass('u-no-transition');
 
@@ -156,7 +161,10 @@ export module Dialog{
         };
 
         // windowにリサイズイベント追加
-        $wnd.bind('resize', fnResizeWnd);
+        $wnd.resize(fnResizeWnd);
+        if (!options.fixed) {
+            $wnd.scroll(fnResizeDlg);
+        }
 
         // 閉じる関数追加
         removeFunctionList.push(function(){
@@ -168,6 +176,7 @@ export module Dialog{
                 $filter.remove();
             },250);
             $wnd.unbind('resize', fnResizeWnd);
+            $wnd.unbind('scroll', fnResizeWnd);
         });
 
         // DOM追加
@@ -175,6 +184,15 @@ export module Dialog{
 
         // リサイズ
         fnResizeDlgs();
+
+        var wnd_w = $wnd.width();
+        var wnd_h = $wnd.height();
+        var wnd_scr_top = $wnd.scrollTop();
+        var wnd_scr_lft = $wnd.scrollLeft();
+        $dialog.offset({
+            top : wnd_scr_top + wnd_h/2 - $dialog.height(),
+            left: wnd_scr_lft + wnd_w/2 - $dialog.width()/2,
+        });
 
         // 表示
         $dialog.addClass('is-shown');

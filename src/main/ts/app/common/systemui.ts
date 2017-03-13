@@ -8,7 +8,7 @@ import {Dialog} from './dialog';
  * @param {String} 表示するテキスト。省略可能。
  */
 export function systemErr( text? : string ){
-    Dialog.show({ text: text || 'A system error occurred! Please contact the system administrator.'});
+    Dialog.show({ text: text || 'A system error occurred! Please contact the system administrator.', fixed: false,});
 }
 
 /**

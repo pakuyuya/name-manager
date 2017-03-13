@@ -106,6 +106,7 @@ class AddNameDialogDirectiveController
             Dialog.show({
                 text: '編集内容を破棄します。よろしいですか？',
                 buttons: {ok: 'OK', ng: 'Cancel'},
+                fixed : false,
                 callback: (id) => {
                     if (id === 'ok') {
                         this.clearModels();
@@ -170,6 +171,7 @@ class AddNameDialogDirectiveController
             Dialog.show({
                 text: '入力内容に警告があります。無視して登録しますか？',
                 buttons: {ok: 'OK', ng: 'Cancel'},
+                fixed : false,
                 callback: (id) => {
                     if (id === 'ok') {
                         this.register();
