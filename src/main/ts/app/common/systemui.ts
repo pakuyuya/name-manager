@@ -84,8 +84,6 @@ const validTargets = [
 export function getErrorMessage(element : any, errorMessages? : any) {
     errorMessages = errorMessages || {};
     if (element.willValidate && !element.validity.valid) {
-        console.log(element.validity);
-
         for (const validTarget of validTargets) {
             if (element.validity[validTarget]) {
                 return element.getAttribute('title')
