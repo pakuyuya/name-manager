@@ -48,11 +48,9 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">住所ラベルの敬称</th>
                         <td class="c-field-data" colspan="12">
-                            <div ng-repeat="term in addNameDialog.terms" class="u-16p1 u-inblock">
-                                <label>
-                                    <input type="radio" ng-model="addNameDialog.name.cd_term" value="{{ term.value }}">{{ term.name}}
-                                </label>
-                            </div>
+                            <label class="c-widelabel" ng-repeat="term in addNameDialog.terms">
+                                <input type="radio" ng-model="addNameDialog.name.cd_term" value="{{ term.value }}">{{ term.name}}
+                            </label>
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -180,10 +178,10 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員種別</th>
                         <td class="c-field-data" colspan="12">
-                            <label><input type="radio" value="1" ng-model="addNameDialog.name.cd_membertype" required>個人会員</label>
-                            <label><input type="radio" value="2" ng-model="addNameDialog.name.cd_membertype" required>団体会員</label>
-                            <label><input type="radio" value="3" ng-model="addNameDialog.name.cd_membertype" required>賛助会員</label>
-                            <label><input type="radio" value="4" ng-model="addNameDialog.name.cd_membertype" required>購読</label>
+                            <label class="c-widelabel"><input type="radio" value="1" ng-model="addNameDialog.name.cd_membertype" required>個人会員</label>
+                            <label class="c-widelabel"><input type="radio" value="2" ng-model="addNameDialog.name.cd_membertype" required>団体会員</label>
+                            <label class="c-widelabel"><input type="radio" value="3" ng-model="addNameDialog.name.cd_membertype" required>賛助会員</label>
+                            <label class="c-widelabel"><input type="radio" value="4" ng-model="addNameDialog.name.cd_membertype" required>購読</label>
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -217,10 +215,10 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">ひろば発送区分</th>
                         <td class="c-field-data" colspan="12">
-                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="">会員種別と同じ</label>
-                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="5">大口</label>
-                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="6">寄贈</label>
-                            <label><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="7">府市</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="">会員種別と同じ</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="5">大口</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="6">寄贈</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.cd_sendtype" value="7">府市</label>
                             <input type="text" ng-model="addNameDialog.subscription.send_govnumber" class="size-m u-16p2" id="addNameDialog_subscription_send_govnumber" ng-disabled="addNameDialog.subscription.cd_sendtype!=='7'" required />
                         </td>
                     </tr>
@@ -255,10 +253,9 @@
                 <tr>
                     <th class="c-field-head" colspan="4">役員</th>
                     <td class="c-field-data" colspan="12">
-                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="0">なし</label>
-                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="1">役員１</label>
-                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="2">役員２</label>
-                        <label><input type="radio" ng-model="addNameDialog.name.cd_officertype" value="3">役員３</label>
+                        <label ng-repeat="director in addNameDialog.directors" class="c-widelabel">
+                            <input type="radio" ng-model="addNameDialog.name.cd_directortype" value="{{ director.value }}">{{ director.name }}
+                        </label>
                     </td>
                 </tr>
             </table>

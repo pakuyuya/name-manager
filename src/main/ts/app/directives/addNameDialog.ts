@@ -8,7 +8,6 @@ import IQService = angular.IQService;
 import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog';
-import {Popup} from '../common/popup';
 
 import systemUI = require('../common/systemui');
 import * as U from '../common/util';
@@ -26,6 +25,8 @@ import {MemberTypeStoreService, MemberTypeDto} from "../services/memberTypeStore
 import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResource";
 import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameIndexStoreService";
 import {TermStoreService, TermDto} from "../services/termStoreService";
+
+import {DirectorStoreService, DirectorDto} from '../services/directorStoreService';
 
 interface Models {
     name : NameModel;
@@ -80,6 +81,7 @@ class AddNameDialogDirectiveController
     public loading: boolean;
 
     public terms: TermDto[];
+    public directors: DirectorDto[];
 
     private element: JQuery;
 
@@ -88,9 +90,11 @@ class AddNameDialogDirectiveController
                   private memberTypeStore: MemberTypeStoreService,
                   private sendNameIndexStore: SendNameIndexStoreService,
                   private termStore: TermStoreService,
+                  private directorStore: DirectorStoreService,
                   private receiptResource: ReceiptResourceClass,
                   private common:CommonService) {
         this.terms = this.termStore.getAll();
+        this.directors = this.directorStore.getAll();
 
         this.setupInitModels();
         this.clearModels();
@@ -376,7 +380,18 @@ U.applyMixins(AddNameDialogDirectiveController, [DialogSupportController, FormUt
 
 class AddNameDialogDirective {
     restrict = 'E';
-    controller = ['$q', 'NameResource', 'SubscriptionResource', 'MemberTypeStore', 'SendNameIndexStore', 'TermStore', 'ReceiptResource', 'Common', AddNameDialogDirectiveController];
+    controller = [
+        '$q',
+        'NameResource',
+        'SubscriptionResource',
+        'MemberTypeStore',
+        'SendNameIndexStore',
+        'TermStore',
+        'DirectorStoreService',
+        'ReceiptResource',
+        'Common',
+        AddNameDialogDirectiveController
+    ];
     controllerAs = 'addNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';

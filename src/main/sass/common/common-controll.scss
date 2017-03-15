@@ -207,8 +207,13 @@ input.ui-date {
 }
 
 //-----------------------------------------------
-// checkbox
+// checkbox, radio
 // ----------------------------------------------
-input[type=checkbox] {
+input[type=checkbox], input[type=radio] {
   margin-left : 2px;
+}
+
+.c-widelabel {
+  display: inline-block;
+  padding: 6px 10px;
 }
