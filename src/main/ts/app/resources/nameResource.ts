@@ -25,8 +25,8 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     send_zipcode    : string;
     send_address    : string;
     postalzone      : string;
-    cd_officertype  : number;
-    cd_membertype   : string;
+    id_director  : number;
+    id_membertype   : string;
     member_name     : string;
     member_rem      : string;
     member_expire_on: string;
@@ -63,13 +63,13 @@ export function nameFactory($resource: ng.resource.IResourceService) : NameResou
         send_zipcode : '@send_zipcode',
         send_address : '@send_address',
         postalzone : '@postalzone',
-        officertype_id : '@officertype_id',
-        cd_membertype : '@cd_membertype',
+        director_id : '@director_id',
+        id_membertype : '@id_membertype',
         member_name : '@member_name',
         member_rem : '@member_rem',
         member_expire_on : '@member_expire_on',
         send_expire_on : '@send_expire_on',
-        cd_term : '@cd_term',
+        id_term : '@id_term',
         label : '@label',
     };
     const actions = {

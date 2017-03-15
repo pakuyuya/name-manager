@@ -748,7 +748,7 @@
 			<char_semantics>false</char_semantics>
 			<description>受領備考</description>
 			<logical_name>受領備考</logical_name>
-			<physical_name>recipt_rem</physical_name>
+			<physical_name>receipt_rem</physical_name>
 			<type>time</type>
 		</word>
 		<word>
@@ -812,7 +812,7 @@
 			<char_semantics>false</char_semantics>
 			<description>1 = ひろば&#x0D;&#x0A;2 = FOCUS</description>
 			<logical_name>発送物種別</logical_name>
-			<physical_name>send_item_id</physical_name>
+			<physical_name>id_send_item</physical_name>
 			<type>integer</type>
 		</word>
 		<word>
@@ -1429,7 +1429,7 @@
 				<inidex>
 					<full_text>false</full_text>
 					<non_unique>true</non_unique>
-					<name>idx_entry_recipt_receiptdate</name>
+					<name>idx_entry_receipt_receiptdate</name>
 					<type>BTREE</type>
 					<description></description>
 					<columns>

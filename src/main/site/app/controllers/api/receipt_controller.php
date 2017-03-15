@@ -21,7 +21,7 @@ class ReceiptController extends SimpleRestfulController
         return [
             'entry_id' => '',
             'receipt_date' => null,
-            'receipt_date' => '0',
+            'id_receipttype' => '0',
             'receipt_rem' => '',
             'create_at' => $current_date,
             'update_at' => $current_date,

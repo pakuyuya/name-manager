@@ -53,7 +53,7 @@ class NamesearchController extends JsonBaseController
         foreach ($datas as $idx => $data) {
             $data['member_type'] = '';
             foreach ($memberTypes as $memberType) {
-                if ($memberType['value'] === ($data['cd_membertype'] . '')) {
+                if ($memberType['value'] === ($data['id_membertype'] . '')) {
                     $datas[$idx]['membertype'] = $memberType['name'];
                     break;
                 }

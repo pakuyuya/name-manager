@@ -37,7 +37,7 @@ class NameModel {
     public name_j     : string = '';
     public name_k     : string = '';
     public send_name_index: string = 'e';
-    public cd_term    : string = '1';
+    public id_term    : string = '1';
     public alias       : string = '';
     public category1   : string = '';
     public category2   : string = '';
@@ -51,8 +51,8 @@ class NameModel {
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
     public country     : string = '';
     public cd_nametype : string = '';
-    public cd_membertype  : string = '1';
-    public cd_officertype: string = '0';
+    public id_membertype  : string = '1';
+    public id_director: string = '0';
     public member_name  : string = '';
     public member_expire_on : string = '';
     public send_expire_on : string = '';
@@ -62,7 +62,7 @@ class MemberModel {
     public memberType : string = '';
 }
 class SubscriptionModel {
-    public cd_sendtype    : string = '';
+    public id_sendtype    : string = '';
     public send_govnumber   : string = '';
     public hirobaNum   : number = 1;
     public focusNum   : number;
@@ -148,7 +148,7 @@ class AddNameDialogDirectiveController
 
     private setupInitModels() {
         let name = new NameModel;
-        name.cd_membertype = this.memberTypeStore.getDefault().value;
+        name.id_membertype = this.memberTypeStore.getDefault().value;
 
         let subscription = new SubscriptionModel();
 
@@ -279,7 +279,7 @@ class AddNameDialogDirectiveController
 
         // ラベル用の名前作成
         const sendNameIndex:SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
-        const term:TermDto = this.termStore.get(this.name.cd_term);
+        const term:TermDto = this.termStore.get(this.name.id_term);
 
         let label = this.name[sendNameIndex.column];
         if (term.prefix) {
@@ -307,7 +307,7 @@ class AddNameDialogDirectiveController
 
         } else {
             // 会員ではない場合に補正
-            name.cd_membertype = this.memberTypeStore.getNone().value;
+            name.id_membertype = this.memberTypeStore.getNone().value;
             name.member_name = '';
             name.member_expire_on = null;
             name.send_expire_on = null;
@@ -325,14 +325,15 @@ class AddNameDialogDirectiveController
         if (!this.subscription || !num)
             return this.common.noopResource() as SubscriptionResource;
 
-        let cd_sendtype = this.subscription.cd_sendtype
-                           || this.memberTypeStore.get(this.name.cd_membertype).cd_cendtype;
+        let id_sendtype = this.subscription.id_sendtype
+                           || this.memberTypeStore.get(this.name.id_membertype).cd_cendtype;
 
         return new this.subscriptionResource({
             entry_id: name.id,
             send_num: num,
-            send_item_id: type,
-            cd_sendtype: cd_sendtype,
+            id_send_item: type,
+            id_sendtype: id_sendtype,
+            send_govnumber: Number(this.subscription.id_sendtype) == 7 ? this.subscription.send_govnumber : '',
             send_enabled: true,
         });
     }
@@ -344,7 +345,7 @@ class AddNameDialogDirectiveController
         return new this.receiptResource({
                 entry_id: name.id,
                 receipt_date: U.dateToSQLString(this.receipted_on),
-                receipt_type: this.memberTypeStore.get(name.cd_membertype).receiptTypeValue,
+                receipt_type: this.memberTypeStore.get(name.id_membertype).receiptTypeValue,
                 receipt_rem: '',
             });
     }

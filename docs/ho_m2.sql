@@ -2,7 +2,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Indexes */
 
-DROP INDEX idx_entry_recipt_receiptdate ON entry_receipt;
+DROP INDEX idx_entry_receipt_receiptdate ON entry_receipt;
 DROP INDEX entry_id ON entry_send;
 
 
@@ -118,7 +118,7 @@ CREATE TABLE entry_receipt
 	receipt_type char NOT NULL COMMENT '受領名目種別 : 0:会費
 1:購読料',
 	-- 受領備考
-	recipt_rem time NOT NULL COMMENT '受領備考',
+	receipt_rem time NOT NULL COMMENT '受領備考',
 	create_at timestamp NOT NULL,
 	update_at timestamp NOT NULL,
 	PRIMARY KEY (id)
@@ -134,7 +134,7 @@ CREATE TABLE entry_send
 	send_num tinyint NOT NULL,
 	-- 1 = ひろば
 	-- 2 = FOCUS
-	send_item_id int NOT NULL COMMENT '1 = ひろば
+	id_send_item int NOT NULL COMMENT '1 = ひろば
 2 = FOCUS',
 	sendtype_id tinyint NOT NULL,
 	send_rem text NOT NULL,
@@ -171,7 +171,7 @@ ALTER TABLE entry_send
 
 /* Create Indexes */
 
-CREATE INDEX idx_entry_recipt_receiptdate USING BTREE ON entry_receipt (receiptdate ASC);
+CREATE INDEX idx_entry_receipt_receiptdate USING BTREE ON entry_receipt (receiptdate ASC);
 CREATE INDEX entry_id USING BTREE ON entry_send (entry_id ASC);
 
 

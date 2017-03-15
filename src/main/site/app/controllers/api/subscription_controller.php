@@ -21,8 +21,9 @@ class SubscriptionController extends SimpleRestfulController
         return [
             'entry_id' => '',
             'send_num' => null,
-            'send_item_id' => 0,
-            'cd_sendtype' => 0,
+            'id_send_item' => 0,
+            'id_sendtype' => 0,
+            'send_govnumber' => '',
             'send_rem' => '',
             'send_enabled' => 1,
             'create_at' => $current_date,

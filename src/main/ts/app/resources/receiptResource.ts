@@ -6,7 +6,7 @@ export interface ReceiptResource extends ng.resource.IResource<ReceiptResource> 
     id       : number,
     entry_id : number,
     receipt_date : string,
-    receipt_type : string,
+    id_receipttype : string,
     receipt_rem  : string,
 }
 
@@ -19,7 +19,7 @@ export function receiptFactory($resource: ng.resource.IResourceService) : Receip
     const params = {
         entry_id: '@entry_id',
         receipt_date: '@receipt_date',
-        receipt_type: '@receipt_type',
+        id_receipttype: '@id_receipttype',
         receipt_rem : '@receipt_rem',
     };
     const actions = {
