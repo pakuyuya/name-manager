@@ -10,11 +10,11 @@ export function createShowPages(from:number, total:number, showPages:number, ste
     let cidx = ~~(from/step);
     let eidx = ~~(total/step);
 
-    let herfPages = ~~(showPages/2);
+    let helf = ~~(showPages/2);
 
     let sidx = (() => {
-        if (cidx < herfPages) return 0;
-        if (cidx < eidx - showPages) return cidx - herfPages;
+        if (cidx < helf) return 0;
+        if (cidx < eidx - showPages) return cidx - helf;
         return eidx - showPages;
     })();
 
