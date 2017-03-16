@@ -14,6 +14,8 @@ import '../resources/index'
 import '../services/index';
 import '../directives/index';
 
+import {NamesListDirectiveController} from '../directives/namesList';
+import {AddNameDialogDirectiveController} from '../directives/addNameDialog';
 import {MemberTypeStoreService} from '../services/memberTypeStoreService';
 
 app.controller('HeaderCtrl', ['$scope', function($scope){
@@ -24,8 +26,14 @@ app.controller('HeaderCtrl', ['$scope', function($scope){
 //
 
 class MainController {
-    constructor(private MemberTypes: MemberTypeStoreService) {
+    constructor(private $scope, private MemberTypes: MemberTypeStoreService) {
         this.MemberTypes.getAllAsync().then((memberTypes) => { this.memberTypes = memberTypes });
+
+        setTimeout(() => {
+            const ctlNamesList = $scope.namesList as NamesListDirectiveController;
+            const ctlAddNameDialog = $scope.addNameDialog as AddNameDialogDirectiveController;
+            ctlAddNameDialog.subscribe('closed', () => ctlNamesList.search());
+        }, 0);
     }
     public selectedNum = 0;
     public memberTypes = [];
@@ -33,7 +41,7 @@ class MainController {
 
 class MainDirective {
     restrict = 'E';
-    controller = ['MemberTypeStore', MainController];
+    controller = ['$scope', 'MemberTypeStore', MainController];
     controllerAs = 'main';
     replace = true;
 }

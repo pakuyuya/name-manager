@@ -15,8 +15,12 @@ import * as U from '../common/util';
 import {DialogSupportController} from './common/dialogSupport';
 import {FormUtilSupport} from './common/formUtilSupport';
 
+
+import {Subscribable} from '../common/subscribable';
+
 import {NameResource, NameResourceClass} from '../resources/nameResource';
 import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subscriptionResource';
+
 
 import {SendItemType} from '../services/sendItemTypeService';
 
@@ -68,8 +72,8 @@ class SubscriptionModel {
     public focusNum   : number;
 }
 
-class AddNameDialogDirectiveController
-    implements FormUtilSupport, DialogSupportController {
+export class AddNameDialogDirectiveController
+    implements FormUtilSupport, DialogSupportController, Subscribable {
     public initModels: Models;
     public name: NameModel;
     public subscription: SubscriptionModel;
@@ -79,6 +83,7 @@ class AddNameDialogDirectiveController
     public isMemberable:boolean = false;
     public isMatchExpire:boolean = true;
     public loading: boolean;
+    public canceled: boolean = false;
 
     public terms: TermDto[];
     public directors: DirectorDto[];
@@ -113,6 +118,7 @@ class AddNameDialogDirectiveController
                 fixed : false,
                 callback: (id) => {
                     if (id === 'ok') {
+                        this.canceled = true;
                         this.clearModels();
                         this.close();
                     }
@@ -127,6 +133,8 @@ class AddNameDialogDirectiveController
         this.close();
         this.clearModels();
         this.removeAllPopups();
+
+        this.emmit('closed', this);
     }
 
     public addAddress() {
@@ -358,6 +366,11 @@ class AddNameDialogDirectiveController
 
     // mixin declaration
 
+    // Subscribable
+    public subscribers = {};
+    public subscribe: (event:string, callback:(arg:any)=>void) => void;
+    public emmit: (event: string, arg:any) => void;
+
     // DialogSupport
     public ctrlDlg:any = null;
     public initDialogSupport: (elm:JQuery) => void;
@@ -376,7 +389,7 @@ class AddNameDialogDirectiveController
 };
 
 // mixin
-U.applyMixins(AddNameDialogDirectiveController, [DialogSupportController, FormUtilSupport]);
+U.applyMixins(AddNameDialogDirectiveController, [DialogSupportController, FormUtilSupport, Subscribable]);
 
 
 class AddNameDialogDirective {

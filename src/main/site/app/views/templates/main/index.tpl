@@ -59,7 +59,7 @@
                         </form>
                     </div>
                     <!--  -->
-                    <names-list class="u-p80">
+                    <names-list class="u-p80" id="names-list">
                         <div>
                             <div class="p-commands">
                                 <div class="p-command">
@@ -124,6 +124,6 @@
         <!-- クリップリスト -->
         <div id="clip-list">
         </div>
-        <add-name-dialog ng-model="dialog"></add-name-dialog>
+        <add-name-dialog ng-model="dialog" id="add-name-dialog"></add-name-dialog>
     </main>
 </div>

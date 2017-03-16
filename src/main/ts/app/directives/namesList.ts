@@ -5,7 +5,7 @@ import {appName} from '../constants';
 import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
 import {createShowPages} from '../common/common';
 
-class NamesListDirectiveController {
+export class NamesListDirectiveController {
     datas: Array<any> = [{a:1}];
     query: any = {};
     idxfrom : number = 10;
@@ -46,7 +46,7 @@ class NamesListDirectiveController {
 
 };
 
-class NamesListDirective {
+export class NamesListDirective {
     restrict = 'E';
     controller = ['NameSearch', NamesListDirectiveController];
     controllerAs = 'namesList';
