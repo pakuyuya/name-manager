@@ -12,10 +12,6 @@ export function createShowPages(from:number, total:number, showPages:number, ste
 
     let herfPages = ~~(showPages/2);
 
-    console.log(cidx);
-    console.log(eidx);
-    console.log(herfPages);
-
     let sidx = (() => {
         if (cidx < herfPages) return 0;
         if (cidx < eidx - showPages) return cidx - herfPages;
