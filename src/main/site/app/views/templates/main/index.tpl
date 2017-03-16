@@ -73,13 +73,16 @@
                                         {{namesList.total}} 件中 {{namesList.idxfrom}}-{{namesList.idxto}}件
                                     </div>
                                     <div class="p-paging u-p45 u-text-l">
-                                        <a href="#" class="p-paging-left">前の20件</a>
-                                        <a href="#" class="p-paging-right">次の20件</a>
+                                        <a href="#" class="p-paging-left" ng-if="namesList.hasPref()">前の20件</a>
+                                        <span class="p-paging-left" ng-else>前の20件</span>
+                                        <a href="#" class="p-paging-right" ng-if="namesList.hasNext()">次の20件</a>
+                                        <span class="p-paging-right" ng-else>次の20件</span>
+
                                         <span class="u-hori-sep"></span>
-                                        <a href="#" class="p-page">1</a>
-                                        <a href="#" class="p-page is-active">2</a>
-                                        <a href="#" class="p-page">3</a>
-                                        <a href="#" class="p-page">4</a>
+                                        <span ng-repeat="page in namesList.showPages">
+                                            <a href="#" class="p-page" ng-if="page != namesList.crtPage">{{ page }}</a>
+                                            <span>{{ page }}</span>
+                                        </span>
                                     </div>
                                     <div class="u-text-s u-p40 u-right">
                                         <button type="button">住所ラベル</button>

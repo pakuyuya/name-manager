@@ -3,6 +3,7 @@
 
 import {appName} from '../constants';
 import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
+import {createShowPages} from '../common/common';
 
 class NamesListDirectiveController {
     datas: Array<any> = [{a:1}];
@@ -10,6 +11,10 @@ class NamesListDirectiveController {
     idxfrom : number = 10;
     idxto   : number = 10;
     total   : number = 10;
+    crtPage : number = 10;
+    showPages : number[] = [];
+
+    rowInPage : number = 20;
 
     constructor(private NameSearch: NameSearchService) {
         this.datas = [{a:1}];
@@ -20,15 +25,25 @@ class NamesListDirectiveController {
         this.query = {};
     }
     public search() {
-        const self = this;
         this.NameSearch.query(this.query)
-            .then(function(greeting : NameSearchResult) {
-                self.idxfrom = greeting.idxfrom;
-                self.idxto = greeting.idxto;
-                self.total = greeting.total;
-                self.datas = greeting.datas;
+            .then((greeting : NameSearchResult) => {
+                this.idxfrom = greeting.idxfrom;
+                this.idxto = greeting.idxto;
+                this.total = greeting.total;
+                this.datas = greeting.datas;
+
+                this.crtPage = ~~(this.idxfrom / this.total) + 1;
+                this.showPages = createShowPages(this.idxfrom, this.total, 5, this.rowInPage)
             });
     }
+
+    public hasPrev() : boolean {
+        return this.idxfrom === 0;
+    }
+    public hasNext() : boolean {
+        return this.idxto < this.total;
+    }
+
 };
 
 class NamesListDirective {
