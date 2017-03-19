@@ -74,6 +74,7 @@ class DlgModel {
     public receipted_on: Date = null;
     public isMemberable:boolean = false;
     public isMatchExpire:boolean = true;
+    public confirmed:boolean = false;
 }
 
 export class AddNameDialogDirectiveController
