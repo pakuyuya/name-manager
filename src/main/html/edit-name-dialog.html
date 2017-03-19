@@ -1,0 +1,289 @@
+<div>
+    <dialog class="p-add-name-dialog" width="800px">
+        <div class="c-dialog-title u-flex u-bg-primary-color u-white">
+            <div class="u-p90">
+                連絡先の編集
+            </div>
+            <div class="u-p10 u-right">
+                <span class="icon-close white" ng-click="editNameDialog.requestClose()"></span>
+            </div>
+        </div>
+        <form class="padding-top10">
+            <div class="u-right">
+                <button type="button">この連絡先を削除する</button>
+            </div>
+            <fieldset>
+                <h3 class="c-legend">基本情報</h3>
+                <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row" ng-if="!!editNameDialog.name.id">
+                        <th class="c-field-head" colspan="4">名簿番号</th>
+                        <td class="c-field-data" colspan="12">{{ editNameDialog.name.id }}</td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">連絡先名（英語）</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_e" ng-model="editNameDialog.name.name_e" ng-focus="editNameDialog.autosetSendNameIndex('e')" maxlength="250" ng-blur="editNameDialog.toHerfValue($event)">
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">連絡先名（日本語）</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_j" ng-model="editNameDialog.name.name_j" ng-focus="editNameDialog.autosetSendNameIndex('j')" maxlength="250" ng-blur="editNameDialog.toHerfSpace($event)">
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">連絡先名（かな）</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_k" ng-model="editNameDialog.name.name_k" ng-focus="editNameDialog.autosetSendNameIndex('k')" maxlength="250" ng-blur="editNameDialog.toHerfSpace($event)">
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">住所ラベル上の連絡先</th>
+                        <td class="c-field-data" colspan="12">
+                            <label><input type="radio" ng-model="editNameDialog.name.send_name_index" value="e">連絡先名（英語）</label>
+                            <label><input type="radio" ng-model="editNameDialog.name.send_name_index" value="j">連絡先名（日本語）</label>
+                            <label><input type="radio" ng-model="editNameDialog.name.send_name_index" value="k">連絡先名（かな）</label>
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">住所ラベルの敬称</th>
+                        <td class="c-field-data" colspan="12">
+                            <label class="c-widelabel" ng-repeat="term in editNameDialog.terms">
+                                <input type="radio" ng-model="editNameDialog.name.id_term" value="{{ term.value }}">{{ term.name}}
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">別名</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" ng-model="editNameDialog.name.alias" ng-click="editNameDialog.fifi($event)" maxlength="200" ng-blur="editNameDialog.toHerfSpace($event)">
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">カテゴリ－</th>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="editNameDialog.name.category1" placeholder="1)" maxlength="50" ng-blur="editNameDialog.toHerfSpace($event)">
+                        </td>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" ng-model="editNameDialog.name.category2" placeholder="2)" maxlength="50" ng-blur="editNameDialog.toHerfSpace($event)">
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">電話番号</th>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_tels0" ng-model="editNameDialog.name.tels[0]" placeholder="1)" maxlength="100" ng-blur="editNameDialog.toHerfValue($event)">
+                        </td>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_tels1" ng-model="editNameDialog.name.tels[1]" placeholder="2)" maxlength="100" ng-blur="editNameDialog.toHerfValue($event)">
+                        </td>
+                        <td class="c-field-data" colspan="4">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_tels2" ng-model="editNameDialog.name.tels[2]" placeholder="3)" maxlength="100" ng-blur="editNameDialog.toHerfValue($event)">
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">FAX</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="text" class="u-p100 size-m" id="editNameDialog_name_fax" ng-model="editNameDialog.name.fax" maxlength="100" ng-blur="editNameDialog.toHerfValue($event)">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">メールアドレス１</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="email" class="u-p100 size-m" id="editNameDialog_name_mail0" ng-model="editNameDialog.name.mails[0]" maxlength="255" ng-blur="editNameDialog.toHerfValue($event)">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">メールアドレス２</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="email" class="u-p100 size-m" id="editNameDialog_name_mail1" ng-model="editNameDialog.name.mails[1]" maxlength="255" ng-blur="editNameDialog.toHerfValue($event)">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">URL</th>
+                        <th class="c-field-data" colspan="12">
+                            <input type="url" class="u-p100 size-m" id="editNameDialog_name_url" ng-model="editNameDialog.name.url" maxlength="255" ng-blur="editNameDialog.toHerfValue($event)">
+                        </th>
+                    </tr>
+                    <tr class="c-field-row-elastic">
+                        <th class="c-field-head" colspan="4">コンタクト備考（英語）</th>
+                        <th class="c-field-data" colspan="12">
+                            <textarea rows="3" class="u-p100 size-s" id="editNameDialog_name_rem_e" ng-model="editNameDialog.name.rem_e" maxlength="4000"></textarea>
+                        </th>
+                    </tr>
+                    <tr class="c-field-row-elastic">
+                        <th class="c-field-head" colspan="4">コンタクト備考（日本語）</th>
+                        <th class="c-field-data" colspan="12">
+                            <textarea rows="3" class="u-p100 size-s" id="editNameDialog_name_rem_j" ng-model="editNameDialog.name.rem_j" maxlength="4000"></textarea>
+                        </th>
+                    </tr>
+                </table>
+                <hr class="c-sep-vertical">
+                <h3 class="c-legend">住所</h3>
+                <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <td colspan="4">
+                            &nbsp;
+                        </td>
+                        <td colspan="11" class="u-center">
+                            <button type="button" tabindex="-1" class="u-p50" ng-click="editNameDialog.addAddress()">住所を追加する</button>
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr class="c-field-row" ng-repeat="address in editNameDialog.name.addresses">
+                        <th class="c-field-head" colspan="2">{{ $index+1 }}</th>
+                        <td class="c-field-data">
+                            <input type="radio" ng-model="editNameDialog.name.sendindex" value="{{$index}}">
+                        </td>
+                        <td class="c-field-data">
+                            <div class="u-right text-s">〒&nbsp;</div>
+                            <div class="u-right text-s">住所&nbsp;</div>
+                        </td>
+                        <td class="c-field-data" colspan="11">
+                            <div><input type="text" class="u-p25 size-m" id="editNameDialog_name_zip{{$index}}" ng-model="address.zip" required maxlength="30" ng-blur="editNameDialog.toHerfValue($event)"></div>
+                            <div><input type="text" class="u-p95 size-m" id="editNameDialog_name_address{{$index}}" ng-model="address.address" required maxlength="255"></div>
+                        </td>
+                        <td class="c-field-data">
+                            <button type="button" tabindex="-1" ng-click="editNameDialog.removeAddress($index)">×</button>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <h3 class="c-legend">会員・ひろば</h3>
+            <table class="c-field-table">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr class="c-field-row">
+                    <td class="c-field-data" colspan="1"></td>
+                    <th class="c-field-head u-left" colspan="15">
+                        <label></label>
+                        <label><input type="checkbox" ng-model="editNameDialog.isMemberable" value="true">会員、ひろばの発送を登録します。</label>
+                    </th>
+                </tr>
+            </table>
+            <fieldset ng-disabled="!(editNameDialog.isMemberable)">
+                <table class="c-field-table">
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <td class="c-field-data" colspan="16">※発送だけを登録する場合、会員情報は不要です。</td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">会員種別</th>
+                        <td class="c-field-data" colspan="12">
+                            <label class="c-widelabel"><input type="radio" value="1" ng-model="editNameDialog.name.id_membertype" required>個人会員</label>
+                            <label class="c-widelabel"><input type="radio" value="2" ng-model="editNameDialog.name.id_membertype" required>団体会員</label>
+                            <label class="c-widelabel"><input type="radio" value="3" ng-model="editNameDialog.name.id_membertype" required>賛助会員</label>
+                            <label class="c-widelabel"><input type="radio" value="4" ng-model="editNameDialog.name.id_membertype" required>購読</label>
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">会員名(必須)</th>
+                        <td class="c-field-data" colspan="8">
+                            <input type="text" class="size-m u-p100" id="editNameDialog_name_member_name" ng-model="editNameDialog.name.member_name" required maxlength="100" />
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">会費受領日</th>
+                        <td class="c-field-data" colspan="8">
+                            <input type="date" class="size-m" id="editNameDialog_reciepted_on" ng-model="editNameDialog.receipted_on" placeholder="yyyy/mm/dd" />
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">会員期限</th>
+                        <td class="c-field-data" colspan="8">
+                            <input type="date" class="size-m" id="editNameDialog_member_expire_on" ng-model="editNameDialog.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <td class="c-field-data" colspan="4">
+                        </td>
+                        <td class="c-field-data" colspan="8">
+                            <button type="button">会員証プレビュー（PDF）</button>
+                        </td>
+                    </tr>
+                    <colgroup>
+                        <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    </colgroup>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">ひろば発送区分</th>
+                        <td class="c-field-data" colspan="12">
+                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="">会員種別と同じ</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="5">大口</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="6">寄贈</label>
+                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="7">府市</label>
+                            <input type="text" ng-model="editNameDialog.subscription.send_govnumber" class="size-m u-16p2" id="editNameDialog_subscription_send_govnumber" ng-disabled="editNameDialog.subscription.id_sendtype!=7" required />
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">ひろば　部数</th>
+                        <td class="c-field-data" colspan="12">
+                            <input id="editNameDialog_subscription_hirobaNum" type="number" id="editNameDialog_subcription_hirobaNum" ng-model="editNameDialog.subscription.hirobaNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">Focus　部数</th>
+                        <td class="c-field-data" colspan="12">
+                            <input type="number" ng-model="editNameDialog.subscription.focusNum" id="editNameDialog_subcription_focusNum" class="size-m u-16p1 u-right" min="0" max="999" >
+                        </td>
+                    </tr>
+                    <tr class="c-field-row">
+                        <th class="c-field-head" colspan="4">配布期限</th>
+                        <td class="c-field-data" colspan="12">
+                            <label><input type="checkbox" ng-model="editNameDialog.isMatchExpire">会員期限と同様</label>
+                            <input type="date" class="size-m" id="editNameDialog_send_expire_on" ng-model="editNameDialog.send_expire_on" ng-disabled="editNameDialog.isMatchExpire">
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <hr class="c-sep-vertical">
+            <h3 class="c-legend">その他設定</h3>
+            <table class="c-field-table margin-top20">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr>
+                    <th class="c-field-head" colspan="4">役員</th>
+                    <td class="c-field-data" colspan="12">
+                        <label ng-repeat="director in editNameDialog.directors" class="c-widelabel">
+                            <input type="radio" ng-model="editNameDialog.name.id_director" value="{{ director.value }}">{{ director.name }}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <hr class="c-sep-vertical">
+            <table class="c-field-table margin-top20">
+                <colgroup>
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                    <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
+                </colgroup>
+                <tr class="c-field-row">
+                    <td colspan="16" class="u-center">
+                        <label><input type="checkbox">登録内容を見直しました。</label>
+                    </td>
+                </tr>
+                <tr class="c-field-row">
+                    <td colspan="3"></td>
+                    <td colspan="10" class="u-center">
+                        <button type="button" ng-disabled="editNameDialog.loading" ng-click="editNameDialog.tryRegister()">更新する</button>
+                        <button type="button" ng-disabled="editNameDialog.loading" ng-click="editNameDialog.requestClose()">キャンセル</button>
+                    </td>
+                    <td colspan="3">
+                        <img src="images/loading-mid.gif" alt="loading" ng-if="editNameDialog.loading" class="size-m">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </dialog>
+</div>

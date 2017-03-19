@@ -1,6 +1,6 @@
 /// <reference path="../../lib/definitely/angularjs/angular-resource.d.ts" />
 
-import {appName, apiBaseUrl} from '../constants';
+import {appName, restApiBaseUrl} from '../constants';
 
 export interface NameResource extends ng.resource.IResource<NameResource> {
     id              : number;
@@ -33,14 +33,15 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     send_expire_on  : string;
     term_id         : number;
     term            : string;
+
+    $update() : angular.IPromise<NameResource>;
 }
 
 export interface NameResourceClass extends ng.resource.IResourceClass<NameResource> {
-    update(model: any) : NameResource;
 }
 
 export function nameFactory($resource: ng.resource.IResourceService) : NameResourceClass {
-    const url = `${apiBaseUrl}/name/:id`;
+    const url = `${restApiBaseUrl}/name/:id`;
     const params = {
         id : '@id',
         name_e : '@name_e',

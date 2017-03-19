@@ -1,6 +1,6 @@
 /// <reference path="../../lib/definitely/angularjs/angular-resource.d.ts" />
 
-import {appName, apiBaseUrl} from '../constants';
+import {appName, restApiBaseUrl} from '../constants';
 
 export interface NamesResource extends ng.resource.IResource<NamesResource> {
     id         : string;
@@ -13,7 +13,7 @@ export interface NamesResourceClass extends ng.resource.IResourceClass<NamesReso
 }
 
 export function namesFactory($resource: ng.resource.IResourceService) : NamesResourceClass {
-    var url = `${apiBaseUrl}/namesearch`;
+    var url = `${restApiBaseUrl}/namesearch`;
     var params = {
         lang: '@lang',
         name: '@name',

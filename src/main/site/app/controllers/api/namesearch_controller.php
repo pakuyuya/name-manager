@@ -4,7 +4,7 @@ Loader::loadLibrary('util', 'common');
 Loader::loadLibrary('ValidatorEx');
 
 /**
- * ログインAjax用コントローラー
+ * 名簿検索API
  * @author pak
  */
 class NamesearchController extends JsonBaseController

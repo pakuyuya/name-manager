@@ -28,6 +28,7 @@ export class NameSearchService {
         const url = `${apiBaseUrl}/namesearch`;
 
         this.$http.get(url, {params : query})
+            .error((data) => { deferred.reject(data); })
             .success(function(json: any, status, headers, config){
                 if (!json.result) {
                     throw new Error(`${url} don't responsed { result : true } at NameSearchService.query() `);

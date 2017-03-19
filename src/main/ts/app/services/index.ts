@@ -1,6 +1,7 @@
 import './memberTypeStoreService'
 import './receiptTypeStoreService'
 import './nameSearchService'
+import './nameRepositoryService'
 
 import './checkedNameService'
 

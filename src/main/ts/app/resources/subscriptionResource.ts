@@ -1,6 +1,6 @@
 /// <reference path="../../lib/definitely/angularjs/angular-resource.d.ts" />
 
-import {appName, apiBaseUrl} from '../constants';
+import {appName, restApiBaseUrl} from '../constants';
 
 export interface SubscriptionResource extends ng.resource.IResource<SubscriptionResource> {
     id       : number,
@@ -11,14 +11,15 @@ export interface SubscriptionResource extends ng.resource.IResource<Subscription
     send_govnumber: string,
     send_rem     : string,
     send_enabled : boolean,
+
+    $update() : angular.IPromise<SubscriptionResource>;
 }
 
 export interface SubscriptionResourceClass extends ng.resource.IResourceClass<SubscriptionResource> {
-    update(model: any) : SubscriptionResource;
 }
 
 export function subscriptionFactory($resource: ng.resource.IResourceService) : SubscriptionResourceClass {
-    const url = `${apiBaseUrl}/subscription/:id`;
+    const url = `${restApiBaseUrl}/subscription/:id`;
     const params = {
         entry_id: '@entry_id',
         send_num: '@send_num',

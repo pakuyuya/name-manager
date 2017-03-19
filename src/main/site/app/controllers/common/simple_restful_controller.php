@@ -52,15 +52,8 @@ abstract class SimpleRestfulController extends RestfulBaseController
             return;
         }
 
-        // 補完、不要インデックスのフィルター
-        $defValueMap = $this->getDefaultValues();
-        $safeValue = [];
-        foreach($defValueMap as $k => $v) {
-            $safeValue[$k] = isset($fields[$k]) ? $fields[$k] : $v;
-        }
-
         if (method_exists($service, 'field_json_encode')) {
-            $safeValue = $service->field_json_encode($safeValue);
+            $safeValue = $service->field_json_encode($fields);
         }
 
         // 登録
@@ -145,12 +138,10 @@ abstract class SimpleRestfulController extends RestfulBaseController
     abstract protected function createService();
 
     /**
-     * フィールドの定義を出力する。
-     *
-     * @return mixed
+     * 入力値の検証を行う
+     * @param $fields
+     * @return bool
      */
-    abstract protected function getDefaultValues();
-
     protected function validateField($fields) {
         $service = $this->createService();
         return method_exists($service, 'validate') ? $service->validate($fields) : true;

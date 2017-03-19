@@ -52,3 +52,7 @@ function escapeLike($str) {
         '_', '\\_'
     );
 }
+
+function stdClassToArray($obj) {
+    return json_decode(json_encode($obj), true);
+}

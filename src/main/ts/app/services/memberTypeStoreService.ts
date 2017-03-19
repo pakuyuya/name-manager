@@ -12,7 +12,7 @@ export interface MemberTypeDto {
     value : string;
     none  : boolean;
     def   : boolean;
-    cd_cendtype: string;
+    cd_sendtype: string;
     receiptTypeValue: string;
 }
 
@@ -59,11 +59,11 @@ export class MemberTypeStoreService {
     public refleshStore() : angular.IPromise<MemberTypeDto[]> {
         return queryPromise = this.$q((resolve, reject) => {
             store = [
-                {name: 'なし',     value: '0', none: true,  def: false, cd_cendtype:'0', receiptTypeValue: '0',},
-                {name: '個人会員', value: '1', none: false, def: true,  cd_cendtype:'1', receiptTypeValue: '1',},
-                {name: '団体会員', value: '2', none: false, def: false, cd_cendtype:'2', receiptTypeValue: '1',},
-                {name: '賛助会員', value: '3', none: false, def: false, cd_cendtype:'3', receiptTypeValue: '1',},
-                {name: '購読',     value: '4', none: false, def: false, cd_cendtype:'4', receiptTypeValue: '0',},
+                {name: 'なし',     value: '0', none: true,  def: false, cd_sendtype:'0', receiptTypeValue: '0',},
+                {name: '個人会員', value: '1', none: false, def: true,  cd_sendtype:'1', receiptTypeValue: '1',},
+                {name: '団体会員', value: '2', none: false, def: false, cd_sendtype:'2', receiptTypeValue: '1',},
+                {name: '賛助会員', value: '3', none: false, def: false, cd_sendtype:'3', receiptTypeValue: '1',},
+                {name: '購読',     value: '4', none: false, def: false, cd_sendtype:'4', receiptTypeValue: '0',},
             ];
 
             isInitStore = true;

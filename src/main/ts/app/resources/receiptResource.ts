@@ -8,10 +8,11 @@ export interface ReceiptResource extends ng.resource.IResource<ReceiptResource> 
     receipt_date : string,
     id_receipttype : string,
     receipt_rem  : string,
+
+    $update() : angular.IPromise<ReceiptResource>;
 }
 
 export interface ReceiptResourceClass extends ng.resource.IResourceClass<ReceiptResource> {
-    update(model: any) : ReceiptResource;
 }
 
 export function receiptFactory($resource: ng.resource.IResourceService) : ReceiptResourceClass {

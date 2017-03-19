@@ -31,7 +31,6 @@ import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameI
 import {TermStoreService, TermDto} from "../services/termStoreService";
 
 import {DirectorStoreService, DirectorDto} from '../services/directorStoreService';
-import {NameRepositoryService} from "../services/nameRepositoryService";
 
 interface Models {
     name : NameModel;
@@ -55,6 +54,7 @@ class NameModel {
     public sendindex   : number = 0;
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
     public country     : string = '';
+    public cd_nametype : string = '';
     public id_membertype  : string = '1';
     public id_director: string = '0';
     public member_name  : string = '';
@@ -72,7 +72,7 @@ class SubscriptionModel {
     public focusNum   : number;
 }
 
-export class AddNameDialogDirectiveController
+export class EditNameDialogDirectiveController
     implements FormUtilSupport, DialogSupportController, Subscribable {
     public initModels: Models;
     public name: NameModel;
@@ -90,8 +90,8 @@ export class AddNameDialogDirectiveController
 
     private element: JQuery;
 
-    constructor(private $q: IQService,
-                  private nameRepository: NameRepositoryService,
+    constructor(private $q: IQService, private nameResource: NameResourceClass,
+                  private subscriptionResource: SubscriptionResourceClass,
                   private memberTypeStore: MemberTypeStoreService,
                   private sendNameIndexStore: SendNameIndexStoreService,
                   private termStore: TermStoreService,
@@ -209,21 +209,21 @@ export class AddNameDialogDirectiveController
 
         // 名
         if (this.name.send_name_index === 'e' && this.name.name_e === '') {
-            this.popupWarning('#addNameDialog_name_e', '住所ラベル用の連絡先は必須です');
+            this.popupWarning('#editNameDialog_name_e', '住所ラベル用の連絡先は必須です');
             result = false;
         }
         if (this.name.send_name_index === 'j' && this.name.name_j === '') {
-            this.popupWarning('#addNameDialog_name_j', '住所ラベル用の連絡先は必須です');
+            this.popupWarning('#editNameDialog_name_j', '住所ラベル用の連絡先は必須です');
             result = false;
         }
         if (this.name.send_name_index === 'k' && this.name.name_k === '') {
-            this.popupWarning('#addNameDialog_name_k', '住所ラベル用の連絡先は必須です');
+            this.popupWarning('#editNameDialog_name_k', '住所ラベル用の連絡先は必須です');
             result = false;
         }
 
         if (this.isMemberable) {
             if (this.subscription.hirobaNum === 0 && this.subscription.focusNum === 0) {
-                this.popupWarning('#addNameDialog_subscription_hirobaNum', '配布対象がありません');
+                this.popupWarning('#editNameDialog_subscription_hirobaNum', '配布対象がありません');
                 result = false;
             }
         }
@@ -255,70 +255,41 @@ export class AddNameDialogDirectiveController
             throw reason;
         };
 
-        let nameParam = this.createNameParam();
-        let subsHirobaParam = this.createSubscriptionParam(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum));
-        let subsFocusParam = this.createSubscriptionParam(name, SendItemType.Forcus, Number(this.subscription.focusNum));
+        this.createNameResource()
+            .$update()
+            .catch(onError)
+            .then((data: any) : any => {
+                name = data;
 
-        let param = {
-            'name' : nameParam,
-            'subscriptions' : [subsHirobaParam, subsFocusParam].filter((d) => d !== null),
-        };
-
-        this.nameRepository.save(param)
+                return this.$q.all([
+                    this.createSubscription(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum))
+                        .$save()
+                        .catch(onError),
+                    this.createSubscription(name, SendItemType.Forcus, Number(this.subscription.focusNum))
+                        .$save()
+                        .catch(onError),
+                    this.createReceipt(name)
+                        .$save()
+                        .catch(onError),
+                ]);
+            })
             .then(() => {
                 this.loading = false;
                 this.forceClose();
-            }, onError);
-    }
-
-    private createNameParam() : any {
-        let name: NameResource = U.assign(this.name, {}) as any;
-
-        // ラベル用の名前作成
-        const sendNameIndex: SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
-        const term: TermDto = this.termStore.get(this.name.id_term);
-
-        let label = this.name[sendNameIndex.column];
-        if (term.prefix) {
-            label = `${term.prefix} ${label}`;
-        }
-        if (term.suffix) {
-            label = `${label} ${term.suffix}`;
-        }
-        name.label = label;
-
-        // 送信先住所の作成
-        const sendAddress = this.name.addresses[this.name.sendindex];
-        name.send_zipcode = sendAddress.zip;
-        name.send_address = sendAddress.address;
-
-        if (this.isMemberable) {
-            // 会員の場合に補正
-            this.name.member_expire_on = (this.member_expire_on)
-                ? U.dateToSQLString(this.member_expire_on)
-                : null;
-
-            this.name.send_expire_on = (this.isMatchExpire)
-                ? this.name.member_expire_on
-                : U.dateToSQLString(this.send_expire_on);
-
-        } else {
-            // 会員ではない場合に補正
-            name.id_membertype = this.memberTypeStore.getNone().value;
-            name.member_name = '';
-            name.member_expire_on = null;
-            name.send_expire_on = null;
-        }
-
-        return name;
+            })
+            .finally(() => {
+                if (failed) {
+                    if (name) { this.nameResource.remove(name); }
+                }
+            });
     }
 
     private createNameResource() : NameResource {
-        let name: NameResource = U.assign(this.name, {}) as any;
+        let name:NameResource = U.assign(this.name, {}) as any;
 
         // ラベル用の名前作成
-        const sendNameIndex: SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
-        const term: TermDto = this.termStore.get(this.name.id_term);
+        const sendNameIndex:SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
+        const term:TermDto = this.termStore.get(this.name.id_term);
 
         let label = this.name[sendNameIndex.column];
         if (term.prefix) {
@@ -351,24 +322,26 @@ export class AddNameDialogDirectiveController
             name.member_expire_on = null;
             name.send_expire_on = null;
         }
+        let returnResource = new this.nameResource(U.jsonizeModelDeep(name));
 
-        return name;
+        return returnResource;
     }
 
-    private createSubscriptionParam(name: NameResource, type: string, num: number) : any {
-        if (!this.isMemberable || !num)
-            return null;
+    private createSubscription(name: NameResource, type: string, num: number) : SubscriptionResource {
+        if (!this.subscription || !num)
+            return this.common.noopResource() as SubscriptionResource;
 
         let id_sendtype = this.subscription.id_sendtype
-            || this.memberTypeStore.get(this.name.id_membertype).cd_sendtype;
+                           || this.memberTypeStore.get(this.name.id_membertype).cd_sendtype;
 
-        return {
+        return new this.subscriptionResource({
+            entry_id: name.id,
             send_num: num,
             id_send_item: type,
             id_sendtype: id_sendtype,
             send_govnumber: Number(this.subscription.id_sendtype) == 7 ? this.subscription.send_govnumber : '',
             send_enabled: true,
-        };
+        });
     }
 
     private createReceipt(name: NameResource) : ReceiptResource {
@@ -414,23 +387,24 @@ export class AddNameDialogDirectiveController
 };
 
 // mixin
-U.applyMixins(AddNameDialogDirectiveController, [DialogSupportController, FormUtilSupport, Subscribable]);
+U.applyMixins(EditNameDialogDirectiveController, [DialogSupportController, FormUtilSupport, Subscribable]);
 
 
 class AddNameDialogDirective {
     restrict = 'E';
     controller = [
         '$q',
-        'NameRepository',
+        'NameResource',
+        'SubscriptionResource',
         'MemberTypeStore',
         'SendNameIndexStore',
         'TermStore',
         'DirectorStoreService',
         'ReceiptResource',
         'Common',
-        AddNameDialogDirectiveController
+        EditNameDialogDirectiveController
     ];
-    controllerAs = 'addNameDialog';
+    controllerAs = 'editNameDialog';
     replace = true;
     templateUrl = templateBaseUrl + '/add-name-dialog.html';
 
@@ -439,4 +413,4 @@ class AddNameDialogDirective {
     }
 };
 
-angular.module(appName).directive('addNameDialog', function(){ return new AddNameDialogDirective(); } );
+angular.module(appName).directive('editNameDialog', function(){ return new AddNameDialogDirective(); } );

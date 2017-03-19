@@ -41,13 +41,13 @@ abstract class JsonBaseController extends BaseController {
     }
 
     public function setOKResponse($statusCode, $data = null) {
-        $this->response->setHttpStatus($statusCode);
+        http_response_code($statusCode);
         if(!$data !== null) {
             $this->setJson($data);
         }
     }
     public function setErrorResponse($statusCode, $errors = null) {
-        $this->response->setHttpStatus($statusCode);
+        http_response_code($statusCode);
         if(!empty($errors)) {
             $json = ['error' => $errors];
             $this->setJson($json);
