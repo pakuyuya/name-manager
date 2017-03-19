@@ -166,11 +166,11 @@
                     <td class="c-field-data" colspan="1"></td>
                     <th class="c-field-head u-left" colspan="15">
                         <label></label>
-                        <label><input type="checkbox" ng-model="editNameDialog.isMemberable" value="true">会員、ひろばの発送を登録します。</label>
+                        <label><input type="checkbox" ng-model="editNameDialog.dlg.isMemberable" value="true">会員、ひろばの発送を登録します。</label>
                     </th>
                 </tr>
             </table>
-            <fieldset ng-disabled="!(editNameDialog.isMemberable)">
+            <fieldset ng-disabled="!(editNameDialog.dlg.isMemberable)">
                 <table class="c-field-table">
                     <colgroup>
                         <col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" /><col class="u-16p1" />
@@ -196,13 +196,13 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会費受領日</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" id="editNameDialog_reciepted_on" ng-model="editNameDialog.receipted_on" placeholder="yyyy/mm/dd" />
+                            <input type="date" class="size-m" id="editNameDialog_reciepted_on" ng-model="editNameDialog.dlg.receipted_on" placeholder="yyyy/mm/dd" />
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員期限</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" id="editNameDialog_member_expire_on" ng-model="editNameDialog.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
+                            <input type="date" class="size-m" id="editNameDialog_dlg.member_expire_on" ng-model="editNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -240,8 +240,8 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">配布期限</th>
                         <td class="c-field-data" colspan="12">
-                            <label><input type="checkbox" ng-model="editNameDialog.isMatchExpire">会員期限と同様</label>
-                            <input type="date" class="size-m" id="editNameDialog_send_expire_on" ng-model="editNameDialog.send_expire_on" ng-disabled="editNameDialog.isMatchExpire">
+                            <label><input type="checkbox" ng-model="editNameDialog.dlg.isMatchExpire">会員期限と同様</label>
+                            <input type="date" class="size-m" id="editNameDialog_dlg.send_expire_on" ng-model="editNameDialog.dlg.send_expire_on" ng-disabled="editNameDialog.dlg.isMatchExpire">
                         </td>
                     </tr>
                 </table>

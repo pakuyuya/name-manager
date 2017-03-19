@@ -19,12 +19,11 @@ import {FormUtilSupport} from './common/formUtilSupport';
 import {Subscribable} from '../common/subscribable';
 
 import {NameResource, NameResourceClass} from '../resources/nameResource';
-import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subscriptionResource';
-
 
 import {SendItemType} from '../services/sendItemTypeService';
 
 import {CommonService} from '../services/commonService';
+import {ReceiptService} from '../services/receiptService';
 import {MemberTypeStoreService, MemberTypeDto} from "../services/memberTypeStoreService";
 import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResource";
 import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameIndexStoreService";
@@ -36,6 +35,7 @@ import {NameRepositoryService} from "../services/nameRepositoryService";
 interface Models {
     name : NameModel;
     subscription : SubscriptionModel;
+    dlg : DlgModel;
 }
 class NameModel {
     public name_e     : string = '';
@@ -62,14 +62,18 @@ class NameModel {
     public send_expire_on : string = '';
     public receipted_on  : string = '';
 }
-class MemberModel {
-    public memberType : string = '';
-}
 class SubscriptionModel {
     public id_sendtype    : string = '';
     public send_govnumber   : string = '';
     public hirobaNum   : number = 1;
     public focusNum   : number;
+}
+class DlgModel {
+    public member_expire_on: Date = null;
+    public send_expire_on: Date = null;
+    public receipted_on: Date = null;
+    public isMemberable:boolean = false;
+    public isMatchExpire:boolean = true;
 }
 
 export class AddNameDialogDirectiveController
@@ -77,12 +81,9 @@ export class AddNameDialogDirectiveController
     public initModels: Models;
     public name: NameModel;
     public subscription: SubscriptionModel;
-    public member_expire_on: Date = null;
-    public send_expire_on: Date = null;
-    public receipted_on: Date = null;
-    public isMemberable:boolean = false;
-    public isMatchExpire:boolean = true;
-    public loading: boolean;
+    public dlg: DlgModel;
+
+    public loading: boolean = false;
     public canceled: boolean = false;
 
     public terms: TermDto[];
@@ -92,6 +93,7 @@ export class AddNameDialogDirectiveController
 
     constructor(private $q: IQService,
                   private nameRepository: NameRepositoryService,
+                  private receipt: ReceiptService,
                   private memberTypeStore: MemberTypeStoreService,
                   private sendNameIndexStore: SendNameIndexStoreService,
                   private termStore: TermStoreService,
@@ -111,7 +113,8 @@ export class AddNameDialogDirectiveController
     }
 
     public requestClose() {
-        if (!U.matchUnlessHashkey(this.name, this.initModels.name)) {
+        if (!U.matchUnlessHashkey(this.name, this.initModels.name)
+             || !U.matchUnlessHashkey(this.subscription, this.initModels.subscription)) {
             Dialog.show({
                 text: '編集内容を破棄します。よろしいですか？',
                 buttons: {ok: 'OK', ng: 'Cancel'},
@@ -120,7 +123,7 @@ export class AddNameDialogDirectiveController
                     if (id === 'ok') {
                         this.canceled = true;
                         this.clearModels();
-                        this.close();
+                        this.forceClose();
                     }
                 }
             });
@@ -154,22 +157,31 @@ export class AddNameDialogDirectiveController
         }
     }
 
+    public calcMemberExpire() {
+        let base: Date = (this.dlg.receipted_on) ? this.dlg.receipted_on : new Date;
+        this.dlg.member_expire_on = this.receipt.getNextExpired(base);
+    }
+
     private setupInitModels() {
         let name = new NameModel;
         name.id_membertype = this.memberTypeStore.getDefault().value;
 
         let subscription = new SubscriptionModel();
 
+        let dlg = new DlgModel();
+
         this.initModels =
             <Models>{
                 name : name,
                 subscription : subscription,
+                dlg : dlg,
             };
     }
 
     public clearModels() {
         this.name = <NameModel>U.assignModel({}, this.initModels.name);
         this.subscription = <SubscriptionModel>U.assignModel({}, this.initModels.subscription);
+        this.dlg = U.assignModel({}, this.initModels.dlg) as DlgModel;
     }
 
     private createPlainAddress() {
@@ -221,7 +233,7 @@ export class AddNameDialogDirectiveController
             result = false;
         }
 
-        if (this.isMemberable) {
+        if (this.dlg.isMemberable) {
             if (this.subscription.hirobaNum === 0 && this.subscription.focusNum === 0) {
                 this.popupWarning('#addNameDialog_subscription_hirobaNum', '配布対象がありません');
                 result = false;
@@ -292,15 +304,15 @@ export class AddNameDialogDirectiveController
         name.send_zipcode = sendAddress.zip;
         name.send_address = sendAddress.address;
 
-        if (this.isMemberable) {
+        if (this.dlg.isMemberable) {
             // 会員の場合に補正
-            this.name.member_expire_on = (this.member_expire_on)
-                ? U.dateToSQLString(this.member_expire_on)
+            this.name.member_expire_on = (this.dlg.member_expire_on)
+                ? U.dateToSQLString(this.dlg.member_expire_on)
                 : null;
 
-            this.name.send_expire_on = (this.isMatchExpire)
+            this.name.send_expire_on = (this.dlg.isMatchExpire)
                 ? this.name.member_expire_on
-                : U.dateToSQLString(this.send_expire_on);
+                : U.dateToSQLString(this.dlg.send_expire_on);
 
         } else {
             // 会員ではない場合に補正
@@ -312,51 +324,8 @@ export class AddNameDialogDirectiveController
 
         return name;
     }
-
-    private createNameResource() : NameResource {
-        let name: NameResource = U.assign(this.name, {}) as any;
-
-        // ラベル用の名前作成
-        const sendNameIndex: SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
-        const term: TermDto = this.termStore.get(this.name.id_term);
-
-        let label = this.name[sendNameIndex.column];
-        if (term.prefix) {
-            label = `${term.prefix} ${label}`;
-        }
-        if (term.suffix) {
-            label = `${label} ${term.suffix}`;
-        }
-        name.label = label;
-
-        // 送信先住所の作成
-        const sendAddress = this.name.addresses[this.name.sendindex];
-        name.send_zipcode = sendAddress.zip;
-        name.send_address = sendAddress.address;
-
-        if (this.isMemberable) {
-            // 会員の場合に補正
-            this.name.member_expire_on = (this.member_expire_on)
-                ? U.dateToSQLString(this.member_expire_on)
-                : null;
-
-            this.name.send_expire_on = (this.isMatchExpire)
-                ? this.name.member_expire_on
-                : U.dateToSQLString(this.send_expire_on);
-
-        } else {
-            // 会員ではない場合に補正
-            name.id_membertype = this.memberTypeStore.getNone().value;
-            name.member_name = '';
-            name.member_expire_on = null;
-            name.send_expire_on = null;
-        }
-
-        return name;
-    }
-
     private createSubscriptionParam(name: NameResource, type: string, num: number) : any {
-        if (!this.isMemberable || !num)
+        if (!this.dlg.isMemberable || !num)
             return null;
 
         let id_sendtype = this.subscription.id_sendtype
@@ -369,18 +338,6 @@ export class AddNameDialogDirectiveController
             send_govnumber: Number(this.subscription.id_sendtype) == 7 ? this.subscription.send_govnumber : '',
             send_enabled: true,
         };
-    }
-
-    private createReceipt(name: NameResource) : ReceiptResource {
-        if (!this.isMemberable || !this.receipted_on) {
-            return this.common.noopResource() as ReceiptResource;
-        }
-        return new this.receiptResource({
-                entry_id: name.id,
-                receipt_date: U.dateToSQLString(this.receipted_on),
-                receipt_type: this.memberTypeStore.get(name.id_membertype).receiptTypeValue,
-                receipt_rem: '',
-            });
     }
 
     public autosetSendNameIndex(autosetIndex: string) {
@@ -422,6 +379,7 @@ class AddNameDialogDirective {
     controller = [
         '$q',
         'NameRepository',
+        'Receipt',
         'MemberTypeStore',
         'SendNameIndexStore',
         'TermStore',

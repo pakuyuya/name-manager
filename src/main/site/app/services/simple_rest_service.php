@@ -73,10 +73,10 @@ abstract class SimpleRestService extends ServiceEx {
     }
 
     public function field_json_encode($value) {
-        return clone $value;
+        return stdClassToArray($value);
     }
 
     public function field_json_decode($value) {
-        return clone $value;
+        return stdClassToArray($value);
     }
 }
