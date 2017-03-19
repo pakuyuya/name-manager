@@ -99,6 +99,7 @@ export class AddNameDialogDirectiveController
                   private sendNameIndexStore: SendNameIndexStoreService,
                   private termStore: TermStoreService,
                   private directorStore: DirectorStoreService,
+                  private nameResource: NameResourceClass,
                   private receiptResource: ReceiptResourceClass,
                   private common:CommonService) {
         this.terms = this.termStore.getAll();
@@ -253,7 +254,7 @@ export class AddNameDialogDirectiveController
         this.loading = true;
 
         let failed = false;
-        let name : NameResource = null;
+        let name_id : number = null;
 
         var onError = (reason) => {
             if (failed) {
@@ -269,8 +270,9 @@ export class AddNameDialogDirectiveController
         };
 
         let nameParam = this.createNameParam();
-        let subsHirobaParam = this.createSubscriptionParam(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum));
-        let subsFocusParam = this.createSubscriptionParam(name, SendItemType.Forcus, Number(this.subscription.focusNum));
+        let subsHirobaParam = this.createSubscriptionParam(SendItemType.Hiroba, Number(this.subscription.hirobaNum));
+        let subsFocusParam = this.createSubscriptionParam(SendItemType.Forcus, Number(this.subscription.focusNum));
+
 
         let param = {
             'name' : nameParam,
@@ -278,10 +280,19 @@ export class AddNameDialogDirectiveController
         };
 
         this.nameRepository.save(param)
+            .then((response) => {
+                name_id = response.id;
+                return this.createReceiptResource(name_id, this.name.id_membertype);
+            })
             .then(() => {
                 this.loading = false;
                 this.forceClose();
-            }, onError);
+            }, onError)
+            .finally(() => {
+                if (failed) {
+                    new this.nameResource({id : name_id}).$remove();
+                }
+            });
     }
 
     private createNameParam() : any {
@@ -325,7 +336,8 @@ export class AddNameDialogDirectiveController
 
         return name;
     }
-    private createSubscriptionParam(name: NameResource, type: string, num: number) : any {
+
+    private createSubscriptionParam(type: string, num: number) : any {
         if (!this.dlg.isMemberable || !num)
             return null;
 
@@ -339,6 +351,18 @@ export class AddNameDialogDirectiveController
             send_govnumber: Number(this.subscription.id_sendtype) == 7 ? this.subscription.send_govnumber : '',
             send_enabled: true,
         };
+    }
+
+    private createReceiptResource(id: number, membertype: string) : ReceiptResource {
+        if (!this.dlg.isMemberable || !this.dlg.receipted_on) {
+            return this.common.noopResource() as ReceiptResource;
+        }
+        return new this.receiptResource({
+            entry_id: id,
+            receipt_date: U.dateToSQLString(this.dlg.receipted_on),
+            receipt_type: this.memberTypeStore.get(membertype).receiptTypeValue,
+            receipt_rem: '',
+        });
     }
 
     public autosetSendNameIndex(autosetIndex: string) {
@@ -385,6 +409,7 @@ class AddNameDialogDirective {
         'SendNameIndexStore',
         'TermStore',
         'DirectorStoreService',
+        'NameResource',
         'ReceiptResource',
         'Common',
         AddNameDialogDirectiveController
