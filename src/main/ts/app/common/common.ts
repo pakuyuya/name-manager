@@ -8,7 +8,7 @@
  */
 export function createShowPages(from:number, total:number, showPages:number, step:number, start:number = 1) : number[] {
     let cidx = ~~(from/step);
-    let eidx = ~~(total/step);
+    let eidx = ~~((total-1)/step);
 
     let helf = ~~(showPages/2);
 
@@ -17,6 +17,8 @@ export function createShowPages(from:number, total:number, showPages:number, ste
         if (cidx < eidx - showPages) return cidx - helf;
         return eidx - showPages;
     })();
+
+    console.log(`${cidx} ${eidx} ${helf} ${sidx}`);
 
     let ary = [];
     for (let i=sidx; i <= eidx; ++i) {
