@@ -18,13 +18,6 @@ import {NamesListDirectiveController} from '../directives/namesList';
 import {AddNameDialogDirectiveController} from '../directives/addNameDialog';
 import {MemberTypeStoreService} from '../services/memberTypeStoreService';
 
-import {Toast} from '../common/toast';
-
-Toast.push('a');
-Toast.push('a');
-Toast.push('a');
-
-
 app.controller('HeaderCtrl', ['$scope', function($scope){
 }]);
 
