@@ -9,6 +9,8 @@ import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog';
 
+import {Toast} from '../common/toast';
+
 import systemUI = require('../common/systemui');
 import * as U from '../common/util';
 
@@ -92,6 +94,9 @@ export class AddNameDialogDirectiveController
 
     private element: JQuery;
 
+    /**
+     * コンストラクタ
+     */
     constructor(private $q: IQService,
                   private nameRepository: NameRepositoryService,
                   private receipt: ReceiptService,
@@ -109,11 +114,22 @@ export class AddNameDialogDirectiveController
         this.clearModels();
     }
 
+    /**
+     * Angular.Directive用linkメソッド
+     * @param scope
+     * @param element
+     * @param attrs
+     */
     public link(scope, element, attrs) {
         this.initDialogSupport(element);
         this.element = element;
     }
 
+    //----------- public method -----------
+
+    /**
+     * ダイアログを閉じる要求をする
+     */
     public requestClose() {
         if (!U.matchUnlessHashkey(this.name, this.initModels.name)
              || !U.matchUnlessHashkey(this.subscription, this.initModels.subscription)) {
@@ -134,6 +150,9 @@ export class AddNameDialogDirectiveController
         this.forceClose();
     }
 
+    /**
+     * 警告メッセージなしにダイアログを強制的に閉じる
+     */
     public forceClose() {
         this.close();
         this.clearModels();
@@ -142,11 +161,30 @@ export class AddNameDialogDirectiveController
         this.emmit('closed', this);
     }
 
+    //--------- UI ---------
+
+    /**
+     * 住所ラベルに使う住所のインデックスを自動更新する
+     * @param autosetIndex
+     */
+    public autosetSendNameIndex(autosetIndex: string) {
+        if (U.isBlank(this.name.name_e) && U.isBlank(this.name.name_j) && U.isBlank(this.name.name_k)) {
+            this.name.send_name_index = autosetIndex;
+        }
+    }
+
+    /**
+     * 住所欄を追加する
+     */
     public addAddress() {
         this.name.addresses.push(this.createPlainAddress());
         this.onResizeCall();
     }
 
+    /**
+     * 住所欄を削除する
+     * @param index
+     */
     public removeAddress(index: string) {
         const numIdx = Number(index);
         const numSendIdx =  this.name.sendindex;
@@ -159,37 +197,17 @@ export class AddNameDialogDirectiveController
         }
     }
 
+    /**
+     * 会員期限を自動計算する
+     */
     public calcMemberExpire() {
         let base: Date = (this.dlg.receipted_on) ? this.dlg.receipted_on : new Date;
         this.dlg.member_expire_on = this.receipt.getNextExpired(base);
     }
 
-    private setupInitModels() {
-        let name = new NameModel;
-        name.id_membertype = this.memberTypeStore.getDefault().value;
-
-        let subscription = new SubscriptionModel();
-
-        let dlg = new DlgModel();
-
-        this.initModels =
-            <Models>{
-                name : name,
-                subscription : subscription,
-                dlg : dlg,
-            };
-    }
-
-    public clearModels() {
-        this.name = <NameModel>U.assignModel({}, this.initModels.name);
-        this.subscription = <SubscriptionModel>U.assignModel({}, this.initModels.subscription);
-        this.dlg = U.assignModel({}, this.initModels.dlg) as DlgModel;
-    }
-
-    private createPlainAddress() {
-        return {zip : '', address : ''};
-    }
-
+    /**
+     * 登録を試みる
+     */
     public tryRegister() {
         if (this.validateForm()) {
             this.register();
@@ -207,6 +225,48 @@ export class AddNameDialogDirectiveController
         }
     }
 
+    //------------ private method -----------
+
+    /**
+     * 内部の初期状態モデルを構築する
+     */
+    private setupInitModels() {
+        let name = new NameModel;
+        name.id_membertype = this.memberTypeStore.getDefault().value;
+
+        let subscription = new SubscriptionModel();
+
+        let dlg = new DlgModel();
+
+        this.initModels =
+            <Models>{
+                name : name,
+                subscription : subscription,
+                dlg : dlg,
+            };
+    }
+
+    /**
+     * モデルを内部の初期状態モデルの状態に復元する
+     */
+    private clearModels() {
+        this.name = <NameModel>U.assignModel({}, this.initModels.name);
+        this.subscription = <SubscriptionModel>U.assignModel({}, this.initModels.subscription);
+        this.dlg = U.assignModel({}, this.initModels.dlg) as DlgModel;
+    }
+
+    /**
+     * 空の住所モデルを作成する
+     * @returns {{zip: string, address: string}}
+     */
+    private createPlainAddress() {
+        return {zip : '', address : ''};
+    }
+
+    /**
+     * フォームを検証する
+     * @returns {boolean}
+     */
     private validateForm() : boolean {
         let result = true;
 
@@ -285,16 +345,21 @@ export class AddNameDialogDirectiveController
                 return this.createReceiptResource(name_id, this.name.id_membertype);
             })
             .then(() => {
-                this.loading = false;
+                Toast.push(`連絡先を登録しました。（登録番号 : ${name_id}）`);
                 this.forceClose();
             }, onError)
             .finally(() => {
+                this.loading = false;
                 if (failed) {
                     new this.nameResource({id : name_id}).$remove();
                 }
             });
     }
 
+    /**
+     * 入力状態からnameの登録パラメータを作成する
+     * @returns {any}
+     */
     private createNameParam() : any {
         let name: NameResource = U.assign(this.name, {}) as any;
 
@@ -337,6 +402,10 @@ export class AddNameDialogDirectiveController
         return name;
     }
 
+    /**
+     * 入力状態からsubscriptionの登録パラメータを作成する
+     * @returns {any}
+     */
     private createSubscriptionParam(type: string, num: number) : any {
         if (!this.dlg.isMemberable || !num)
             return null;
@@ -353,6 +422,11 @@ export class AddNameDialogDirectiveController
         };
     }
 
+    /**
+     * 入力状態からReceiptResourceを作成する。
+     * @param id
+     * @param membertype
+     */
     private createReceiptResource(id: number, membertype: string) : ReceiptResource {
         if (!this.dlg.isMemberable || !this.dlg.receipted_on) {
             return this.common.noopResource() as ReceiptResource;
@@ -363,12 +437,6 @@ export class AddNameDialogDirectiveController
             receipt_type: this.memberTypeStore.get(membertype).receiptTypeValue,
             receipt_rem: '',
         });
-    }
-
-    public autosetSendNameIndex(autosetIndex: string) {
-        if (U.isBlank(this.name.name_e) && U.isBlank(this.name.name_j) && U.isBlank(this.name.name_k)) {
-            this.name.send_name_index = autosetIndex;
-        }
     }
 
     // mixin declaration

@@ -1,0 +1,52 @@
+@import "compass";
+@import "../sass-util/const";
+
+
+// toast
+
+.c-toast {
+  display : block;
+  position: fixed;
+  width : 70%;
+  left : 15%;
+  bottom : 20px;
+  background: $primary-color;
+  color : $primary-font-color;
+}
+
+.c-toast__text {
+  line-height : 32px;
+  font-size : 16px;
+  padding : 5px 15px;
+  width : 80%;
+
+  a {
+    color : $primary-font-second-color;
+    text-decoration : underline;
+
+    &:hover {
+      color : $primary-font-second-color;
+    }
+  }
+}
+.c-toast__close {
+  position : absolute;
+  right : 0;
+  top : 0;
+  width : 24px;
+  height: 24px;
+  line-height: 24px;
+  margin-right: 9px;
+  margin-top  : 9px;
+  border-radius : 12px;
+  font-size : 16px;
+  text-align: center;
+  color : #fff;
+  cursor:pointer;
+
+  &:hover {
+    background: $sub-color;
+    color: $sub-font-color;
+  }
+}
+
