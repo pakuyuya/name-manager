@@ -116,7 +116,7 @@ export function isString(json: any):any {
 }
 
 export function dateToSQLString(date: Date) : string {
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    return date ? `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}` : null;
 }
 
 export function isPrimitive(obj: any) : boolean {
