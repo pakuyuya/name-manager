@@ -1,5 +1,5 @@
 <div>
-    <dialog class="p-add-name-dialog" width="800px">
+    <dialog class="p-edit-name-dialog" width="800px">
         <div class="c-dialog-title u-flex u-bg-primary-color u-white">
             <div class="u-p90">
                 連絡先の編集
@@ -10,7 +10,7 @@
         </div>
         <form class="padding-top10">
             <div class="u-right">
-                <button type="button">この連絡先を削除する</button>
+                <button type="button">連絡先を削除する</button>
             </div>
             <fieldset>
                 <h3 class="c-legend">基本情報</h3>
@@ -194,15 +194,17 @@
                         </td>
                     </tr>
                     <tr class="c-field-row">
-                        <th class="c-field-head" colspan="4">会費受領日</th>
+                        <th class="c-field-head" colspan="4">会費受領記録管理</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" id="editNameDialog_reciepted_on" ng-model="editNameDialog.dlg.receipted_on" placeholder="yyyy/mm/dd" />
+                            <button type="button">受領記録画面を開く</button>
                         </td>
                     </tr>
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員期限</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" id="editNameDialog_dlg.member_expire_on" ng-model="editNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />（未記入で無制限）
+                            <input type="date" class="size-m" id="editNameDialog_dlg.member_expire_on" ng-model="editNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />
+                            <button type="button" ng-click="editNameDialog.calcMemberExpire()">自動計算</button>
+                            （※未記入で無制限）
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -270,7 +272,7 @@
                 </colgroup>
                 <tr class="c-field-row">
                     <td colspan="16" class="u-center">
-                        <label><input type="checkbox">登録内容を見直しました。</label>
+                        <label><input type="checkbox" ng-model="editNameDialog.dlg.confirmed">登録内容を見直しました。</label>
                     </td>
                 </tr>
                 <tr class="c-field-row">

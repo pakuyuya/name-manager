@@ -69,22 +69,22 @@
                             <div class="p-list u-block">
                                 <!-- ページング -->
                                 <div class="p-list-head u-flex">
-                                    <div class="p-pagecnt u-15 u-text-m">
-                                        {{namesList.total}} 件中 {{namesList.idxfrom}}-{{namesList.idxto}}件
+                                    <div class="p-pagecnt u-p20 u-text-m">
+                                        {{namesList.total}} 件中 {{namesList.idxfrom + 1}}-{{namesList.idxto + 1}}件
                                     </div>
                                     <div class="p-paging u-p45 u-text-l">
-                                        <a href="#" class="p-paging-left" ng-if="namesList.hasPref()">前の20件</a>
-                                        <span class="p-paging-left" ng-if="!namesList.hasPref()">前の20件</span>
-                                        <a href="#" class="p-paging-right" ng-if="namesList.hasNext()">次の20件</a>
+                                        <a href="#" class="p-paging-left" ng-if="namesList.hasPrev()" ng-click="namesList.prevPage()">前の20件</a>
+                                        <span class="p-paging-left" ng-if="!namesList.hasPrev()">前の20件</span>
+                                        <a href="#" class="p-paging-right" ng-if="namesList.hasNext()" ng-click="namesList.nextPage()">次の20件</a>
                                         <span class="p-paging-right" ng-if="!namesList.hasNext()">次の20件</span>
 
                                         <span class="u-hori-sep"></span>
                                         <span ng-repeat="page in namesList.showPages">
-                                            <a href="#" class="p-page" ng-if="page != namesList.crtPage">{{ page }}</a>
-                                            <span ng-if="page == namesList.crtPage">{{ page }}</span>
+                                            <a href="#" class="p-page" ng-if="page.idx != namesList.crtPage" ng-click="namesList.movePage(page.from)">{{ page.idx }}</a>
+                                            <span ng-if="page.idx == namesList.crtPage">{{ page.idx }}</span>
                                         </span>
                                     </div>
-                                    <div class="u-text-s u-p40 u-right">
+                                    <div class="u-text-s u-p35 u-right">
                                         <button type="button">住所ラベル</button>
                                         <button type="button">CSV</button>
                                     </div>

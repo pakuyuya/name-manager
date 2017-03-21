@@ -4,46 +4,79 @@
 import {appName} from '../constants';
 import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
 import {createShowPages} from '../common/common';
+import * as U from '../common/util';
 
 export class NamesListDirectiveController {
-    datas: Array<any> = [{a:1}];
+    datas: Array<any> = [];
     query: any = {};
     idxfrom : number = 10;
     idxto   : number = 10;
     total   : number = 10;
     crtPage : number = 10;
-    showPages : number[] = [];
+    showPages : {idx:number, from:number}[] = [];
 
     rowInPage : number = 20;
 
+    reloading : boolean = false;
+
     constructor(private NameSearch: NameSearchService) {
-        this.datas = [{a:1}];
+        this.datas = [];
         this.search();
     }
 
     public resetQuery() {
         this.query = {};
     }
+
     public search() {
-        this.NameSearch.query(this.query)
+        this.reload();
+    }
+
+    public prevPage() {
+        this.reload(this.idxfrom - this.rowInPage);
+    }
+
+    public nextPage() {
+        this.reload(this.idxfrom + this.rowInPage);
+    }
+
+    public movePage(position: number) {
+        this.reload(position);
+    }
+
+    public hasPrev() : boolean {
+        return this.idxfrom > 0;
+    }
+    public hasNext() : boolean {
+        return this.idxto + 1 < this.total;
+    }
+
+    private reload(offset:number = null) {
+        if (this.reloading) {
+            return;
+        }
+
+        this.reloading = true;
+
+        let query:any = U.assign({}, this.query);
+        if (offset !== null) {
+            query.offset = offset;
+        }
+
+        this.NameSearch.query(query)
             .then((greeting : NameSearchResult) => {
                 this.idxfrom = greeting.idxfrom;
                 this.idxto = greeting.idxto;
                 this.total = greeting.total;
                 this.datas = greeting.datas;
 
-                this.crtPage = ~~(this.idxfrom / this.total) + 1;
+                this.crtPage = ~~(this.idxfrom / this.rowInPage) + 1;
                 this.showPages = createShowPages(this.idxfrom, this.total, 5, this.rowInPage)
+                    .map((page) => { return {idx:page, from:(page-1) * this.rowInPage}; });
+
+                this.reloading = false;
             });
     }
-
-    public hasPrev() : boolean {
-        return this.idxfrom === 0;
-    }
-    public hasNext() : boolean {
-        return this.idxto < this.total;
-    }
-
 };
 
 export class NamesListDirective {

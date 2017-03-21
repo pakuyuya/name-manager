@@ -18,8 +18,6 @@ export function createShowPages(from:number, total:number, showPages:number, ste
         return eidx - showPages;
     })();
 
-    console.log(`${cidx} ${eidx} ${helf} ${sidx}`);
-
     let ary = [];
     for (let i=sidx; i <= eidx; ++i) {
         ary.push(i + start);

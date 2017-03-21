@@ -61,8 +61,8 @@ class NamesearchController extends JsonBaseController
         }
 
         $total = $svName->getCount($params);
-        $idxfrom = ($total > 0) ? $params['offset'] + 1 : 0;
-        $idxto   = (int)$params['offset'] + count($datas);
+        $idxfrom = ($total > 0) ? $params['offset'] : 0;
+        $idxto   = (int)$params['offset'] + count($datas) - 1;
 
         $this->json = [
             "result" => true,

@@ -19,9 +19,7 @@ export function systemErr( text? : string ){
 export function popFormErrorsAsync(form: Element) {
     let $btn = $(document.createElement('button'))
                     .css('display', 'none')
-                    .click((ev) => {
-                        console.log(ev);
-                    });
+                    .click((ev) => {});
 
     const onsubmit = (event) => {
         event.preventDefault();
