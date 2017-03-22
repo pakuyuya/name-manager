@@ -111,7 +111,7 @@
                                         <div class="p-names-name">{{ name.name_e }} / {{ name.name_j }}</div>
                                         <div class="p-names-expr">{{ name.expire_on }}</div>
                                         <div class="p-names-edit">
-                                            <button type="button" ng-click="namesList.edit(name.id)">編集</button>
+                                            <button type="button" ng-click="editNameDialog.openWith(name.id)">編集</button>
                                         </div>
                                     </div>
                                 </div>
@@ -124,6 +124,7 @@
         <!-- クリップリスト -->
         <div id="clip-list">
         </div>
-        <add-name-dialog ng-model="dialog" id="add-name-dialog"></add-name-dialog>
+        <add-name-dialog id="add-name-dialog"></add-name-dialog>
+        <edit-name-dialog id="edit-name-dialog"></edit-name-dialog>
     </main>
 </div>

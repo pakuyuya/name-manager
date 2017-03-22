@@ -15,7 +15,7 @@ abstract class RestfulBaseController extends JsonBaseController {
     public function index(){
         $params = $this->getRequest()->getRestParams();
 
-        $uriParams = $this->getRequest()->getParams(0);
+        $uriParams = $this->getRequest()->getParams();
         if(!isset($uriParams[0])){
             $this->fetchList($params);
         } else {

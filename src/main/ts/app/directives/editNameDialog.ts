@@ -9,6 +9,8 @@ import {appName, templateBaseUrl} from '../constants';
 
 import {Dialog} from '../common/dialog';
 
+import {Toast} from '../common/toast';
+
 import systemUI = require('../common/systemui');
 import * as U from '../common/util';
 
@@ -19,12 +21,14 @@ import {FormUtilSupport} from './common/formUtilSupport';
 import {Subscribable} from '../common/subscribable';
 
 import {NameResource, NameResourceClass} from '../resources/nameResource';
-import {SubscriptionResource, SubscriptionResourceClass} from '../resources/subscriptionResource';
+import {SubscriptionResource} from '../resources/subscriptionResource';
 
+import {SubscriptionSearchService, SubscriptionSearchResult} from '../services/subscriptionSearchService';
 
 import {SendItemType} from '../services/sendItemTypeService';
 
 import {CommonService} from '../services/commonService';
+import {ReceiptService} from '../services/receiptService';
 import {MemberTypeStoreService, MemberTypeDto} from "../services/memberTypeStoreService";
 import {ReceiptResource, ReceiptResourceClass} from "../resources/receiptResource";
 import {SendNameIndexStoreService, SendNameIndexDto} from "../services/sendNameIndexStoreService";
@@ -36,6 +40,7 @@ import {NameRepositoryService} from "../services/nameRepositoryService";
 interface Models {
     name : NameModel;
     subscription : SubscriptionModel;
+    dlg : DlgModel;
 }
 class NameModel {
     public name_e     : string = '';
@@ -55,7 +60,7 @@ class NameModel {
     public sendindex   : number = 0;
     public addresses   : Array<{zip:string, address:string}> = [{zip:'', address:''}];
     public country     : string = '';
-    public id_membertype  : string = '1';
+    public id_membertype  : string = '0';
     public id_director: string = '0';
     public member_name  : string = '';
     public member_expire_on : string = '';
@@ -65,7 +70,7 @@ class NameModel {
 class SubscriptionModel {
     public id_sendtype    : string = '';
     public send_govnumber   : string = '';
-    public hirobaNum   : number = 1;
+    public hirobaNum   : number;
     public focusNum   : number;
 }
 class DlgModel {
@@ -74,6 +79,7 @@ class DlgModel {
     public receipted_on: Date = null;
     public isMemberable:boolean = false;
     public isMatchExpire:boolean = true;
+    public confirmed:boolean = false;
 }
 
 export class EditNameDialogDirectiveController
@@ -91,28 +97,83 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
 
     private element: JQuery;
 
+    /**
+     * コンストラクタ
+     */
     constructor(private $q: IQService,
                 private nameRepository: NameRepositoryService,
+                private subscriptionSearch: SubscriptionSearchService,
+                private receipt: ReceiptService,
                 private memberTypeStore: MemberTypeStoreService,
                 private sendNameIndexStore: SendNameIndexStoreService,
                 private termStore: TermStoreService,
                 private directorStore: DirectorStoreService,
+                private nameResource: NameResourceClass,
                 private receiptResource: ReceiptResourceClass,
                 private common:CommonService) {
         this.terms = this.termStore.getAll();
         this.directors = this.directorStore.getAll();
-
-        this.setupInitModels();
-        this.clearModels();
     }
 
+    /**
+     * Angular.Directive用linkメソッド
+     * @param scope
+     * @param element
+     * @param attrs
+     */
     public link(scope, element, attrs) {
         this.initDialogSupport(element);
         this.element = element;
     }
 
+    //----------- public method -----------
+
+    /**
+     * 値の編集付きでダイアログを開く
+     */
+    public openWith(id: number) {
+        this.open();
+        let failed = false;
+
+        let onError = (reason) => {
+            if (failed) {
+                return;
+            }
+
+            console.error(reason);
+            systemUI.systemErr();
+
+            throw reason;
+        };
+
+        this.$q.all([
+            new this.nameResource({id : id})
+                .$get()
+                .catch(onError)
+                .then((data) => data, onError),
+            this.subscriptionSearch.query({entry_id : id})
+                .catch(onError)
+                .then((result) => result, onError),
+        ]).then((results :any[]) => {
+            if (failed) {
+                this.forceClose();
+                return;
+            }
+
+            let name = results[0] as NameResource;
+            let subscriptions = (results[1] as SubscriptionSearchResult).datas;
+
+            this.setupInitModels(name, subscriptions);
+            this.restoreInitModels();
+        });
+    }
+
+    /**
+     * ダイアログを閉じる要求をする
+     */
     public requestClose() {
-        if (!U.matchUnlessHashkey(this.name, this.initModels.name)) {
+        if (!U.matchUnlessHashkey(this.name, this.initModels.name)
+            || !U.matchUnlessHashkey(this.subscription, this.initModels.subscription)) {
             Dialog.show({
                 text: '編集内容を破棄します。よろしいですか？',
                 buttons: {ok: 'OK', ng: 'Cancel'},
@@ -120,8 +181,8 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
                 callback: (id) => {
                     if (id === 'ok') {
                         this.canceled = true;
-                        this.clearModels();
-                        this.close();
+                        this.restoreInitModels();
+                        this.forceClose();
                     }
                 }
             });
@@ -130,19 +191,41 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         this.forceClose();
     }
 
+    /**
+     * 警告メッセージなしにダイアログを強制的に閉じる
+     */
     public forceClose() {
         this.close();
-        this.clearModels();
+        this.restoreInitModels();
         this.removeAllPopups();
 
         this.emmit('closed', this);
     }
 
+    //--------- UI ---------
+
+    /**
+     * 住所ラベルに使う住所のインデックスを自動更新する
+     * @param autosetIndex
+     */
+    public autosetSendNameIndex(autosetIndex: string) {
+        if (U.isBlank(this.name.name_e) && U.isBlank(this.name.name_j) && U.isBlank(this.name.name_k)) {
+            this.name.send_name_index = autosetIndex;
+        }
+    }
+
+    /**
+     * 住所欄を追加する
+     */
     public addAddress() {
         this.name.addresses.push(this.createPlainAddress());
         this.onResizeCall();
     }
 
+    /**
+     * 住所欄を削除する
+     * @param index
+     */
     public removeAddress(index: string) {
         const numIdx = Number(index);
         const numSendIdx =  this.name.sendindex;
@@ -155,28 +238,17 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         }
     }
 
-    private setupInitModels() {
-        let name = new NameModel;
-        name.id_membertype = this.memberTypeStore.getDefault().value;
-
-        let subscription = new SubscriptionModel();
-
-        this.initModels =
-            <Models>{
-                name : name,
-                subscription : subscription,
-            };
+    /**
+     * 会員期限を自動計算する
+     */
+    public calcMemberExpire() {
+        let base: Date = (this.dlg.receipted_on) ? this.dlg.receipted_on : new Date;
+        this.dlg.member_expire_on = this.receipt.getNextExpired(base);
     }
 
-    public clearModels() {
-        this.name = <NameModel>U.assignModel({}, this.initModels.name);
-        this.subscription = <SubscriptionModel>U.assignModel({}, this.initModels.subscription);
-    }
-
-    private createPlainAddress() {
-        return {zip : '', address : ''};
-    }
-
+    /**
+     * 登録を試みる
+     */
     public tryRegister() {
         if (this.validateForm()) {
             this.register();
@@ -194,6 +266,64 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         }
     }
 
+    //------------ private method -----------
+
+    /**
+     * 内部の初期状態モデルを構築する
+     */
+    private setupInitModels(srcName: NameResource, subscriptions: SubscriptionResource[]) {
+        let name = new NameModel();
+        name = U.assign(name, srcName);
+        name.addresses = JSON.parse(srcName.addresses);
+        name.mails = JSON.parse(srcName.mails);
+        name.tels = JSON.parse(srcName.tels);
+        name.id_membertype = (this.memberTypeStore.get(srcName.id_membertype).none)
+                               ? this.memberTypeStore.getDefault().value  : srcName.id_membertype;
+
+        let subscription = new SubscriptionModel();
+        for (let subs of subscriptions) {
+            subscription.id_sendtype = subs.id_sendtype;
+            subscription.send_govnumber = subscription.send_govnumber;
+            switch (subs.id_send_item) {
+                case SendItemType.Hiroba: subscription.hirobaNum = Number(subs.send_num);
+                case SendItemType.Forcus: subscription.focusNum = Number(subs.send_num);
+            }
+        }
+
+        let dlg = new DlgModel();
+        dlg.isMemberable = !!(subscriptions.length) || !this.memberTypeStore.get(srcName.id_membertype).none;
+        dlg.isMatchExpire = name.member_expire_on === name.send_expire_on;
+
+        this.initModels =
+            <Models>{
+                name : name,
+                subscription : subscription,
+                dlg : dlg,
+            };
+        console.log(this.initModels);
+    }
+
+    /**
+     * モデルを内部の初期状態モデルの状態に復元する
+     */
+    private restoreInitModels() {
+        this.name = U.assignModel({}, this.initModels.name) as NameModel;
+        this.subscription = U.assignModel({}, this.initModels.subscription) as SubscriptionModel;
+        this.dlg = U.assignModel({}, this.initModels.dlg) as DlgModel;
+    }
+
+    /**
+     * 空の住所モデルを作成する
+     * @returns {{zip: string, address: string}}
+     */
+    private createPlainAddress() {
+        return {zip : '', address : ''};
+    }
+
+    /**
+     * フォームを検証する
+     * @returns {boolean}
+     */
     private validateForm() : boolean {
         let result = true;
 
@@ -241,7 +371,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         this.loading = true;
 
         let failed = false;
-        let name : NameResource = null;
+        let name_id : number = null;
 
         var onError = (reason) => {
             if (failed) {
@@ -257,8 +387,9 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         };
 
         let nameParam = this.createNameParam();
-        let subsHirobaParam = this.createSubscriptionParam(name, SendItemType.Hiroba, Number(this.subscription.hirobaNum));
-        let subsFocusParam = this.createSubscriptionParam(name, SendItemType.Forcus, Number(this.subscription.focusNum));
+        let subsHirobaParam = this.createSubscriptionParam(SendItemType.Hiroba, Number(this.subscription.hirobaNum));
+        let subsFocusParam = this.createSubscriptionParam(SendItemType.Forcus, Number(this.subscription.focusNum));
+
 
         let param = {
             'name' : nameParam,
@@ -266,12 +397,26 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         };
 
         this.nameRepository.save(param)
+            .then((response) => {
+                name_id = response.id;
+                return this.createReceiptResource(name_id, this.name.id_membertype);
+            })
             .then(() => {
-                this.loading = false;
+                Toast.push(`連絡先を登録しました。（登録番号 : ${name_id}）`);
                 this.forceClose();
-            }, onError);
+            }, onError)
+            .finally(() => {
+                this.loading = false;
+                if (failed) {
+                    new this.nameResource({id : name_id}).$remove();
+                }
+            });
     }
 
+    /**
+     * 入力状態からnameの登録パラメータを作成する
+     * @returns {any}
+     */
     private createNameParam() : any {
         let name: NameResource = U.assign(this.name, {}) as any;
 
@@ -314,49 +459,11 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         return name;
     }
 
-    private createNameResource() : NameResource {
-        let name: NameResource = U.assign(this.name, {}) as any;
-
-        // ラベル用の名前作成
-        const sendNameIndex: SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);
-        const term: TermDto = this.termStore.get(this.name.id_term);
-
-        let label = this.name[sendNameIndex.column];
-        if (term.prefix) {
-            label = `${term.prefix} ${label}`;
-        }
-        if (term.suffix) {
-            label = `${label} ${term.suffix}`;
-        }
-        name.label = label;
-
-        // 送信先住所の作成
-        const sendAddress = this.name.addresses[this.name.sendindex];
-        name.send_zipcode = sendAddress.zip;
-        name.send_address = sendAddress.address;
-
-        if (this.dlg.isMemberable) {
-            // 会員の場合に補正
-            this.name.member_expire_on = (this.dlg.member_expire_on)
-                ? U.dateToSQLString(this.dlg.member_expire_on)
-                : null;
-
-            this.name.send_expire_on = (this.dlg.isMatchExpire)
-                ? this.name.member_expire_on
-                : U.dateToSQLString(this.dlg.send_expire_on);
-
-        } else {
-            // 会員ではない場合に補正
-            name.id_membertype = this.memberTypeStore.getNone().value;
-            name.member_name = '';
-            name.member_expire_on = null;
-            name.send_expire_on = null;
-        }
-
-        return name;
-    }
-
-    private createSubscriptionParam(name: NameResource, type: string, num: number) : any {
+    /**
+     * 入力状態からsubscriptionの登録パラメータを作成する
+     * @returns {any}
+     */
+    private createSubscriptionParam(type: string, num: number) : any {
         if (!this.dlg.isMemberable || !num)
             return null;
 
@@ -372,22 +479,21 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         };
     }
 
-    private createReceipt(name: NameResource) : ReceiptResource {
+    /**
+     * 入力状態からReceiptResourceを作成する。
+     * @param id
+     * @param membertype
+     */
+    private createReceiptResource(id: number, membertype: string) : ReceiptResource {
         if (!this.dlg.isMemberable || !this.dlg.receipted_on) {
             return this.common.noopResource() as ReceiptResource;
         }
         return new this.receiptResource({
-            entry_id: name.id,
+            entry_id: id,
             receipt_date: U.dateToSQLString(this.dlg.receipted_on),
-            receipt_type: this.memberTypeStore.get(name.id_membertype).receiptTypeValue,
+            receipt_type: this.memberTypeStore.get(membertype).receiptTypeValue,
             receipt_rem: '',
         });
-    }
-
-    public autosetSendNameIndex(autosetIndex: string) {
-        if (U.isBlank(this.name.name_e) && U.isBlank(this.name.name_j) && U.isBlank(this.name.name_k)) {
-            this.name.send_name_index = autosetIndex;
-        }
     }
 
     // mixin declaration
@@ -423,10 +529,13 @@ class EditNameDialogDirective {
     controller = [
         '$q',
         'NameRepository',
+        'SubscriptionSearch',
+        'Receipt',
         'MemberTypeStore',
         'SendNameIndexStore',
         'TermStore',
         'DirectorStoreService',
+        'NameResource',
         'ReceiptResource',
         'Common',
         EditNameDialogDirectiveController
@@ -440,4 +549,4 @@ class EditNameDialogDirective {
     }
 };
 
-angular.module(appName).directive('addNameDialog', function(){ return new EditNameDialogDirective(); } );
+angular.module(appName).directive('editNameDialog', function(){ return new EditNameDialogDirective(); } );

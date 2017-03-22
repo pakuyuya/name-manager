@@ -38,6 +38,37 @@ class SubscriptionService extends SimpleRestService
     }
 
     /**
+     * Subscriptionを検索する。
+     * @param $param
+     * @return mixed
+     */
+    public function find($param) {
+        $select = $this->createSelectQuery($param);
+
+        $paramOrder = getOr($param, 'order', null);
+        $orderAllows = ['receipt_date'];
+        $defaultOrder = 'id';
+
+        $order = whiteboxOr($paramOrder, $orderAllows, $defaultOrder);
+        $select->order($order);
+
+        if (isset($param['offset'])) {
+            $select->offset($param['offset']);
+        }
+
+        if (isset($param['limit'])) {
+            $select->limit($param['limit']);
+        }
+
+        return $select->fetchAll();
+    }
+
+    public function getCount($param) {
+        return $this->createSelectQuery($param)
+                     ->fetchCount();
+    }
+
+    /**
      * @param $name_id NameのID
      * @return bool
      */
@@ -48,5 +79,23 @@ class SubscriptionService extends SimpleRestService
         return $model->delete()
                     ->where('entry_id', $name_id)
                     ->execute();
+    }
+
+
+    /**
+     * SqlSelectインスタンスを返却する
+     * @param $param パラメータ
+     * @return SqlSelect インスタンス
+     */
+    private function createSelectQuery($param) {
+
+        $model = $this->createModel();
+        $select = $model->select();
+
+        if (isset($param['entry_id'])) {
+            $select->where('entry_id', $param['entry_id']);
+        }
+
+        return $select;
     }
 }

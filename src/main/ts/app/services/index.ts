@@ -3,6 +3,8 @@ import './receiptTypeStoreService'
 import './nameSearchService'
 import './nameRepositoryService'
 
+import './subscriptionSearchService'
+
 import './checkedNameService'
 
 import './receiptService'
