@@ -26,8 +26,8 @@ class SubscriptionService extends SimpleRestService
         $current_date = date('Y-n-d H:i:s');
         return [
             'entry_id' => '',
-            'send_num' => null,
-            'id_send_item' => 0,
+            'hiroba_num' => null,
+            'focus_num' => null,
             'id_sendtype' => 0,
             'send_govnumber' => '',
             'send_rem' => '',

@@ -19,7 +19,7 @@ class NameAddController extends JsonBaseController
         $params = $this->request->getPost();
 
         $name = isset($params['name']) ? json_decode($params['name']) : null;
-        $subscriptions = isset($params['subscriptions']) ? json_decode($params['subscriptions']) : null;
+        $subscription = isset($params['subscription']) ? json_decode($params['subscription']) : null;
 
         $nameService = $this->service('NameService');
         $subscriptionService = $this->service('SubscriptionService');
@@ -34,14 +34,8 @@ class NameAddController extends JsonBaseController
             $errors += $nameService->validate($name);
         }
 
-        if ($subscriptions !== null && !is_array($subscriptions)) {
-            array_push($errors, 'parameter `subscriptions` is not an array.');
-        }
-
-        if (is_array($subscriptions)) {
-            foreach ($subscriptions as $subs) {
-                $errors += $subscriptionService->validate($subs);
-            }
+        if ($subscription !== null) {
+            $errors += $subscriptionService->validate($subscription);
         }
 
         if (!empty($errors)) {
@@ -53,10 +47,11 @@ class NameAddController extends JsonBaseController
         // $subscriptionService->beginTran(); コネクションは共通のためbegin不要
 
         $id = $nameService->create($name);
-        foreach ($subscriptions as $subs) {
-            $tmp = clone $subs;
+
+        if ($subscription !== null) {
+            $tmp = clone $subscription;
             $tmp->entry_id = $id;
-            $subscriptionService->create($subs);
+            $subscriptionService->create($tmp);
         }
 
         $nameService->commitTran();

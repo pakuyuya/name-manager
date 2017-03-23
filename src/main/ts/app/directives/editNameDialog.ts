@@ -70,8 +70,8 @@ class NameModel {
 class SubscriptionModel {
     public id_sendtype    : string = '';
     public send_govnumber   : string = '';
-    public hirobaNum   : number;
-    public focusNum   : number;
+    public hiroba_num   : number;
+    public focus_num   : number;
 }
 class DlgModel {
     public member_expire_on: Date = null;
@@ -163,7 +163,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
             let name = results[0] as NameResource;
             let subscriptions = (results[1] as SubscriptionSearchResult).datas;
 
-            this.setupInitModels(name, subscriptions);
+            this.setupInitModels(name, (subscriptions.length) ? subscriptions[0] : null);
             this.restoreInitModels();
         });
     }
@@ -271,7 +271,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
     /**
      * 内部の初期状態モデルを構築する
      */
-    private setupInitModels(srcName: NameResource, subscriptions: SubscriptionResource[]) {
+    private setupInitModels(srcName: NameResource, srcSubs: SubscriptionResource) {
         let name = new NameModel();
         name = U.assign(name, srcName);
         name.addresses = JSON.parse(srcName.addresses);
@@ -281,17 +281,15 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
                                ? this.memberTypeStore.getDefault().value  : srcName.id_membertype;
 
         let subscription = new SubscriptionModel();
-        for (let subs of subscriptions) {
-            subscription.id_sendtype = subs.id_sendtype;
-            subscription.send_govnumber = subscription.send_govnumber;
-            switch (subs.id_send_item) {
-                case SendItemType.Hiroba: subscription.hirobaNum = Number(subs.send_num);
-                case SendItemType.Forcus: subscription.focusNum = Number(subs.send_num);
-            }
+        if (srcSubs) {
+            subscription.id_sendtype = srcSubs.id_sendtype;
+            subscription.hiroba_num = Number(srcSubs.hiroba_num);
+            subscription.focus_num = Number(srcSubs.focus_num);
+            subscription.send_govnumber = srcSubs.send_govnumber;
         }
 
         let dlg = new DlgModel();
-        dlg.isMemberable = !!(subscriptions.length) || !this.memberTypeStore.get(srcName.id_membertype).none;
+        dlg.isMemberable = !!(subscription) || !this.memberTypeStore.get(srcName.id_membertype).none;
         dlg.isMatchExpire = name.member_expire_on === name.send_expire_on;
 
         this.initModels =
@@ -300,7 +298,6 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
                 subscription : subscription,
                 dlg : dlg,
             };
-        console.log(this.initModels);
     }
 
     /**
@@ -353,7 +350,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         }
 
         if (this.dlg.isMemberable) {
-            if (this.subscription.hirobaNum === 0 && this.subscription.focusNum === 0) {
+            if (this.subscription.hiroba_num === 0 && this.subscription.focus_num === 0) {
                 this.popupWarning('#addNameDialog_subscription_hirobaNum', '配布対象がありません');
                 result = false;
             }
@@ -386,14 +383,11 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
             throw reason;
         };
 
-        let nameParam = this.createNameParam();
-        let subsHirobaParam = this.createSubscriptionParam(SendItemType.Hiroba, Number(this.subscription.hirobaNum));
-        let subsFocusParam = this.createSubscriptionParam(SendItemType.Forcus, Number(this.subscription.focusNum));
 
 
         let param = {
-            'name' : nameParam,
-            'subscriptions' : [subsHirobaParam, subsFocusParam].filter((d) => d !== null),
+            'name' : this.createNameParam(),
+            'subscriptions' : this.createSubscriptionParam(),
         };
 
         this.nameRepository.save(param)
@@ -463,20 +457,15 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
      * 入力状態からsubscriptionの登録パラメータを作成する
      * @returns {any}
      */
-    private createSubscriptionParam(type: string, num: number) : any {
-        if (!this.dlg.isMemberable || !num)
+    private createSubscriptionParam() : any {
+        if (!this.dlg.isMemberable && this.subscription.hiroba_num > 0 && this.subscription.focus_num > 0)
             return null;
 
-        let id_sendtype = this.subscription.id_sendtype
+        let subscription:any = U.assign({}, this.subscription);
+        subscription.id_membertype = this.subscription.id_sendtype
             || this.memberTypeStore.get(this.name.id_membertype).cd_sendtype;
 
-        return {
-            send_num: num,
-            id_send_item: type,
-            id_sendtype: id_sendtype,
-            send_govnumber: Number(this.subscription.id_sendtype) == 7 ? this.subscription.send_govnumber : '',
-            send_enabled: true,
-        };
+        return subscription;
     }
 
     /**

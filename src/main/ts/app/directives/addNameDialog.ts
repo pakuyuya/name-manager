@@ -67,8 +67,8 @@ class NameModel {
 class SubscriptionModel {
     public id_sendtype    : string = '';
     public send_govnumber   : string = '';
-    public hirobaNum   : number = 1;
-    public focusNum   : number;
+    public hiroba_num   : number = 1;
+    public focus_num   : number;
 }
 class DlgModel {
     public member_expire_on: Date = null;
@@ -296,7 +296,7 @@ export class AddNameDialogDirectiveController
         }
 
         if (this.dlg.isMemberable) {
-            if (this.subscription.hirobaNum === 0 && this.subscription.focusNum === 0) {
+            if (this.subscription.hiroba_num === 0 && this.subscription.focus_num === 0) {
                 this.popupWarning('#addNameDialog_subscription_hirobaNum', '配布対象がありません');
                 result = false;
             }
@@ -329,14 +329,9 @@ export class AddNameDialogDirectiveController
             throw reason;
         };
 
-        let nameParam = this.createNameParam();
-        let subsHirobaParam = this.createSubscriptionParam(SendItemType.Hiroba, Number(this.subscription.hirobaNum));
-        let subsFocusParam = this.createSubscriptionParam(SendItemType.Forcus, Number(this.subscription.focusNum));
-
-
         let param = {
-            'name' : nameParam,
-            'subscriptions' : [subsHirobaParam, subsFocusParam].filter((d) => d !== null),
+            'name' : this.createNameParam(),
+            'subscriptions' : this.createSubscriptionParam(),
         };
 
         this.nameRepository.save(param)
@@ -350,9 +345,6 @@ export class AddNameDialogDirectiveController
             }, onError)
             .finally(() => {
                 this.loading = false;
-                if (failed) {
-                    new this.nameResource({id : name_id}).$remove();
-                }
             });
     }
 
@@ -406,20 +398,17 @@ export class AddNameDialogDirectiveController
      * 入力状態からsubscriptionの登録パラメータを作成する
      * @returns {any}
      */
-    private createSubscriptionParam(type: string, num: number) : any {
-        if (!this.dlg.isMemberable || !num)
+    private createSubscriptionParam() : any {
+        if (!this.dlg.isMemberable)
             return null;
 
-        let id_sendtype = this.subscription.id_sendtype
-            || this.memberTypeStore.get(this.name.id_membertype).cd_sendtype;
+        let subscription:any = U.assign({}, this.subscription);
 
-        return {
-            send_num: num,
-            id_send_item: type,
-            id_sendtype: id_sendtype,
-            send_govnumber: Number(this.subscription.id_sendtype) == 7 ? this.subscription.send_govnumber : '',
-            send_enabled: true,
-        };
+        subscription.id_sendtype = this.subscription.id_sendtype
+            || this.memberTypeStore.get(this.name.id_membertype).cd_sendtype;
+        subscription.send_enabled = true;
+
+        return subscription;
     }
 
     /**

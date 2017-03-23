@@ -5,8 +5,8 @@ import {appName, restApiBaseUrl} from '../constants';
 export interface SubscriptionResource extends ng.resource.IResource<SubscriptionResource> {
     id       : number,
     entry_id : number,
-    send_num : number,
-    id_send_item : string,
+    hiroba_num : number,
+    focus_num : number,
     id_sendtype  : string,
     send_govnumber: string,
     send_rem     : string,
@@ -22,7 +22,8 @@ export function subscriptionFactory($resource: ng.resource.IResourceService) : S
     const url = `${restApiBaseUrl}/subscription/:id`;
     const params = {
         entry_id: '@entry_id',
-        send_num: '@send_num',
+        hiroba_num: '@hiroba_num',
+        focus_num: '@focus_num',
         id_send_item: '@id_send_item',
         id_sendtype : '@id_sendtype',
         send_govnumber: '@send_govnumber',

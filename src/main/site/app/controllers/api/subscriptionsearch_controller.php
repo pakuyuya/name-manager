@@ -46,7 +46,8 @@ class SubscriptionsearchController extends JsonBaseController
 
         $total = $subscriptionService->getCount($params);
         $idxfrom = ($total > 0) ? $params['offset'] : 0;
-        $idxto   = (int)$params['offset'] + count($datas) - 1;
+        $cnt = count($datas);
+        $idxto   = (int)$params['offset'] + $cnt - (($cnt>0) ? 1 : 0);
 
         $this->json = [
             "result" => true,
