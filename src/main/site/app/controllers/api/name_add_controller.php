@@ -18,8 +18,8 @@ class NameAddController extends JsonBaseController
     public function post() {
         $params = $this->request->getPost();
 
-        $name = isset($params['name']) ? json_decode($params['name']) : null;
-        $subscription = isset($params['subscription']) ? json_decode($params['subscription']) : null;
+        $name = isset($params['name']) ? json_decode($params['name'], true) : null;
+        $subscription = isset($params['subscription']) ? json_decode($params['subscription'], true) : null;
 
         $nameService = $this->service('NameService');
         $subscriptionService = $this->service('SubscriptionService');
@@ -40,13 +40,15 @@ class NameAddController extends JsonBaseController
 
         if (!empty($errors)) {
             $this->setErrorResponse(403, $errors);
-            exit();
+            return;
         }
 
         $nameService->beginTran();
         // $subscriptionService->beginTran(); コネクションは共通のためbegin不要
 
-        $id = $nameService->create($name);
+        $safeName = $nameService->field_json_encode($name);
+
+        $id = $nameService->create($safeName);
 
         if ($subscription !== null) {
             $tmp = clone $subscription;

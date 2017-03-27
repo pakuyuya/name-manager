@@ -5,21 +5,20 @@ Loader::loadLibrary('ValidatorEx');
 
 /**
  * 名簿更新API
- * @author pak
  */
-class NameAddController extends JsonBaseController
+class NameUpdateController extends JsonBaseController
 {
     public function __construct() {
     }
 
     /**
-     * GET request
+     * POST request
      */
-    public function index() {
-        $params = $this->request->getQuery();
+    public function post() {
+        $params = $this->request->getPost();
 
-        $name = isset($params['name']) ? json_decode($params['name']) : null;
-        $subscription = isset($params['subscription']) ? json_decode($params['subscription']) : null;
+        $name = isset($params['name']) ? json_decode($params['name'], true) : null;
+        $subscription = isset($params['subscription']) ? json_decode($params['subscription'], true) : null;
 
         $nameService = $this->service('NameService');
         $subscriptionService = $this->service('SubscriptionService');
@@ -30,7 +29,7 @@ class NameAddController extends JsonBaseController
         if (!$name) {
             array_push($errors, 'parameter `name` required.');
         }
-        if ($name && isset($name['id'])) {
+        if ($name && !isset($name['id'])) {
             array_push($errors, 'parameter `id` required.');
         }
         if ($name) {
@@ -43,15 +42,17 @@ class NameAddController extends JsonBaseController
 
         if (!empty($errors)) {
             $this->setErrorResponse(403, $errors);
-            exit();
+            return;
         }
 
         $id = $name['id'];
 
-        $nameService->begin();
+        $nameService->beginTran();
 //        $subscriptionService->begin();
 
-        $nameService->update($id, $name);
+        $safeName = $nameService->field_json_encode($name);
+
+        $nameService->update($id, $safeName);
         $subscriptionService->deleteByNameId($id);
 
         if ($subscription !== null) {
@@ -60,7 +61,16 @@ class NameAddController extends JsonBaseController
             $subscriptionService->create($tmp);
         }
 
-        $nameService->commit();
+        $nameService->commitTran();
 //        $subscriptionService->commit();
+
+        $this->setJson(
+            [
+                'result' => true,
+                'data' => [
+                    'id' => $id
+                ]
+            ]
+        );
     }
 }

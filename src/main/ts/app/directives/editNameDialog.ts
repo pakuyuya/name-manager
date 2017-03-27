@@ -43,6 +43,7 @@ interface Models {
     dlg : DlgModel;
 }
 class NameModel {
+    public id : string = '';
     public name_e     : string = '';
     public name_j     : string = '';
     public name_k     : string = '';
@@ -383,20 +384,18 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
             throw reason;
         };
 
-
-
         let param = {
             'name' : this.createNameParam(),
             'subscriptions' : this.createSubscriptionParam(),
         };
 
-        this.nameRepository.save(param)
+        this.nameRepository.update(param)
             .then((response) => {
                 name_id = response.id;
                 return this.createReceiptResource(name_id, this.name.id_membertype);
             })
             .then(() => {
-                Toast.push(`連絡先を登録しました。（登録番号 : ${name_id}）`);
+                Toast.push(`連絡先を更新しました。（登録番号 : ${name_id}）`);
                 this.forceClose();
             }, onError)
             .finally(() => {
