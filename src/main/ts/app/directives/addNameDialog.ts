@@ -353,7 +353,7 @@ export class AddNameDialogDirectiveController
      * @returns {any}
      */
     private createNameParam() : any {
-        let name: NameResource = U.assign(this.name, {}) as any;
+        let name: NameResource = U.cloneDeep(this.name) as any;
 
         // ラベル用の名前作成
         const sendNameIndex: SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);

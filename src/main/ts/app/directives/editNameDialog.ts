@@ -274,10 +274,14 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
      */
     private setupInitModels(srcName: NameResource, srcSubs: SubscriptionResource) {
         let name = new NameModel();
-        name = U.assign(name, srcName);
-        name.addresses = JSON.parse(srcName.addresses);
-        name.mails = JSON.parse(srcName.mails);
-        name.tels = JSON.parse(srcName.tels);
+
+
+        name = U.assignExcludes(name, srcName, ['addresses', 'mails', 'tels']);
+
+        name.addresses = U.assign(name.addresses, JSON.parse(srcName.addresses));
+        name.mails = U.assign(name.mails, JSON.parse(srcName.mails));
+        name.tels = U.assign(name.tels, JSON.parse(srcName.tels));
+
         name.id_membertype = (this.memberTypeStore.get(srcName.id_membertype).none)
                                ? this.memberTypeStore.getDefault().value  : srcName.id_membertype;
 
@@ -411,7 +415,8 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
      * @returns {any}
      */
     private createNameParam() : any {
-        let name: NameResource = U.assign(this.name, {}) as any;
+        console.log(this.name);
+        let name: NameResource = U.cloneDeep(this.name) as any;
 
         // ラベル用の名前作成
         const sendNameIndex: SendNameIndexDto = this.sendNameIndexStore.get(this.name.send_name_index);

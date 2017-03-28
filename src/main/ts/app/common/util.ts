@@ -78,9 +78,89 @@ export function safeJsonPost(param) {
     return JSON.stringify(param);
 }
 
+/**
+ * 浅いクローン
+ * @param org
+ * @return クローンしたオブジェクト
+ */
+export function clone(arg:any) :any {
+    if (Array.isArray(arg)) {
+        return cloneArray(arg);
+    }
+
+    var type = typeof arg;
+    return (arg == null || (type != "object" && type != "function")) ? arg : cloneObj(arg);
+}
+
+/**
+ * 浅い配列クローン
+ * @param org
+ * @return クローンしたオブジェクト
+ */
+export function cloneArray(arg:any):any {
+    return arg !== null ? [].concat(arg) : null;
+}
+
+/**
+ * 浅いオブジェクトクローン
+ * @param org
+ * @return クローンしたオブジェクト
+ */
+export function cloneObj(arg:any):any {
+    let o = {};
+    for (let k in arg) {
+        o[k] = arg[k]
+    }
+    return o ;
+}
+
+/**
+ * 深いクローン
+ * @param org
+ * @return クローンしたオブジェクト
+ */
+export function cloneDeep(arg:any):any {
+    if (Array.isArray(arg)) {
+        return cloneArrayDeep(arg);
+    }
+
+    var type = typeof arg;
+    return (arg == null || (type != "object" && type != "function")) ? arg : cloneObjDeep(arg);
+}
+
+/**
+ * 深い配列クローン
+ * @param org
+ * @return クローンしたオブジェクト
+ */
+export function cloneArrayDeep(arg:any):any {
+    return arg.map(q => cloneDeep(q));
+}
+
+/**
+ * @param org
+ * @return クローンしたオブジェクト
+ */
+export function cloneObjDeep(arg:any):any {
+    let o = {};
+    for (let k in arg) {
+        o[k] = cloneDeep(arg[k]);
+    }
+    return o;
+}
+
 export function assign<T, U>(target: T, source: U): T {
     for (let id in source) {
         target[id] = source[id];
+    }
+    return target;
+}
+
+export function assignExcludes<T, U>(target:T, source:U, excludes:string[]):T {
+    for (let id in source) {
+        if (!excludes.find(e => e === id)) {
+            target[id] = source[id];
+        }
     }
     return target;
 }
