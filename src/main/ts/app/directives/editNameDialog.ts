@@ -393,6 +393,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
         };
 
         this.nameRepository.update(param)
+            .catch(onError)
             .then((response) => {
                 name_id = response.id;
                 return this.createReceiptResource(name_id, this.name.id_membertype);
@@ -411,7 +412,6 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
      * @returns {any}
      */
     private createNameParam() : any {
-        console.log(this.name);
         let name: NameResource = U.cloneDeep(this.name) as any;
 
         // ラベル用の名前作成
