@@ -14,7 +14,7 @@ import IPromise = angular.IPromise;
  */
 export class NameSearchService {
     constructor(private $http:IHttpService, private $q:IQService,
-                 private CheckedName:CheckedNameService, private MemberTypeStore:MemberTypeStoreService) {
+                 private checkedName:CheckedNameService, private memberTypeStore:MemberTypeStoreService) {
     }
 
     /**
@@ -29,7 +29,7 @@ export class NameSearchService {
 
         this.$http.get(url, {params : query})
             .error((data) => { deferred.reject(data); })
-            .success(function(json: any, status, headers, config){
+            .success((json: any, status, headers, config) => {
                 if (!json.result) {
                     throw new Error(`${url} don't responsed { result : true } at NameSearchService.query() `);
                 }
@@ -39,8 +39,8 @@ export class NameSearchService {
                             (value : any) =>
                                 new NameSearchDto(
                                     value.id,
-                                    self.CheckedName.contains(value.id),
-                                    value.membertype,
+                                    self.checkedName.contains(value.id),
+                                    this.memberTypeStore.get(value.id_membertype).name,
                                     value.name_e,
                                     value.name_j,
                                     value.member_expire_on
@@ -64,12 +64,13 @@ export class NameSearchDto {
     constructor(
         public id: string,
         public checked: boolean,
-        public memberLabel: string,
+        public membertype: string,
         public name_e: string,
         public name_j: string,
         public expire_on: string
     ) {}
 }
+
 /**
  * NamseServiceの取得結果；
  */
@@ -82,5 +83,5 @@ export class NameSearchResult {
 
 angular.module(appName).factory('NameSearch',
     ['$http', '$q', 'CheckedName', 'MemberTypeStore',
-        ($http, $q, CheckedName, MemberTypeStore) =>
-            new NameSearchService($http, $q, CheckedName, MemberTypeStore)]);
+        ($http, $q, checkedName, memberTypeStore) =>
+            new NameSearchService($http, $q, checkedName, memberTypeStore)]);

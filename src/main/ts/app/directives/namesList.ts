@@ -5,7 +5,6 @@ import {appName} from '../constants';
 import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
 import {createShowPages} from '../common/common';
 import * as U from '../common/util';
-import {MemberTypeStoreService} from "../services/memberTypeStoreService";
 
 export class NamesListDirectiveController {
     datas: Array<any> = [];
@@ -20,7 +19,7 @@ export class NamesListDirectiveController {
 
     reloading : boolean = false;
 
-    constructor(private nameSearch: NameSearchService, private memberTypeStore: MemberTypeStoreService) {
+    constructor(private nameSearch: NameSearchService) {
         this.datas = [];
         this.search();
     }
@@ -73,11 +72,7 @@ export class NamesListDirectiveController {
                 this.idxfrom = greeting.idxfrom;
                 this.idxto = greeting.idxto;
                 this.total = greeting.total;
-                this.datas = greeting.datas.map(data => {
-                    let d = U.clone(data);
-                    d.membertype_name = this.memberTypeStore.get(d.membertype_id).name;
-                    return d;
-                });
+                this.datas = greeting.datas;
 
                 this.crtPage = ~~(this.idxfrom / this.rowInPage) + 1;
                 this.showPages = createShowPages(this.idxfrom, this.total, 5, this.rowInPage)
@@ -90,7 +85,7 @@ export class NamesListDirectiveController {
 
 export class NamesListDirective {
     restrict = 'E';
-    controller = ['NameSearch', 'MemberTypeStore', NamesListDirectiveController];
+    controller = ['NameSearch', NamesListDirectiveController];
     controllerAs = 'namesList';
     replace = true;
 };

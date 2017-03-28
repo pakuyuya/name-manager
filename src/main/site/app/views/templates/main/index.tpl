@@ -108,7 +108,7 @@
                                         <div class="p-names-clip">
                                             <input type="checkbox" ng-model="name.checked">
                                         </div>
-                                        <div class="p-names-mem">{{ name.membertype_name }}</div>
+                                        <div class="p-names-mem">{{ name.membertype }}</div>
                                         <div class="p-names-name">{{ name.name_e }} / {{ name.name_j }}</div>
                                         <div class="p-names-expr">{{ name.expire_on }}</div>
                                         <div class="p-names-edit">

@@ -7,7 +7,7 @@ export module Toast {
     let _timeout = null;
 
     let _config = {
-        duration : 10000,
+        duration : 100000,
     };
 
     export function setConfig(config : any) {
