@@ -275,7 +275,6 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
     private setupInitModels(srcName: NameResource, srcSubs: SubscriptionResource) {
         let name = new NameModel();
 
-
         name = U.assignExcludes(name, srcName, ['addresses', 'mails', 'tels']);
 
         name.addresses = U.assign(name.addresses, JSON.parse(srcName.addresses));
@@ -404,9 +403,6 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
             }, onError)
             .finally(() => {
                 this.loading = false;
-                if (failed) {
-                    new this.nameResource({id : name_id}).$remove();
-                }
             });
     }
 
