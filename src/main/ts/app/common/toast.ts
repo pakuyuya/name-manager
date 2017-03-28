@@ -7,7 +7,7 @@ export module Toast {
     let _timeout = null;
 
     let _config = {
-        duration : 100000,
+        duration : 10000,
     };
 
     export function setConfig(config : any) {
@@ -78,5 +78,6 @@ export module Toast {
         }
 
         _$toast.remove();
+        _$toast = null;
     }
 }
