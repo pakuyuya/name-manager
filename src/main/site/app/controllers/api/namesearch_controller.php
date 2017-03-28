@@ -41,24 +41,12 @@ class NamesearchController extends JsonBaseController
         }
 
         $svName = $this->service('NameService');
-        $svMemberType = $this->service('MemberTypeService');
 
 
         $params['offset'] = (int)getOr($params, 'offset', 0);
         $params['limit'] = (int)getOr($params, 'limit', 20);
 
         $datas = $svName->find($params);
-
-        $memberTypes = $svMemberType->findAll();
-        foreach ($datas as $idx => $data) {
-            $data['member_type'] = '';
-            foreach ($memberTypes as $memberType) {
-                if ($memberType['value'] === ($data['id_membertype'] . '')) {
-                    $datas[$idx]['membertype'] = $memberType['name'];
-                    break;
-                }
-            }
-        }
 
         $total = $svName->getCount($params);
         $idxfrom = ($total > 0) ? $params['offset'] : 0;

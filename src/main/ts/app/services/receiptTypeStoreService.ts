@@ -33,7 +33,7 @@ export class ReceiptTypeStoreService {
 
     public get(value: string) : ReceiptTypeDto {
         let model = store.find((define) => define.value === value);
-        return model || null;
+        return model || this.getNone();
     }
 
     public getNone() : ReceiptTypeDto {
@@ -57,7 +57,7 @@ export class ReceiptTypeStoreService {
     public refleshStore() : angular.IPromise<ReceiptTypeDto[]> {
         return queryPromise = this.$q((resolve, reject) => {
             store = [
-                {name: 'なし', value: '0', none: true, def: false,},
+                {name: '－', value: '0', none: true, def: false,},
                 {name: '会費', value: '1', none: false, def: true,},
                 {name: '購読', value: '2', none: false, def: false,},
             ];

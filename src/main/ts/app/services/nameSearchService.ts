@@ -43,7 +43,7 @@ export class NameSearchService {
                                     value.membertype,
                                     value.name_e,
                                     value.name_j,
-                                    value.send_expire_on
+                                    value.member_expire_on
                                 )
                         ),
                         idxfrom : ~~(json.idxfrom),

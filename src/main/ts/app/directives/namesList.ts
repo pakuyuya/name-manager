@@ -5,6 +5,7 @@ import {appName} from '../constants';
 import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
 import {createShowPages} from '../common/common';
 import * as U from '../common/util';
+import {MemberTypeStoreService} from "../services/memberTypeStoreService";
 
 export class NamesListDirectiveController {
     datas: Array<any> = [];
@@ -19,7 +20,7 @@ export class NamesListDirectiveController {
 
     reloading : boolean = false;
 
-    constructor(private NameSearch: NameSearchService) {
+    constructor(private nameSearch: NameSearchService, private memberTypeStore: MemberTypeStoreService) {
         this.datas = [];
         this.search();
     }
@@ -67,12 +68,16 @@ export class NamesListDirectiveController {
             query.offset = offset;
         }
 
-        this.NameSearch.query(query)
+        this.nameSearch.query(query)
             .then((greeting : NameSearchResult) => {
                 this.idxfrom = greeting.idxfrom;
                 this.idxto = greeting.idxto;
                 this.total = greeting.total;
-                this.datas = greeting.datas;
+                this.datas = greeting.datas.map(data => {
+                    let d = U.clone(data);
+                    d.membertype_name = this.memberTypeStore.get(d.membertype_id).name;
+                    return d;
+                });
 
                 this.crtPage = ~~(this.idxfrom / this.rowInPage) + 1;
                 this.showPages = createShowPages(this.idxfrom, this.total, 5, this.rowInPage)
@@ -85,7 +90,7 @@ export class NamesListDirectiveController {
 
 export class NamesListDirective {
     restrict = 'E';
-    controller = ['NameSearch', NamesListDirectiveController];
+    controller = ['NameSearch', 'MemberTypeStore', NamesListDirectiveController];
     controllerAs = 'namesList';
     replace = true;
 };

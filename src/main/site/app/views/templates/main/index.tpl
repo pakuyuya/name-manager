@@ -44,10 +44,10 @@
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box">
-                                <h3 class="p-search-condition-label">配布期限</h3>
-                                <input type="search" class="ui-date" pattern="^\d{1,4}/\d{1,2}/\d{1,2}$" ng-model="namesList.query.send_expire_from" />
+                                <h3 class="p-search-condition-label">会員期限</h3>
+                                <input type="search" class="ui-date" pattern="^\d{1,4}/\d{1,2}/\d{1,2}$" ng-model="namesList.query.member_expire_from" />
                                 ～
-                                <input type="search" class="ui-date" pattern="^\d{1,4}/\d{1,2}/\d{1,2}$" ng-model="namesList.query.send_expire_to" />
+                                <input type="search" class="ui-date" pattern="^\d{1,4}/\d{1,2}/\d{1,2}$" ng-model="namesList.query.member_expire_to" />
                             </div>
                             <span class="u-vert-sep"></span>
                             <div class="p-search-condition-box u-right u-text-m">
@@ -108,7 +108,7 @@
                                         <div class="p-names-clip">
                                             <input type="checkbox" ng-model="name.checked">
                                         </div>
-                                        <div class="p-names-mem">{{ name.memberLabel }}</div>
+                                        <div class="p-names-mem">{{ name.membertype_name }}</div>
                                         <div class="p-names-name">{{ name.name_e }} / {{ name.name_j }}</div>
                                         <div class="p-names-expr">{{ name.expire_on }}</div>
                                         <div class="p-names-edit">

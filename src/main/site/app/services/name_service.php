@@ -35,7 +35,6 @@ class NameService extends SimpleRestService {
             'member_name' => '',
             'member_rem' =>  '',
             'member_expire_on' => null,
-            'send_expire_on' => null,
             'id_term' => '0',
             'label' => '',
             'create_at' => $current_date,
@@ -105,14 +104,14 @@ class NameService extends SimpleRestService {
             $select->whereIn('id_membertype', $member_type_id);
         }
 
-        if (!empty($param['send_expire_from'])) {
-            $send_expire_from = toSqlDate($param['send_expire_from']);
-            $select->whereGe('send_expire_on', $send_expire_from);
+        if (!empty($param['member_expire_from'])) {
+            $member_expore_from = toSqlDate($param['member_expire_from']);
+            $select->whereGe('member_expire_on', $member_expore_from);
         }
 
-        if (!empty($param['send_expire_to'])) {
-            $send_expire_to = toSqlDate($param['send_expire_to']);
-            $select->whereLe('send_expire_on', $send_expire_to);
+        if (!empty($param['member_expire_to'])) {
+            $member_expire_to = toSqlDate($param['member_expire_to']);
+            $select->whereLe('member_expire_on', $member_expire_to);
         }
 
         return $select;

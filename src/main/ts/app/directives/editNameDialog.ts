@@ -64,8 +64,7 @@ class NameModel {
     public id_membertype  : string = '0';
     public id_director: string = '0';
     public member_name  : string = '';
-    public member_expire_on : string = '';
-    public send_expire_on : string = '';
+    public member_expire_on : string = null;
     public receipted_on  : string = '';
 }
 class SubscriptionModel {
@@ -76,10 +75,8 @@ class SubscriptionModel {
 }
 class DlgModel {
     public member_expire_on: Date = null;
-    public send_expire_on: Date = null;
     public receipted_on: Date = null;
     public isMemberable:boolean = false;
-    public isMatchExpire:boolean = true;
     public confirmed:boolean = false;
 }
 
@@ -294,7 +291,6 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
 
         let dlg = new DlgModel();
         dlg.isMemberable = !!(subscription) || !this.memberTypeStore.get(srcName.id_membertype).none;
-        dlg.isMatchExpire = name.member_expire_on === name.send_expire_on;
 
         this.initModels =
             <Models>{
@@ -392,6 +388,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
             'subscriptions' : this.createSubscriptionParam(),
         };
 
+        console.log(param);
         this.nameRepository.update(param)
             .catch(onError)
             .then((response:any) => {
@@ -434,20 +431,14 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
 
         if (this.dlg.isMemberable) {
             // 会員の場合に補正
-            this.name.member_expire_on = (this.dlg.member_expire_on)
+            name.member_expire_on = (this.dlg.member_expire_on)
                 ? U.dateToSQLString(this.dlg.member_expire_on)
                 : null;
-
-            this.name.send_expire_on = (this.dlg.isMatchExpire)
-                ? this.name.member_expire_on
-                : U.dateToSQLString(this.dlg.send_expire_on);
-
         } else {
             // 会員ではない場合に補正
             name.id_membertype = this.memberTypeStore.getNone().value;
             name.member_name = '';
             name.member_expire_on = null;
-            name.send_expire_on = null;
         }
 
         return name;

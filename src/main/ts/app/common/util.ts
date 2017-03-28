@@ -195,8 +195,24 @@ export function isString(json: any):any {
     return typeof json === 'string';
 }
 
+export function leftPad(text: string, len:number, pad: string): string {
+    if (!pad.length) {
+        return text;
+    }
+    for (let i=text.length,step=pad.length; i<len; i += step) {
+        text = pad + text;
+    }
+    return text.substr(0, len);
+}
+
 export function dateToSQLString(date: Date) : string {
-    return date ? `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}` : null;
+    if (date) {
+        return leftPad(date.getFullYear().toString(), 4, '0')
+            + '-' + leftPad((date.getMonth() + 1).toString(), 2, '0')
+            + '-' + leftPad(date.getDate().toString(), 2, '0');
+    } else {
+        return null;
+    }
 }
 
 export function isPrimitive(obj: any) : boolean {

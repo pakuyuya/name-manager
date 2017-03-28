@@ -199,7 +199,7 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員期限</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" id="addNameDialog_dlg.member_expire_on" ng-model="addNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />
+                            <input type="date" class="size-m" id="addNameDialog_dlg_member_expire_on" ng-model="addNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />
                             <button type="button" ng-click="addNameDialog.calcMemberExpire()">自動計算</button>
                             （※未記入で無制限）
                         </td>
@@ -234,13 +234,6 @@
                         <th class="c-field-head" colspan="4">Focus　部数</th>
                         <td class="c-field-data" colspan="12">
                             <input type="number" id="addNameDialog_subcription_focus_num" ng-model="addNameDialog.subscription.focus_num" class="size-m u-16p1 u-right" min="0" max="999" >
-                        </td>
-                    </tr>
-                    <tr class="c-field-row">
-                        <th class="c-field-head" colspan="4">配布期限</th>
-                        <td class="c-field-data" colspan="12">
-                            <label><input type="checkbox" ng-model="addNameDialog.dlg.isMatchExpire">会員期限と同様</label>
-                            <input type="date" class="size-m" id="addNameDialog_dlg.send_expire_on" ng-model="addNameDialog.dlg.send_expire_on" ng-disabled="addNameDialog.dlg.isMatchExpire">
                         </td>
                     </tr>
                 </table>

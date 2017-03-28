@@ -60,9 +60,9 @@ class NameModel {
     public id_membertype  : string = '1';
     public id_director: string = '0';
     public member_name  : string = '';
-    public member_expire_on : string = '';
-    public send_expire_on : string = '';
-    public receipted_on  : string = '';
+    public member_expire_on : string = null;
+    public send_expire_on : string = null;
+    public receipted_on  : string = null;
 }
 class SubscriptionModel {
     public id_sendtype    : string = '';
@@ -376,21 +376,18 @@ export class AddNameDialogDirectiveController
 
         if (this.dlg.isMemberable) {
             // 会員の場合に補正
-            this.name.member_expire_on = (this.dlg.member_expire_on)
+            name.member_expire_on = (this.dlg.member_expire_on)
                 ? U.dateToSQLString(this.dlg.member_expire_on)
                 : null;
-
-            this.name.send_expire_on = (this.dlg.isMatchExpire)
-                ? this.name.member_expire_on
-                : U.dateToSQLString(this.dlg.send_expire_on);
 
         } else {
             // 会員ではない場合に補正
             name.id_membertype = this.memberTypeStore.getNone().value;
             name.member_name = '';
             name.member_expire_on = null;
-            name.send_expire_on = null;
         }
+
+        console.log(name);
 
         return name;
     }

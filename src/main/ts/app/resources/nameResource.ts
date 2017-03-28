@@ -30,7 +30,6 @@ export interface NameResource extends ng.resource.IResource<NameResource> {
     member_name     : string;
     member_rem      : string;
     member_expire_on: string;
-    send_expire_on  : string;
     term_id         : number;
     term            : string;
 
