@@ -70,7 +70,8 @@
                                 <!-- ページング -->
                                 <div class="p-list-head u-flex">
                                     <div class="p-pagecnt u-p20 u-text-m">
-                                        {{namesList.total}} 件中 {{namesList.idxfrom + 1}}-{{namesList.idxto + 1}}件
+                                        <span ng-if="namesList.total > 0">{{namesList.total}} 件中 {{namesList.idxfrom + 1}}-{{namesList.idxto + 1}}件</span>
+                                        <span ng-if="namesList.total === 0">0 件</span>
                                     </div>
                                     <div class="p-paging u-p45 u-text-l">
                                         <a href="#" class="p-paging-left" ng-if="namesList.hasPrev()" ng-click="namesList.prevPage()">前の20件</a>

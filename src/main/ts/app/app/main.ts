@@ -16,6 +16,7 @@ import '../directives/index';
 
 import {NamesListDirectiveController} from '../directives/namesList';
 import {AddNameDialogDirectiveController} from '../directives/addNameDialog';
+import {EditNameDialogDirectiveController} from "../directives/editNameDialog";
 import {MemberTypeStoreService} from '../services/memberTypeStoreService';
 
 app.controller('HeaderCtrl', ['$scope', function($scope){
@@ -32,7 +33,9 @@ class MainController {
         setTimeout(() => {
             const ctlNamesList = $scope.namesList as NamesListDirectiveController;
             const ctlAddNameDialog = $scope.addNameDialog as AddNameDialogDirectiveController;
-            ctlAddNameDialog.subscribe('closed', () => ctlNamesList.search());
+            const ctlEditNameDialog = $scope.editNameDialog as EditNameDialogDirectiveController;
+            ctlAddNameDialog.subscribe('closed', () => ctlNamesList.serachWithStay());
+            ctlEditNameDialog.subscribe('closed', () => ctlNamesList.serachWithStay());
         }, 0);
     }
     public selectedNum = 0;

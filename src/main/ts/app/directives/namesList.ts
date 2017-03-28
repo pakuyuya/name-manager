@@ -32,6 +32,10 @@ export class NamesListDirectiveController {
         this.reload();
     }
 
+    public serachWithStay() {
+        this.reload(this.idxfrom);
+    }
+
     public prevPage() {
         this.reload(this.idxfrom - this.rowInPage);
     }
