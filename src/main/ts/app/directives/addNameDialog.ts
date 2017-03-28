@@ -387,8 +387,6 @@ export class AddNameDialogDirectiveController
             name.member_expire_on = null;
         }
 
-        console.log(name);
-
         return name;
     }
 
