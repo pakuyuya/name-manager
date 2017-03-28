@@ -81,9 +81,6 @@ export module Tips{
 
 
     function setTipsOnTarget($tips : JQuery, $target : JQuery){
-
-        var tgtOffset = $target.offset();
-
         // 非表示のダミーDOMを作成し、BODYに追加することで、一度サイズを計算させる
         var $dmy = $('<div>').css({opacity: 0, position: 'absolute', top:0, height:0});
         $dmy.append($tips);

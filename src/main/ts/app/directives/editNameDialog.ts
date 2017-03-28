@@ -337,21 +337,21 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
 
         // 名
         if (this.name.send_name_index === 'e' && this.name.name_e === '') {
-            this.popupWarning('#addNameDialog_name_e', '住所ラベル用の連絡先は必須です');
+            this.popupWarning('#editNameDialog_name_e', '住所ラベル用の連絡先は必須です');
             result = false;
         }
         if (this.name.send_name_index === 'j' && this.name.name_j === '') {
-            this.popupWarning('#addNameDialog_name_j', '住所ラベル用の連絡先は必須です');
+            this.popupWarning('#editNameDialog_name_j', '住所ラベル用の連絡先は必須です');
             result = false;
         }
         if (this.name.send_name_index === 'k' && this.name.name_k === '') {
-            this.popupWarning('#addNameDialog_name_k', '住所ラベル用の連絡先は必須です');
+            this.popupWarning('#editNameDialog_name_k', '住所ラベル用の連絡先は必須です');
             result = false;
         }
 
         if (this.dlg.isMemberable) {
             if (this.subscription.hiroba_num === 0 && this.subscription.focus_num === 0) {
-                this.popupWarning('#addNameDialog_subscription_hirobaNum', '配布対象がありません');
+                this.popupWarning('#editNameDialog_subscription_hirobaNum', '配布対象がありません');
                 result = false;
             }
         }

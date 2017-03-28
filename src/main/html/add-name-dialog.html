@@ -178,10 +178,10 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員種別</th>
                         <td class="c-field-data" colspan="12">
-                            <label class="c-widelabel"><input type="radio" value="1" ng-model="addNameDialog.name.id_membertype" required>個人会員</label>
-                            <label class="c-widelabel"><input type="radio" value="2" ng-model="addNameDialog.name.id_membertype" required>団体会員</label>
-                            <label class="c-widelabel"><input type="radio" value="3" ng-model="addNameDialog.name.id_membertype" required>賛助会員</label>
-                            <label class="c-widelabel"><input type="radio" value="4" ng-model="addNameDialog.name.id_membertype" required>購読</label>
+                            <label class="c-widelabel"><input type="radio" value="1" id="addNameDialog_name_id_member" ng-model="addNameDialog.name.id_membertype" required>個人会員</label>
+                            <label class="c-widelabel"><input type="radio" value="2" ng-model="addNameDialog.name.id_membertype">団体会員</label>
+                            <label class="c-widelabel"><input type="radio" value="3" ng-model="addNameDialog.name.id_membertype">賛助会員</label>
+                            <label class="c-widelabel"><input type="radio" value="4" ng-model="addNameDialog.name.id_membertype">購読</label>
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -217,10 +217,10 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">ひろば発送区分</th>
                         <td class="c-field-data" colspan="12">
-                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.id_sendtype" value="">会員種別と同じ</label>
-                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.id_sendtype" value="5">大口</label>
-                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.id_sendtype" value="6">寄贈</label>
-                            <label class="c-widelabel"><input type="radio" ng-model="addNameDialog.subscription.id_sendtype" value="7">府市</label>
+                            <label class="c-widelabel"><input type="radio" value="" id="addNameDialog_subscription_id_sendtype" ng-model="addNameDialog.subscription.id_sendtype" required>会員種別と同じ</label>
+                            <label class="c-widelabel"><input type="radio" value="5" ng-model="addNameDialog.subscription.id_sendtype">大口</label>
+                            <label class="c-widelabel"><input type="radio" value="6" ng-model="addNameDialog.subscription.id_sendtype">寄贈</label>
+                            <label class="c-widelabel"><input type="radio" value="7" ng-model="addNameDialog.subscription.id_sendtype">府市</label>
                             <input type="text" ng-model="addNameDialog.subscription.send_govnumber" class="size-m u-16p2" id="addNameDialog_subscription_send_govnumber" ng-disabled="addNameDialog.subscription.id_sendtype!=7" required />
                         </td>
                     </tr>

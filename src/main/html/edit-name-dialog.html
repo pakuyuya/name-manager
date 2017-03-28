@@ -181,10 +181,10 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員種別</th>
                         <td class="c-field-data" colspan="12">
-                            <label class="c-widelabel"><input type="radio" value="1" ng-model="editNameDialog.name.id_membertype" required>個人会員</label>
-                            <label class="c-widelabel"><input type="radio" value="2" ng-model="editNameDialog.name.id_membertype" required>団体会員</label>
-                            <label class="c-widelabel"><input type="radio" value="3" ng-model="editNameDialog.name.id_membertype" required>賛助会員</label>
-                            <label class="c-widelabel"><input type="radio" value="4" ng-model="editNameDialog.name.id_membertype" required>購読</label>
+                            <label class="c-widelabel"><input type="radio" id="editNameDialog_name_id_membertype" value="1" ng-model="editNameDialog.name.id_membertype" required>個人会員</label>
+                            <label class="c-widelabel"><input type="radio" value="2" ng-model="editNameDialog.name.id_membertype">団体会員</label>
+                            <label class="c-widelabel"><input type="radio" value="3" ng-model="editNameDialog.name.id_membertype">賛助会員</label>
+                            <label class="c-widelabel"><input type="radio" value="4" ng-model="editNameDialog.name.id_membertype">購読</label>
                         </td>
                     </tr>
                     <tr class="c-field-row">
@@ -202,7 +202,7 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">会員期限</th>
                         <td class="c-field-data" colspan="8">
-                            <input type="date" class="size-m" id="editNameDialog_dlg.member_expire_on" ng-model="editNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />
+                            <input type="date" class="size-m" id="editNameDialog_dlg_member_expire_on" ng-model="editNameDialog.dlg.member_expire_on" placeholder="yyyy/mm/dd" required />
                             <button type="button" ng-click="editNameDialog.calcMemberExpire()">自動計算</button>
                             （※未記入で無制限）
                         </td>
@@ -220,10 +220,10 @@
                     <tr class="c-field-row">
                         <th class="c-field-head" colspan="4">ひろば発送区分</th>
                         <td class="c-field-data" colspan="12">
-                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="">会員種別と同じ</label>
-                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="5">大口</label>
-                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="6">寄贈</label>
-                            <label class="c-widelabel"><input type="radio" ng-model="editNameDialog.subscription.id_sendtype" value="7">府市</label>
+                            <label class="c-widelabel"><input type="radio" value="" ng-model="editNameDialog.subscription.id_sendtype" id="editNameDialog.subscription_id_sendtype" required>会員種別と同じ</label>
+                            <label class="c-widelabel"><input type="radio" value="5" ng-model="editNameDialog.subscription.id_sendtype">大口</label>
+                            <label class="c-widelabel"><input type="radio" value="6" ng-model="editNameDialog.subscription.id_sendtype">寄贈</label>
+                            <label class="c-widelabel"><input type="radio" value="7" ng-model="editNameDialog.subscription.id_sendtype">府市</label>
                             <input type="text" ng-model="editNameDialog.subscription.send_govnumber" class="size-m u-16p2" id="editNameDialog_subscription_send_govnumber" ng-disabled="editNameDialog.subscription.id_sendtype!=7" required />
                         </td>
                     </tr>
