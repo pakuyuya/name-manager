@@ -336,7 +336,7 @@ export class AddNameDialogDirectiveController
 
         this.nameRepository.save(param)
             .catch(onError)
-            .then((response) => {
+            .then((response:any) => {
                 name_id = response.id;
                 return this.createReceiptResource(name_id, this.name.id_membertype);
             })

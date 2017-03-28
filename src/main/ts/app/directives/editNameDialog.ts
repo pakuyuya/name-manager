@@ -394,7 +394,7 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
 
         this.nameRepository.update(param)
             .catch(onError)
-            .then((response) => {
+            .then((response:any) => {
                 name_id = response.id;
                 return this.createReceiptResource(name_id, this.name.id_membertype);
             })
@@ -484,6 +484,46 @@ implements FormUtilSupport, DialogSupportController, Subscribable {
             receipt_rem: '',
         });
     }
+
+    /**
+     * 削除ボタンが押下
+     */
+    public tryRemove() {
+
+        Dialog.show({
+            text: 'この名簿情報を削除しますか？',
+            buttons: {ok: 'OK', ng: 'Cancel'},
+            fixed : false,
+            callback: (id) => {
+                if (id === 'ok') {
+                    this.remove();
+                }
+            }
+        });
+    }
+
+    public remove() {
+        this.loading = true;
+
+        var onError = (reason) => {
+            this.loading = false;
+            console.error(reason);
+            systemUI.systemErr();
+            throw reason;
+        };
+
+        new this.nameResource(this.name)
+            .$remove()
+            .catch(onError)
+            .then(() => {
+                Toast.push(`連絡先を削除しました。（登録番号 : ${this.name.id}）`);
+                this.forceClose();
+            }, onError)
+            .finally(() => {
+                this.loading = false;
+            })
+    }
+
 
     // mixin declaration
 
