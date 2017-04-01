@@ -5,6 +5,7 @@ import {appName} from '../constants';
 import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/nameSearchService";
 import {createShowPages} from '../common/common';
 import * as U from '../common/util';
+import {CheckedNameService} from "../services/checkedNameService";
 
 export class NamesListDirectiveController {
     datas: Array<any> = [];
@@ -19,7 +20,7 @@ export class NamesListDirectiveController {
 
     reloading : boolean = false;
 
-    constructor(private nameSearch: NameSearchService) {
+    constructor(private nameSearch: NameSearchService, private checkedNameService: CheckedNameService) {
         this.datas = [];
         this.search();
     }
@@ -55,6 +56,14 @@ export class NamesListDirectiveController {
         return this.idxto + 1 < this.total;
     }
 
+    public changeClip(data: NameSearchDto) : void {
+        if (data.checked) {
+            this.checkedNameService.clip(data.id);
+        } else {
+            this.checkedNameService.unclip(data.id);
+        }
+    }
+
     private reload(offset:number = null) {
         if (this.reloading) {
             return;
@@ -85,7 +94,7 @@ export class NamesListDirectiveController {
 
 export class NamesListDirective {
     restrict = 'E';
-    controller = ['NameSearch', NamesListDirectiveController];
+    controller = ['NameSearch', 'CheckedName', NamesListDirectiveController];
     controllerAs = 'namesList';
     replace = true;
 };

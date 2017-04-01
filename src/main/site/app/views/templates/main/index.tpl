@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="p-names-row u-flex" ng-repeat="name in namesList.datas">
                                         <div class="p-names-clip">
-                                            <input type="checkbox" ng-model="name.checked">
+                                            <input type="checkbox" ng-model="name.checked" ng-click="namesList.changeClip(name)">
                                         </div>
                                         <div class="p-names-mem">{{ name.membertype }}</div>
                                         <div class="p-names-name">{{ name.name_e }} / {{ name.name_j }}</div>
