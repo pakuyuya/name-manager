@@ -6,6 +6,8 @@ import {NameSearchService, NameSearchResult, NameSearchDto} from "../services/na
 import {createShowPages} from '../common/common';
 import * as U from '../common/util';
 import {CheckedNameService} from "../services/checkedNameService";
+import {Dialog} from '../common/dialog';
+import {systemErr} from "../common/systemui";
 
 export class NamesListDirectiveController {
     datas: Array<any> = [];
@@ -54,6 +56,27 @@ export class NamesListDirectiveController {
     }
     public hasNext() : boolean {
         return this.idxto + 1 < this.total;
+    }
+
+    public clipAll() {
+        this.nameSearch.queryAllId(this.query)
+            .then((ids: string[]) => {
+                for (let id of ids) {
+                    this.checkedNameService.clip(id);
+                }
+                for (let data of this.datas) {
+                    data.checked = true;
+                }
+            }, () => {
+                systemErr();
+            });
+    }
+
+    public clearClips() {
+        this.checkedNameService.clear();
+        for (let data of this.datas) {
+            data.checked = false;
+        }
     }
 
     public changeClip(data: NameSearchDto) : void {

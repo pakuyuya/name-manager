@@ -92,8 +92,8 @@
                                 </div>
 
                                 <div>
-                                    <button type="button" class="size-s">検索結果をすべて選択</button>
-                                    <button type="button" class="size-s">すべての選択を取り消す</button>
+                                    <button type="button" class="size-s" ng-click="namesList.clipAll()">検索結果をすべて選択</button>
+                                    <button type="button" class="size-s" ng-click="namesList.clearClips()">すべての選択を取り消す</button>
                                 </div>
                                 <!-- リスト -->
                                 <div class="p-names-list">

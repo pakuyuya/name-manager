@@ -8,6 +8,7 @@ import IHttpService = angular.IHttpService;
 import IQService = angular.IQService;
 import IRequestShortcutConfig = angular.IRequestShortcutConfig;
 import IPromise = angular.IPromise;
+import * as U from '../common/util';
 
 /**
  * 名簿一覧を取得するサービス
@@ -51,6 +52,26 @@ export class NameSearchService {
                         total : ~~(json.total),
                     }
                 );
+            });
+
+        return deferred.promise;
+    }
+
+    public queryAllId(query: any): IPromise<string[]> {
+        let deferred = this.$q.defer();
+
+        let q = U.clone(query);
+        q.limit = 2147483647;
+
+        const url = `${apiBaseUrl}/namesearch`;
+
+        this.$http.get(url, {params : q})
+            .error((data) => { deferred.reject(data); })
+            .success((json: any, status, headers, config) => {
+                if (!json.result) {
+                    throw new Error(`${url} don't responsed { result : true } at NameSearchService.query() `);
+                }
+                deferred.resolve(json.datas.map(value => value.id));
             });
 
         return deferred.promise;
