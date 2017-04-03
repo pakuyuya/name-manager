@@ -18,6 +18,7 @@ import {NamesListDirectiveController} from '../directives/namesList';
 import {AddNameDialogDirectiveController} from '../directives/addNameDialog';
 import {EditNameDialogDirectiveController} from "../directives/editNameDialog";
 import {MemberTypeStoreService} from '../services/memberTypeStoreService';
+import {CheckedNameService} from "../services/checkedNameService";
 
 app.controller('HeaderCtrl', ['$scope', function($scope){
 }]);
@@ -27,7 +28,7 @@ app.controller('HeaderCtrl', ['$scope', function($scope){
 //
 
 class MainController {
-    constructor(private $scope, private MemberTypes: MemberTypeStoreService) {
+    constructor(private $scope, private MemberTypes: MemberTypeStoreService, private checkedName:CheckedNameService) {
         this.MemberTypes.getAllAsync().then((memberTypes) => { this.memberTypes = memberTypes });
 
         setTimeout(() => {
@@ -36,15 +37,22 @@ class MainController {
             const ctlEditNameDialog = $scope.editNameDialog as EditNameDialogDirectiveController;
             ctlAddNameDialog.subscribe('closed', () => ctlNamesList.serachWithStay());
             ctlEditNameDialog.subscribe('closed', () => ctlNamesList.serachWithStay());
+
+            ctlNamesList.subscribe('change_clip', () => { this.refreshSelected(); });
         }, 0);
     }
+
+    private refreshSelected() {
+        this.selectedNum = this.checkedName.getLength();
+    }
+
     public selectedNum = 0;
     public memberTypes = [];
 }
 
 class MainDirective {
     restrict = 'E';
-    controller = ['$scope', 'MemberTypeStore', MainController];
+    controller = ['$scope', 'MemberTypeStore', 'CheckedName', MainController];
     controllerAs = 'main';
     replace = true;
 }

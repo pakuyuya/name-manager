@@ -8,8 +8,9 @@ import * as U from '../common/util';
 import {CheckedNameService} from "../services/checkedNameService";
 import {Dialog} from '../common/dialog';
 import {systemErr} from "../common/systemui";
+import {Subscribable} from "../common/subscribable";
 
-export class NamesListDirectiveController {
+export class NamesListDirectiveController implements Subscribable {
     datas: Array<any> = [];
     query: any = {};
     idxfrom : number = 10;
@@ -67,6 +68,8 @@ export class NamesListDirectiveController {
                 for (let data of this.datas) {
                     data.checked = true;
                 }
+
+                this.emmit('change_clip', this);
             }, () => {
                 systemErr();
             });
@@ -77,6 +80,7 @@ export class NamesListDirectiveController {
         for (let data of this.datas) {
             data.checked = false;
         }
+        this.emmit('change_clip', this);
     }
 
     public changeClip(data: NameSearchDto) : void {
@@ -85,6 +89,7 @@ export class NamesListDirectiveController {
         } else {
             this.checkedNameService.unclip(data.id);
         }
+        this.emmit('change_clip', this);
     }
 
     private reload(offset:number = null) {
@@ -113,7 +118,16 @@ export class NamesListDirectiveController {
                 this.reloading = false;
             });
     }
+
+    // Mixin
+
+    // Subscribable
+    public subscribers = {};
+    public subscribe : (event:string, callback : (arg:any) => void) => void;
+    public emmit : (event:string, arg:any) => void;
 };
+U.applyMixins(NamesListDirectiveController, [Subscribable]);
+
 
 export class NamesListDirective {
     restrict = 'E';

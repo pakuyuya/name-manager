@@ -69,7 +69,7 @@ export class CheckedNameService {
      * 現在のIDの個数を取得する
      * @returns {number} 個数
      */
-    public length() : number {
+    public getLength() : number {
         return CheckedNameService.len;
     }
 
