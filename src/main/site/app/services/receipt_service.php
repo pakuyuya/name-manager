@@ -35,6 +35,89 @@ class ReceiptService extends SimpleRestService
     }
 
     /**
+     * 検索
+     * @param $param
+     * @return array
+     */
+    public function find($param) {
+        $select = $this->createSelectQuery($param);
+
+        $paramOrder = getOr($param, 'order', null);
+        $orderAllows = ['receipt_date'];
+        $defaultOrder = 'receipt_date';
+
+        $order = whiteboxOr($paramOrder, $orderAllows, $defaultOrder);
+        $select->order($order);
+
+        if (isset($param['offset'])) {
+            $select->offset($param['offset']);
+        }
+
+        if (isset($param['limit'])) {
+            $select->limit($param['limit']);
+        }
+
+        return $select->fetchAll();
+    }
+
+    /**
+     * 件数取得
+     * @param $param
+     * @return string
+     */
+    public function getCount($param) {
+        $select = $this->createSelectQuery($param);
+
+        return $select->fetchCount();
+    }
+
+    /**
+     * Select句作成
+     * @param $param
+     * @return SqlSelect
+     */
+    private function createSelectQuery($param) {
+        $model = $this->createModel();
+        $select = $model->select();
+
+        if (!empty($param['entry_id'])) {
+            $entry_id = $param['entry_id'];
+            $select->whereLe('entry_id', $entry_id);
+        }
+
+        return $select;
+    }
+
+    /**
+     * NameIdをもとに検索
+     * @param $entry_id NameのID
+     * @return
+     */
+    public function findByNameId($entry_id) {
+
+        $model = $this->createModel();
+
+        return $model->select()
+            ->where('entry_id', $entry_id)
+            ->order('receipt_date')
+            ->fetchAll();
+    }
+
+    /**
+     * @param $name_id NameのID
+     * @return
+     */
+    public function findLastByNameId($name_id) {
+
+        $model = $this->createModel();
+
+        return $model->select()
+            ->where('entry_id', $name_id)
+            ->order('receipt_date desc')
+            ->fetchRow();
+    }
+
+    /**
      * @param $name_id NameのID
      */
     public function deleteByNameId($name_id) {
